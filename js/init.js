@@ -65,6 +65,7 @@
         //AMS_Map();
         AMSNavBarClock();
         AMS_NavBar_MiscInfo_UpdateText();
+        AMS_Issues_Update();
 
     }); // end of document ready
 })(jQuery); // end of jQuery name space

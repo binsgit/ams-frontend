@@ -22,7 +22,7 @@
     <li><a href="#"><i class="material-icons left">&#xE332;</i>无风扇</a></li>
     <li><a href="#"><i class="material-icons left">&#xE047;</i>停止工作</a></li>
     <li><a href="#"><i class="material-icons left">&#xE80E;</i>温度过高</a></li>
-    <li><a href="#"><i class="material-icons left">&#xE040;</i>机器重启</a></li>
+    <li><a href="#"><i class="material-icons left">&#xE040;</i>机器运行时间异常</a></li>
 </ul>
 
 <ul id="ams-mainpage-badmachines-warnings-list" class="dropdown-content">
@@ -33,6 +33,7 @@
     <li><a href="#"><i class="material-icons left">&#xE8E5;</i>DH过高</a></li>
     <li><a href="#"><i class="material-icons left">&#xE8E3;</i>算力过低</a></li>
 
+    <li><a href="#"><i class="material-icons left">&#xE80E;</i>曾经温度过高</a></li>
     <li><a href="#"><i class="material-icons left">&#xE0DB;</i>没有检测到PMU</a></li>
     <li><a href="#"><i class="material-icons left">&#xE8E1;</i>PMU温度传感异常</a></li>
     <li><a href="#"><i class="material-icons left">&#xE3E6;</i>供电异常</a></li>
@@ -237,8 +238,6 @@
     <li><a class="subheader white-text text-darken-1">系统</a></li>
     <li><a href="#ams-themesettings-window" class="white-text msyh waves-effect waves-light"><i class="material-icons white-text">&#xE3B7;</i>主题</a></li>
     <li><a href="#ams-apisettings-window" class="white-text msyh waves-effect waves-light"><i class="material-icons white-text">&#xE86F;</i>API地址</a></li>
-    <!--<li><a href="#!" class="white-text msyh waves-effect waves-light"><i class="material-icons white-text">&#xE853;</i>未登录</a></li>-->
-    <!--<li><a href="#!" class="white-text msyh waves-effect waves-light"><i class="material-icons white-text">&#xE853;</i>未登录</a></li>-->
 </ul>
 
 <div class="row">
@@ -249,8 +248,6 @@
             <div class="card hoverable">
                 <div class="card-content">
                     <span class="card-title">场地概况</span>
-
-                    <!--<div id="ams-mainpage-card-map-container" style="height: 400px; min-width: 310px; max-width: 800px; margin: 0 auto"></div>-->
 
                     <br>
                     <div class="right-align">
@@ -268,13 +265,15 @@
                             <br><br>
                         </div>
                     </div>
-                    <div class="ams-maparea">
+                    <div class="ams-maparea" id="ams-mainpage-card-maparea">
                         <div class="ams-mapline">
                             <div class="row" style="display: flex">
 
-                                <div class="ams-mapblock">喵</div>
+                                <div class="ams-mapblock tooltipped" data-position="top"
+                                     data-delay="50" data-tooltip="192.168.1.21:4028">喵</div>
                                 &nbsp;
-                                <div class="ams-mapblock">喵</div>
+                                <div class="ams-mapblock tooltipped" data-position="top"
+                                     data-delay="50" data-tooltip="192.168.1.22:4028">喵</div>
                                 &nbsp;
                                 <div class="ams-mapblock">喵</div>
                                 &nbsp;
@@ -437,10 +436,12 @@
 <script src="js/jstorage.js"></script>
 <script src="js/materialize.js"></script>
 <script src="js/init.js"></script>
+<script src="js/AMS/temp2color.js"></script>
 <script src="js/AMS/ams.js"></script>
 <script src="js/AMS/navbar-clock.js"></script>
 <script src="js/AMS/errcode.js"></script>
 <script src="js/AMS/issues.js"></script>
+
 
 <script src="js/Chart.js/2.4.0/Chart.min.js"></script>
 <script src="js/Chart.js/2.4.0/Chart.bundle.min.js"></script>

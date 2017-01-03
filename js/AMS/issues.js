@@ -50,9 +50,7 @@ function AMS_Issues_Update(){
         }
 
 
-        
-
     });
 
-    //var t = setTimeout(AMS_NavBar_MiscInfo_UpdateText, 5000);
+    var t = setTimeout(AMS_Issues_Update, 60000);
 }

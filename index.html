@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+    <title>Avalon Management System</title>
+
+    <link rel="shortcut icon" type="image/png" href="favicon.png" />
+    <!-- CSS  -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+    <link href="css/ams.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+</head>
+<body onload="">
+
+<ul id="ams-navbar-ip-selector" class="dropdown-content">
+    <!--Will be filled by js-->
+</ul>
+
+<ul id="ams-mainpage-badmachines-critical-errs-list" class="dropdown-content">
+    <li><a href="#"><i class="material-icons left">&#xE068;</i>空闲</a></li>
+    <li><a href="#"><i class="material-icons left">&#xE332;</i>风扇停转</a></li>
+    <li><a href="#"><i class="material-icons left">&#xE047;</i>停止工作</a></li>
+    <li><a href="#"><i class="material-icons left">&#xE80E;</i>温度过高</a></li>
+    <li><a href="#"><i class="material-icons left">&#xE040;</i>机器重启</a></li>
+</ul>
+
+<ul id="ams-mainpage-badmachines-warnings-list" class="dropdown-content">
+    <li><a href="#"><i class="material-icons left">&#xE8B2;</i>WU异常</a></li>
+    <li><a href="#"><i class="material-icons left">&#xE8B2;</i>MW异常</a></li>
+    <li><a href="#"><i class="material-icons left">&#xE01E;</i>CRC异常</a></li>
+    <li><a href="#"><i class="material-icons left">&#xEB3B;</i>温度过低</a></li>
+    <li><a href="#"><i class="material-icons left">&#xE8E5;</i>DH过高</a></li>
+    <li><a href="#"><i class="material-icons left">&#xE8E3;</i>算力过低</a></li>
+
+    <li><a href="#"><i class="material-icons left">&#xE0DB;</i>没有检测到PMU</a></li>
+    <li><a href="#"><i class="material-icons left">&#xE8E1;</i>PMU温度传感异常</a></li>
+    <li><a href="#"><i class="material-icons left">&#xE3E6;</i>供电异常</a></li>
+    <li><a href="#"><i class="material-icons left">&#xE3E6;</i>模组电压输入异常</a></li>
+    <li><a href="#"><i class="material-icons left">&#xE3E6;</i>模组电压输出异常</a></li>
+</ul>
+
+<div class="navbar-fixed">
+    <nav class="light-blue" role="navigation">
+        <div class="nav-wrapper container">
+
+            <a href="#" data-activates="slide-out" class="button-collapse show-on-large tooltipped" data-position="bottom"
+               data-delay="50" data-tooltip="主菜单">
+                <i class="material-icons">menu</i>
+            </a>
+
+            <ul class="left msyh" style="font-size: 1.1rem">
+
+                <li class="hide-on-med-and-down"><a href="#" class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="当前时间">
+                    <i class="material-icons left">&#xE192;</i><span id="ams-navbar-clock">2000-04-17 00:00:00</span></a>
+                </li>
+
+            </ul>
+
+            <ul class="left msyh" style="font-size: 1.1rem">
+                <li><a class="dropdown-button tooltipped" href="#" data-activates="ams-navbar-ip-selector"
+                       data-position="bottom" data-delay="50" data-tooltip="当前网段">
+                    <i class="material-icons right">arrow_drop_down</i>
+                    <i class="material-icons left">&#xE335;</i>
+                    <span id="ams-navbar-ip">192.168.1.0/24</span></a></li>
+
+                <li><a href="#" class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="当前算力">
+                    <i class="material-icons left">&#xE85C;</i>
+                    <span id="ams-navbar-hashrate">1048576 TH/s</span>
+                </a>
+                </li>
+
+            </ul>
+
+            <ul class="left msyh" style="font-size: 1.1rem">
+
+                <li><a href="#" class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="控制器数量">
+                    <i class="material-icons left">&#xE875;</i>
+                    <span id="ams-navbar-nodescount">3000</span>
+                </a>
+                </li>
+
+                <li><a href="#" class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="机器数量">
+                    <i class="material-icons left">&#xE30D;</i>
+                    <span id="ams-navbar-machinescount">50000</span>
+                </a>
+                </li>
+
+
+
+
+            </ul>
+
+            <!--<ul id="nav-mobile" class="side-nav">-->
+            <!--<li><a href="#">Navbar Link</a></li>-->
+            <!--</ul>-->
+
+        </div>
+    </nav>
+</div>
+
+<div id="ams-userlogin-window" class="modal">
+    <div class="modal-content">
+        <h4>登录</h4>
+        <div class="row">
+            <form class="col s12">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <i class="material-icons prefix">&#xE853;</i>
+                        <input id="ams-userlogin-window-form-username" type="text" class="validate">
+                        <label for="ams-userlogin-window-form-username">用户名</label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-field col s12">
+                        <i class="material-icons prefix">&#xE897;</i>
+                        <input id="ams-userlogin-window-form-passwd" type="password" class="validate">
+                        <label for="ams-userlogin-window-form-passwd">密码</label>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="modal-action modal-close waves-effect waves-red btn-flat">取消</a>
+        <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat"
+           onclick="AMS_Action_LoginUserFromForm()">
+            登录
+        </a>
+    </div>
+</div>
+
+<div id="ams-apisettings-window" class="modal">
+    <div class="modal-content">
+        <h4>API地址</h4>
+        <div class="row">
+            <form class="col s12">
+                <div class="row">
+                    <div class="input-field col s12">
+                        <i class="material-icons prefix">&#xE86F;</i>
+                        <input id="ams-apisettings-window-form-url" class="tooltipped validate" data-position="bottom"
+                               data-delay="50" data-tooltip="没事不要乱改！没事不要乱改！没事不要乱改！重要的事情说三遍！！" type="text">
+                        <label for="ams-apisettings-window-form-url">API地址</label>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="modal-action modal-close waves-effect waves-red btn-flat">取消</a>
+        <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat"
+           onclick="AMS_Action_ChangeAPI()">
+            确定
+        </a>
+    </div>
+</div>
+
+<div id="ams-userlogout-window" class="modal">
+    <div class="modal-content">
+        <h4>退出登录</h4>
+        <p>您确定要退出登录吗？</p>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="modal-action modal-close waves-effect waves-red btn-flat">不要嘛</a>
+        <a href="#" onclick="AMS_Action_LogoutUser()" class="modal-action modal-close waves-effect waves-green btn-flat">嗯嗯！</a>
+    </div>
+</div>
+
+<div id="ams-themesettings-window" class="modal">
+    <div class="modal-content">
+        <h4>主题</h4>
+        <ul class="collection with-header">
+            <li class="collection-item"><div>蓝色<a href="#" class="secondary-content"><i class="material-icons">
+                <font color="#1E88E5">&#xE047;</font></i></a></div></li>
+        </ul>
+    </div>
+</div>
+
+<div id="ams-firmwareupgrade-window" class="modal modal-fixed-footer">
+    <div class="modal-content">
+        <h4>固件升级</h4>
+        <p>A bunch of text</p>
+    </div>
+</div>
+
+<div id="ams-nodesmanage-window" class="modal modal-fixed-footer">
+    <div class="modal-content">
+        <h4>控制器管理</h4>
+        <p>A bunch of text</p>
+    </div>
+</div>
+
+<div id="ams-poolmanage-window" class="modal modal-fixed-footer">
+    <div class="modal-content">
+        <h4>矿池管理</h4>
+        <p>A bunch of text</p>
+    </div>
+</div>
+
+<ul id="slide-out" class="white-text side-nav blue darken-1">
+    <li><div class="userView logo-bg">
+        <div class="background center blue darken-2">
+            <img src="assets/ams-logo.svg" align="middle">
+            <br>
+        </div>
+        <br>
+        <span class="ams mainmenu-header-first codename">AMS</span>
+        <span class="ams mainmenu-header version">v3.0.1-ffffffff</span>
+    </div></li>
+
+    <li><a href="#" class="white-text msyh waves-effect waves-light tooltipped" data-position="right" data-delay="50" data-tooltip="喵喵喵">
+        <i class="material-icons white-text">&#xE853;</i><span id="ams-sidebar-userinfo-text">未登录</span>
+    </a></li>
+    <li><div class="divider blue darken-3"></div></li>
+    <li><a class="subheader white-text text-darken-1">信息</a></li>
+    <li><a href="#" class="white-text msyh waves-effect waves-light"><i class="material-icons white-text">&#xE88A;</i>概览</a></li>
+    <li><div class="divider blue darken-3"></div></li>
+    <li><a class="subheader white-text text-darken-1">管理</a></li>
+    <li><a href="#ams-firmwareupgrade-window" class="white-text msyh waves-effect waves-light"><i class="material-icons white-text">&#xE864;</i>固件升级</a></li>
+    <li><a href="#ams-nodesmanage-window" class="white-text msyh waves-effect waves-light"><i class="material-icons white-text">&#xE875;</i>控制器管理</a></li>
+    <li><a href="#ams-poolmanage-window" class="white-text msyh waves-effect waves-light"><i class="material-icons white-text">&#xE80B;</i>矿池管理</a></li>
+    <li><div class="divider blue darken-3"></div></li>
+    <li><a class="subheader white-text text-darken-1">系统</a></li>
+    <li><a href="#ams-themesettings-window" class="white-text msyh waves-effect waves-light"><i class="material-icons white-text">&#xE3B7;</i>主题</a></li>
+    <li><a href="#ams-apisettings-window" class="white-text msyh waves-effect waves-light"><i class="material-icons white-text">&#xE86F;</i>API地址</a></li>
+    <!--<li><a href="#!" class="white-text msyh waves-effect waves-light"><i class="material-icons white-text">&#xE853;</i>未登录</a></li>-->
+    <!--<li><a href="#!" class="white-text msyh waves-effect waves-light"><i class="material-icons white-text">&#xE853;</i>未登录</a></li>-->
+</ul>
+
+<div class="row">
+
+    <div class="col s12 m12 l6">
+
+        <div class="col s12">
+            <div class="card hoverable">
+                <div class="card-content">
+                    <span class="card-title">场地概况</span>
+
+                    <!--<div id="ams-mainpage-card-map-container" style="height: 400px; min-width: 310px; max-width: 800px; margin: 0 auto"></div>-->
+
+                    <br>
+                    <div class="right-align">
+                        <div class="ams-mapline">
+                            <a class="waves-effect waves-green btn grey lighten-5 black-text" id="ams-map-tc-btn"
+                               onclick="AMS_Action_Map_TC_Switch()">
+                                控制器平均值
+                            </a>
+                            <a class="waves-effect waves-orange btn grey lighten-5 black-text" id="ams-map-tr-btn"
+                               onclick="AMS_Action_Map_TR_Switch()">
+                                最高温度
+                            </a>
+                            &nbsp;&nbsp;
+                            <br><br>
+                        </div>
+                    </div>
+                    <div class="ams-maparea">
+                        <div class="ams-mapline">
+                            <div class="row" style="display: flex">
+
+                                <div class="ams-mapblock">喵</div>
+                                &nbsp;
+                                <div class="ams-mapblock">喵</div>
+                                &nbsp;
+                                <div class="ams-mapblock">喵</div>
+                                &nbsp;
+                                <div class="ams-mapblock">喵</div>
+                                &nbsp;
+                                <div class="ams-mapblock">喵</div>
+                                &nbsp;
+                                <div class="ams-mapblock">喵</div>
+                                &nbsp;
+                                <div class="ams-mapblock">喵</div>
+                                &nbsp;
+                                <div class="ams-mapblock">喵</div>
+
+                            </div>
+                        </div>
+
+
+                        <div class="ams-mapline">
+                            <div class="row" style="display: flex">
+
+                                <div class="ams-mapblock">喵</div>
+                                &nbsp;
+                                <div class="ams-mapblock">喵</div>
+                                &nbsp;
+                                <div class="ams-mapblock">喵</div>
+                                &nbsp;
+                                <div class="ams-mapblock">喵</div>
+                                &nbsp;
+                                <div class="ams-mapblock">喵</div>
+                                &nbsp;
+                                <div class="ams-mapblock">喵</div>
+                                &nbsp;
+                                <div class="ams-mapblock">喵</div>
+                                &nbsp;
+                                <div class="ams-mapblock">喵</div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+                <!--<div class="card-action">-->
+                <!--<a href="#">This is a link</a>-->
+                <!--<a href="#">This is a link</a>-->
+                <!--</div>-->
+            </div>
+        </div>
+
+        <div class="col s12">
+            <div class="card hoverable large">
+                <div class="card-content">
+                    <span class="card-title">算力</span>
+                    <canvas id="ams-mainpage-card-hashrate-chart" width="auto" height="140%"></canvas>
+                </div>
+                <!--<div class="card-action">-->
+                <!--<a href="#">This is a link</a>-->
+                <!--<a href="#">This is a link</a>-->
+                <!--</div>-->
+            </div>
+        </div>
+
+        <div class="col s12">
+            <div class="card hoverable large">
+                <div class="card-content">
+                    <span class="card-title">工作正常的设备数量</span>
+                    <canvas id="ams-mainpage-card-normalnodes-chart" width="auto" height="140%"></canvas>
+                </div>
+                <!--<div class="card-action">-->
+                <!--<a href="#">This is a link</a>-->
+                <!--<a href="#">This is a link</a>-->
+                <!--</div>-->
+            </div>
+        </div>
+
+        <div class="col s12">
+            <div class="card hoverable large">
+                <div class="card-content">
+                    <span class="card-title">找到的区块数量</span>
+
+                    <canvas id="ams-mainpage-card-foundblocks-chart" width="auto" height="140%"></canvas>
+
+
+                </div>
+
+                <!--<div class="card-action">-->
+                <!--<a href="#">This is a link</a>-->
+                <!--<a href="#">This is a link</a>-->
+                <!--</div>-->
+            </div>
+        </div>
+
+    </div>
+
+    <div class="col s6">
+        <div class="card hoverable">
+            <div class="card-content">
+                <span class="card-title">故障列表</span>
+
+                <br>
+
+                <a href="#" class="waves-effect waves-orange btn-flat">
+                    全部
+                </a>
+
+                <a href="#" class="dropdown-button waves-effect waves-red btn-flat"
+                   data-activates="ams-mainpage-badmachines-critical-errs-list">
+                    严重警告
+                </a>
+
+                <a href="#"  class="dropdown-button waves-effect waves-yellow btn-flat"
+                   data-activates="ams-mainpage-badmachines-warnings-list">
+                    一般警告
+                </a>
+
+
+                <div class="divider grey lighten-2"></div>
+
+                <table class="highlight">
+                    <thead>
+                    <tr>
+                        <th data-field="ams-mainpage-badmachines-table-th-ip">控制器IP地址</th>
+                        <th data-field="ams-mainpage-badmachines-table-th-errs">故障内容</th>
+
+                    </tr>
+                    </thead>
+
+                    <tbody id="ams-mainpage-badmachines-table-tbody">
+
+                    <tr>
+                        <td>NicoNicoNi~~~</td>
+                        <td>喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵</td>
+                    </tr>
+
+                    <tr>
+                        <td>Alan</td>
+                        <td>Jellybean</td>
+                    </tr>
+
+                    <tr>
+                        <td>Jonathan</td>
+                        <td>Lollipop</td>
+                    </tr>
+
+                    <tr>
+                        <td>Alvin</td>
+                        <td>Eclair</td>
+                    </tr>
+
+                    <tr>
+                        <td>Alan</td>
+                        <td>Jellybean</td>
+                    </tr>
+
+                    <tr>
+                        <td>Jonathan</td>
+                        <td>Lollipop</td>
+                    </tr>
+                    <tr>
+                        <td>Alvin</td>
+                        <td>Eclair</td>
+                    </tr>
+
+                    <tr>
+                        <td>Alan</td>
+                        <td>Jellybean</td>
+                    </tr>
+
+                    <tr>
+                        <td>Jonathan</td>
+                        <td>Lollipop</td>
+                    </tr>
+                    <tr>
+                        <td>Alvin</td>
+                        <td>Eclair</td>
+                    </tr>
+
+                    <tr>
+                        <td>Alan</td>
+                        <td>Jellybean</td>
+                    </tr>
+
+                    <tr>
+                        <td>Jonathan</td>
+                        <td>Lollipop</td>
+                    </tr>
+                    <tr>
+                        <td>Alvin</td>
+                        <td>Eclair</td>
+                    </tr>
+
+                    <tr>
+                        <td>Alan</td>
+                        <td>Jellybean</td>
+                    </tr>
+
+                    <tr>
+                        <td>Jonathan</td>
+                        <td>Lollipop</td>
+                    </tr>
+                    </tbody>
+                </table>
+
+
+
+            </div>
+            <!--<div class="card-action">-->
+            <!--<a href="#">This is a link</a>-->
+            <!--<a href="#">This is a link</a>-->
+            <!--</div>-->
+        </div>
+    </div>
+
+</div>
+
+
+<!--  Scripts-->
+<script src="js/json2.js"></script>
+<script src="js/jquery-2.1.1.min.js"></script>
+<script src="js/jstorage.js"></script>
+<script src="js/materialize.js"></script>
+<script src="js/init.js"></script>
+<script src="js/AMS/ams.js"></script>
+<script src="js/AMS/navbar-clock.js"></script>
+
+<script src="js/Chart.js/2.4.0/Chart.min.js"></script>
+<script src="js/Chart.js/2.4.0/Chart.bundle.min.js"></script>
+
+<!--<script src="js/highcharts/highcharts.js"></script>-->
+<!--<script src="js/highcharts/modules/heatmap.js"></script>-->
+<!--<script src="js/highcharts/modules/exporting.js"></script>-->
+
+<script src="js/AMS/map.js"></script>
+<script src="js/AMS/charts.js"></script>
+
+</body>
+</html>

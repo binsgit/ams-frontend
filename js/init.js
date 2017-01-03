@@ -16,13 +16,13 @@
 
         };
 
-        var modal_cfg_big_functions = {
-            dismissible: true, // Modal can be dismissed by clicking outside of the modal
+        var modal_cfg_big_window = {
+            dismissible: false, // Modal can be dismissed by clicking outside of the modal
             opacity: .5, // Opacity of modal background
             in_duration: 300, // Transition in duration
             out_duration: 200, // Transition out duration
-            starting_top: '90%', // Starting top style attribute
-            //ending_top: '90%', // Ending top style attribute
+            starting_top: '95%', // Starting top style attribute
+            //ending_top: '100%' // Ending top style attribute
 
         };
 
@@ -32,7 +32,9 @@
         $('#ams-userlogout-window').modal(modal_cfg_center_small);
         $('#ams-apisettings-window').modal(modal_cfg_center_small);
 
-        $('#ams-firmwareupgrade-window').modal(modal_cfg_big_functions);
+        $('#ams-firmwareupgrade-window').modal(modal_cfg_big_window);
+        $('#ams-nodesmanage-window').modal(modal_cfg_big_window);
+        $('#ams-poolmanage-window').modal(modal_cfg_big_window);
 
         $('.dropdown-button').dropdown({
                 inDuration: 300,

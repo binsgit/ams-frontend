@@ -19,7 +19,7 @@
 
 <ul id="ams-mainpage-badmachines-critical-errs-list" class="dropdown-content">
     <li><a href="#"><i class="material-icons left">&#xE068;</i>空闲</a></li>
-    <li><a href="#"><i class="material-icons left">&#xE332;</i>风扇停转</a></li>
+    <li><a href="#"><i class="material-icons left">&#xE332;</i>无风扇</a></li>
     <li><a href="#"><i class="material-icons left">&#xE047;</i>停止工作</a></li>
     <li><a href="#"><i class="material-icons left">&#xE80E;</i>温度过高</a></li>
     <li><a href="#"><i class="material-icons left">&#xE040;</i>机器重启</a></li>
@@ -38,6 +38,16 @@
     <li><a href="#"><i class="material-icons left">&#xE3E6;</i>供电异常</a></li>
     <li><a href="#"><i class="material-icons left">&#xE3E6;</i>模组电压输入异常</a></li>
     <li><a href="#"><i class="material-icons left">&#xE3E6;</i>模组电压输出异常</a></li>
+</ul>
+
+<ul id="ams-mainpage-map-tr-list" class="dropdown-content">
+    <li><a href="#"><i class="material-icons left">&#xE3C1;</i>控制器下所有机器的平均值</a></li>
+    <li><a href="#"><i class="material-icons left">&#xE3EC;</i>每台机器的值</a></li>
+</ul>
+
+<ul id="ams-mainpage-map-td-list" class="dropdown-content">
+    <li><a href="#"><i class="material-icons left">&#xE8E1;</i>平均温度</a></li>
+    <li><a href="#"><i class="material-icons left">&#xE80E;</i>最高温度</a></li>
 </ul>
 
 <div class="navbar-fixed">
@@ -64,7 +74,7 @@
                     <i class="material-icons left">&#xE335;</i>
                     <span id="ams-navbar-ip">192.168.1.0/24</span></a></li>
 
-                <li><a href="#" class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="当前算力">
+                <li><a href="#" class="tooltipped" data-position="bottom" data-delay="50" data-tooltip="实际算力/理论算力；单位为PH/s">
                     <i class="material-icons left">&#xE85C;</i>
                     <span id="ams-navbar-hashrate">1048576 TH/s</span>
                 </a>
@@ -141,6 +151,7 @@
                         <input id="ams-apisettings-window-form-url" class="tooltipped validate" data-position="bottom"
                                data-delay="50" data-tooltip="没事不要乱改！没事不要乱改！没事不要乱改！重要的事情说三遍！！" type="text">
                         <label for="ams-apisettings-window-form-url">API地址</label>
+                        注意：请使用HTTP或证书有效的HTTPS地址。证书错误的API地址（例如hb1）是不被支持的。
                     </div>
                 </div>
             </form>
@@ -176,22 +187,25 @@
     </div>
 </div>
 
-<div id="ams-firmwareupgrade-window" class="modal modal-fixed-footer">
+<div id="ams-firmwareupgrade-window" class="modal modal-fixed-footer modal-big-window">
     <div class="modal-content">
+        <a href="#" onclick="" class="modal-action modal-close"><i class="material-icons right black-text">&#xE14C;</i></a>
         <h4>固件升级</h4>
         <p>A bunch of text</p>
     </div>
 </div>
 
-<div id="ams-nodesmanage-window" class="modal modal-fixed-footer">
+<div id="ams-nodesmanage-window" class="modal modal-fixed-footer modal-big-window">
     <div class="modal-content">
+        <a href="#" onclick="" class="modal-action modal-close"><i class="material-icons right black-text">&#xE14C;</i></a>
         <h4>控制器管理</h4>
         <p>A bunch of text</p>
     </div>
 </div>
 
-<div id="ams-poolmanage-window" class="modal modal-fixed-footer">
+<div id="ams-poolmanage-window" class="modal modal-fixed-footer modal-big-window">
     <div class="modal-content">
+        <a href="#" onclick="" class="modal-action modal-close"><i class="material-icons right black-text">&#xE14C;</i></a>
         <h4>矿池管理</h4>
         <p>A bunch of text</p>
     </div>
@@ -241,13 +255,14 @@
                     <br>
                     <div class="right-align">
                         <div class="ams-mapline">
-                            <a class="waves-effect waves-green btn grey lighten-5 black-text" id="ams-map-tc-btn"
-                               onclick="AMS_Action_Map_TC_Switch()">
-                                控制器平均值
+                            <a href="#" class="dropdown-button waves-effect waves-green btn-flat"
+                               data-activates="ams-mainpage-map-tr-list">
+                                取值<i class="material-icons right">&#xE313;</i>
                             </a>
-                            <a class="waves-effect waves-orange btn grey lighten-5 black-text" id="ams-map-tr-btn"
-                               onclick="AMS_Action_Map_TR_Switch()">
-                                最高温度
+
+                            <a href="#"  class="dropdown-button waves-effect waves-green btn-flat"
+                               data-activates="ams-mainpage-map-td-list">
+                                显示<i class="material-icons right">&#xE313;</i>
                             </a>
                             &nbsp;&nbsp;
                             <br><br>
@@ -367,12 +382,12 @@
 
                 <a href="#" class="dropdown-button waves-effect waves-red btn-flat"
                    data-activates="ams-mainpage-badmachines-critical-errs-list">
-                    严重警告
+                    严重警告<i class="material-icons right">&#xE313;</i>
                 </a>
 
                 <a href="#"  class="dropdown-button waves-effect waves-yellow btn-flat"
                    data-activates="ams-mainpage-badmachines-warnings-list">
-                    一般警告
+                    一般警告<i class="material-icons right">&#xE313;</i>
                 </a>
 
 
@@ -381,7 +396,10 @@
                 <table class="highlight">
                     <thead>
                     <tr>
-                        <th data-field="ams-mainpage-badmachines-table-th-ip">控制器IP地址</th>
+                        <th data-field="ams-mainpage-badmachines-table-th-ip">控制器</th>
+                        <th data-field="ams-mainpage-badmachines-table-th-auc">AUC</th>
+                        <th data-field="ams-mainpage-badmachines-table-th-module">Module</th>
+                        <th data-field="ams-mainpage-badmachines-table-th-dna">DNA</th>
                         <th data-field="ams-mainpage-badmachines-table-th-errs">故障内容</th>
 
                     </tr>
@@ -390,76 +408,13 @@
                     <tbody id="ams-mainpage-badmachines-table-tbody">
 
                     <tr>
-                        <td>NicoNicoNi~~~</td>
-                        <td>喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵喵</td>
+                        <td>192.168.1.233:4028</td>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>喵喵喵</td>
                     </tr>
 
-                    <tr>
-                        <td>Alan</td>
-                        <td>Jellybean</td>
-                    </tr>
 
-                    <tr>
-                        <td>Jonathan</td>
-                        <td>Lollipop</td>
-                    </tr>
-
-                    <tr>
-                        <td>Alvin</td>
-                        <td>Eclair</td>
-                    </tr>
-
-                    <tr>
-                        <td>Alan</td>
-                        <td>Jellybean</td>
-                    </tr>
-
-                    <tr>
-                        <td>Jonathan</td>
-                        <td>Lollipop</td>
-                    </tr>
-                    <tr>
-                        <td>Alvin</td>
-                        <td>Eclair</td>
-                    </tr>
-
-                    <tr>
-                        <td>Alan</td>
-                        <td>Jellybean</td>
-                    </tr>
-
-                    <tr>
-                        <td>Jonathan</td>
-                        <td>Lollipop</td>
-                    </tr>
-                    <tr>
-                        <td>Alvin</td>
-                        <td>Eclair</td>
-                    </tr>
-
-                    <tr>
-                        <td>Alan</td>
-                        <td>Jellybean</td>
-                    </tr>
-
-                    <tr>
-                        <td>Jonathan</td>
-                        <td>Lollipop</td>
-                    </tr>
-                    <tr>
-                        <td>Alvin</td>
-                        <td>Eclair</td>
-                    </tr>
-
-                    <tr>
-                        <td>Alan</td>
-                        <td>Jellybean</td>
-                    </tr>
-
-                    <tr>
-                        <td>Jonathan</td>
-                        <td>Lollipop</td>
-                    </tr>
                     </tbody>
                 </table>
 
@@ -484,6 +439,8 @@
 <script src="js/init.js"></script>
 <script src="js/AMS/ams.js"></script>
 <script src="js/AMS/navbar-clock.js"></script>
+<script src="js/AMS/errcode.js"></script>
+<script src="js/AMS/issues.js"></script>
 
 <script src="js/Chart.js/2.4.0/Chart.min.js"></script>
 <script src="js/Chart.js/2.4.0/Chart.bundle.min.js"></script>

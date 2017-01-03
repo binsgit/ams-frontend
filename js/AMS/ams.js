@@ -18,15 +18,23 @@ function AMS_NavBar_MiscInfo_UpdateText(){
         type: "GET",
         url: ams_api_url + "shortlog",
     }).done(function(data, textStatus, jqXHR){
+
+        Materialize.toast("Debug: API request /shortlog success",3000);
+
         var parsed = JSON.parse(jqXHR.responseText);
 
         console.log(jqXHR.responseText);
 
         var nodescount = parsed.result.node_num;
         var machinescount = parsed.result.module_num;
+        var thashrate_cgm = parsed.result.hashrate_cgminer / 1000 / 1000 / 1000;
+        var thashrate_theo = parsed.result.hashrate / 1000 / 1000 / 1000;
+
+        $.jStorage.set("AMS_3_1_Runtime_API_Time", parsed.result.time);
 
         $("#ams-navbar-nodescount").text(nodescount.toString());
         $("#ams-navbar-machinescount").text(machinescount.toString());
+        $("#ams-navbar-hashrate").text(thashrate_cgm.toFixed(2).toString()+" / "+thashrate_theo.toFixed(2).toString());
     });
 
     var t = setTimeout(AMS_NavBar_MiscInfo_UpdateText, 5000);
@@ -110,6 +118,7 @@ function AMS_APIRequest_Login(username, password) {
         contentType: "application/json; charset=utf-8",
         dataType: "json",
     }).done(function(data, textStatus, jqXHR){
+        Materialize.toast("Debug: API request /login success",3000);
         var parsed = JSON.parse(jqXHR.responseText);
 
         if (parsed.auth === true) {

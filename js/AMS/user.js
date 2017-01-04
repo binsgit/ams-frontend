@@ -12,7 +12,7 @@ function AMS_User_LogoutUser() {
 
 function AMS_User_LoginUser(username, password) {
 
-    var serialized_login_req = '{"username":"' + username + '","password":"' + password + '}';
+    var serialized_login_req = '{"username":"' + username + '","password":"' + password + '"}';
 
     $.ajax({
         async: true,

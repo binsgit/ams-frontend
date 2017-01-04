@@ -8,6 +8,8 @@ var ams_api_url = $.jStorage.get("ams_api_url", "/api/");
 var ams_map_tc = 0;
 var ams_map_tr = 0;
 
+var ams_api_connectok_noticed = 0;
+
 function AMS_NavBar_IP_UpdateText(ip) {
     $("#ams-navbar-ip").text(ip);
 }
@@ -17,7 +19,16 @@ function AMS_NavBar_MiscInfo_UpdateText(){
         async: true,
         type: "GET",
         url: ams_api_url + "shortlog",
+        error: function () {
+            ams_api_connectok_noticed = 0;
+            Materialize.toast("API请求失败！请检查您的网络、服务器证书和API地址配置是否正确",3000);
+        }
     }).done(function(data, textStatus, jqXHR){
+
+        if (ams_api_connectok_noticed === 0) {
+            ams_api_connectok_noticed = 1;
+            Materialize.toast("API连接成功 ["+ams_api_url+"]",3000);
+        }
 
         Materialize.toast("Debug: API request /shortlog success",3000);
 
@@ -113,7 +124,7 @@ function AMS_APIRequest_Login(username, password) {
     $.ajax({
         async: false, // This crap!!!!!!!!!!!!!!!!!!!!
         type: "POST",
-        url: "/api/login",
+        url: ams_api_url + "login",
         data: serialized_login_req,
         contentType: "application/json; charset=utf-8",
         dataType: "json",

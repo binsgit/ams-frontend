@@ -26,15 +26,26 @@
 
         };
 
+        var modal_cfg_big_window_dismissible = {
+            dismissible: true, // Modal can be dismissed by clicking outside of the modal
+            opacity: .5, // Opacity of modal background
+            in_duration: 300, // Transition in duration
+            out_duration: 200, // Transition out duration
+            starting_top: '95%', // Starting top style attribute
+        };
+
         $('.modal').modal();
 
         $('#ams-userlogin-window').modal(modal_cfg_center_small);
         $('#ams-userlogout-window').modal(modal_cfg_center_small);
         $('#ams-apisettings-window').modal(modal_cfg_center_small);
+        $('#ams-themesettings-window').modal(modal_cfg_center_small);
 
         $('#ams-firmwareupgrade-window').modal(modal_cfg_big_window);
         $('#ams-nodesmanage-window').modal(modal_cfg_big_window);
         $('#ams-poolmanage-window').modal(modal_cfg_big_window);
+
+        $('#ams-nodedetails-window').modal(modal_cfg_big_window_dismissible);
 
         $('.dropdown-button').dropdown({
                 inDuration: 300,

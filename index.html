@@ -7,7 +7,7 @@
 
     <link rel="shortcut icon" type="image/png" href="favicon.png" />
     <!-- CSS  -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="css/materialicons.css" rel="stylesheet">
     <link href="css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
     <link href="css/ams.css" type="text/css" rel="stylesheet" media="screen,projection"/>
 </head>
@@ -135,7 +135,7 @@
     <div class="modal-footer">
         <a href="#" class="modal-action modal-close waves-effect waves-red btn-flat">取消</a>
         <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat"
-           onclick="AMS_Action_LoginUserFromForm()">
+           onclick="AMS_User_LoginUserFromForm()">
             登录
         </a>
     </div>
@@ -174,7 +174,7 @@
     </div>
     <div class="modal-footer">
         <a href="#" class="modal-action modal-close waves-effect waves-red btn-flat">不要嘛</a>
-        <a href="#" onclick="AMS_Action_LogoutUser()" class="modal-action modal-close waves-effect waves-green btn-flat">嗯嗯！</a>
+        <a href="#" onclick="AMS_User_LogoutUser()" class="modal-action modal-close waves-effect waves-green btn-flat">嗯嗯！</a>
     </div>
 </div>
 
@@ -184,6 +184,134 @@
         <ul class="collection with-header">
             <li class="collection-item"><div>蓝色<a href="#" class="secondary-content"><i class="material-icons">
                 <font color="#1E88E5">&#xE047;</font></i></a></div></li>
+        </ul>
+    </div>
+</div>
+
+<div id="ams-nodedetails-window" class="modal modal-fixed-footer modal-big-window">
+    <div class="modal-content">
+        <a href="#" onclick="" class="modal-action modal-close"><i class="material-icons right black-text">&#xE14C;</i></a>
+        <a href="#" onclick="" class="modal-action modal-close"><i class="material-icons right black-text">&#xE15B;</i></a>
+        <h4>192.168.1.21:4028</h4>
+        <a href="#" class="modal-action waves-effect waves-orange btn-flat">重启CGMiner</a>
+        <a href="#" class="modal-action waves-effect waves-red btn-flat">关闭CGMiner</a>
+        <a href="#" class="modal-action waves-effect waves-light btn-flat">调试信息</a>
+        <!--<div class="divider grey lighten-1"></div>-->
+        <ul class="collapsible" data-collapsible="expandable">
+            <li>
+                <div class="collapsible-header active"><i class="material-icons">&#xE8D2;</i>概要</div>
+                <div class="collapsible-body">
+                    <table class="highlight centered responsive-table">
+                        <thead>
+                        <tr>
+                            <th data-field="ams-nodedetails-window-summary-table-th-elapsed">Elapsed</th>
+                            <th data-field="ams-nodedetails-window-summary-table-th-ghsav">GHSav</th>
+                            <th data-field="ams-nodedetails-window-summary-table-th-accepted">Accepted</th>
+                            <th data-field="ams-nodedetails-window-summary-table-th-rejected">Rejected</th>
+                            <th data-field="ams-nodedetails-window-summary-table-th-nbs">NetworkBlocks</th>
+                            <th data-field="ams-nodedetails-window-summary-table-th-bestshare">BestShare</th>
+
+                        </tr>
+                        </thead>
+
+                        <tbody id="ams-nodedetails-window-summary-table-tbody">
+
+                        <tr>
+                            <td>1:45:17</td>
+                            <td>23333.33</td>
+                            <td>2333</td>
+                            <td>10</td>
+                            <td>10</td>
+                            <td>23336666</td>
+                        </tr>
+
+
+                        </tbody>
+                    </table>
+
+
+                </div>
+            </li>
+            <li>
+                <div class="collapsible-header active"><i class="material-icons">&#xE80B;</i>矿池</div>
+                <div class="collapsible-body">
+
+                    <table class="highlight centered responsive-table">
+                        <thead>
+                        <tr>
+                            <th data-field="ams-nodedetails-window-pool-table-th-pool">Pool</th>
+                            <th data-field="ams-nodedetails-window-pool-table-th-url">URL</th>
+                            <th data-field="ams-nodedetails-window-pool-table-th-strmactive">StratumActive</th>
+                            <th data-field="ams-nodedetails-window-pool-table-th-user">User</th>
+                            <th data-field="ams-nodedetails-window-pool-table-th-status">Status</th>
+                            <th data-field="ams-nodedetails-window-pool-table-th-getworks">GetWorks</th>
+                            <th data-field="ams-nodedetails-window-pool-table-th-accepted">Accepted</th>
+                            <th data-field="ams-nodedetails-window-pool-table-th-rejected">Rejected</th>
+                            <th data-field="ams-nodedetails-window-pool-table-th-stale">Stale</th>
+                            <th data-field="ams-nodedetails-window-pool-table-th-lst">LST</th>
+                            <th data-field="ams-nodedetails-window-pool-table-th-lsd">LSD</th>
+
+                        </tr>
+                        </thead>
+
+                        <tbody id="ams-nodedetails-window-pool-table-tbody">
+
+                        <tr>
+                            <td>0</td>
+                            <td>stratum+tcp://stratum.kano.is:3333</td>
+                            <td>True</td>
+                            <td>canaan.233</td>
+                            <td>Alive</td>
+                            <td>23234</td>
+                            <td>2333</td>
+                            <td>450</td>
+                            <td>0</td>
+                            <td>2017-01-01 12:33:33</td>
+                            <td>25675</td>
+                        </tr>
+
+                        <tr>
+                            <td>0</td>
+                            <td>stratum+tcp://stratum.kano.is:3333</td>
+                            <td>True</td>
+                            <td>canaan.233</td>
+                            <td>Alive</td>
+                            <td>23234</td>
+                            <td>2333</td>
+                            <td>450</td>
+                            <td>0</td>
+                            <td>2017-01-01 12:33:33</td>
+                            <td>25675</td>
+                        </tr>
+
+                        <tr>
+                            <td>0</td>
+                            <td>stratum+tcp://stratum.kano.is:3333</td>
+                            <td>True</td>
+                            <td>canaan.233</td>
+                            <td>Alive</td>
+                            <td>23234</td>
+                            <td>2333</td>
+                            <td>450</td>
+                            <td>0</td>
+                            <td>2017-01-01 12:33:33</td>
+                            <td>25675</td>
+                        </tr>
+
+
+                        </tbody>
+                    </table>
+
+                </div>
+            </li>
+            <li>
+                <div class="collapsible-header active"><i class="material-icons">&#xE875;</i>设备</div>
+                <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
+            </li>
+            <li>
+                <div class="collapsible-header active"><i class="material-icons">&#xE85C;</i>状态</div>
+                <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
+            </li>
         </ul>
     </div>
 </div>
@@ -270,7 +398,7 @@
                             <div class="row" style="display: flex">
 
                                 <div class="ams-mapblock tooltipped" data-position="top"
-                                     data-delay="50" data-tooltip="192.168.1.21:4028">喵</div>
+                                     data-delay="50" data-tooltip="192.168.1.21:4028" onclick="$('#ams-nodedetails-window').modal('open')">喵</div>
                                 &nbsp;
                                 <div class="ams-mapblock tooltipped" data-position="top"
                                      data-delay="50" data-tooltip="192.168.1.22:4028">喵</div>
@@ -438,6 +566,7 @@
 <script src="js/init.js"></script>
 <script src="js/AMS/temp2color.js"></script>
 <script src="js/AMS/ams.js"></script>
+<script src="js/AMS/user.js"></script>
 <script src="js/AMS/navbar-clock.js"></script>
 <script src="js/AMS/errcode.js"></script>
 <script src="js/AMS/issues.js"></script>

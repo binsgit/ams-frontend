@@ -87,6 +87,7 @@
 }
 
 .modal-big-window {
-    width: 90% !important;
-    max-height: 90% !important;
+    width: 96% !important;
+    height: 96% !important;
+    max-height: 80% !important;
 }

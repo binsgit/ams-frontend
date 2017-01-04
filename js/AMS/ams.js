@@ -115,60 +115,6 @@ function AMS_StartupTask_ProcessLoggedInUser() {
     }
 }
 
-/**
- * @return {string}
- */
-function AMS_APIRequest_Login(username, password) {
-    var serialized_login_req = "{\"username\":\"" + username + "\",\"password\":\"" + password + "\"}";
-
-    $.ajax({
-        async: false, // This crap!!!!!!!!!!!!!!!!!!!!
-        type: "POST",
-        url: ams_api_url + "login",
-        data: serialized_login_req,
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-    }).done(function(data, textStatus, jqXHR){
-        Materialize.toast("Debug: API request /login success",3000);
-        var parsed = JSON.parse(jqXHR.responseText);
-
-        if (parsed.auth === true) {
-            AMS_LocalStorage_SetLoggedInUserToken(parsed.token);
-        } else {
-            AMS_LocalStorage_SetLoggedInUserToken("bad");
-        }
-    });
-
-}
-
-
-function AMS_Action_LogoutUser() {
-    AMS_LocalStorage_WipeLoggedInUserInfo();
-    AMS_SideBar_UserInfo_Update(0);
-    Materialize.toast("成功退出登录", 3000, 'rounded');
-}
-
-
-function AMS_Action_LoginUser(username, password) {
-    AMS_APIRequest_Login(username, password);
-
-    AMS_LocalStorage_GetLoggedInUserToken();
-
-    if (AMS_LocalStorage_GetLoggedInUserToken() === "bad") {
-        Materialize.toast("登录失败！请检查用户名或密码是否正确", 3000, 'rounded')
-    } else {
-        Materialize.toast("登录成功", 3000, 'rounded');
-        AMS_SideBar_UserInfo_Update(1, username);
-    }
-
-
-}
-
-function AMS_Action_LoginUserFromForm(){
-    var username = $("#ams-userlogin-window-form-username").val();
-    var password = $("#ams-userlogin-window-form-passwd").val();
-    AMS_Action_LoginUser(username, password);
-}
 
 function AMS_Action_ChangeAPI(){
     var newams_api_url = $("#ams-apisettings-window-form-url").val();

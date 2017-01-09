@@ -41,12 +41,25 @@ function AMS_NavBar_MiscInfo_UpdateText(){
         var thashrate_cgm = parsed.result.hashrate_cgminer / 1000 / 1000 / 1000;
         var thashrate_theo = parsed.result.hashrate / 1000 / 1000 / 1000;
 
-        $.jStorage.set("AMS_3_1_Runtime_API_Time", parsed.result.time);
+        // $.jStorage.set("AMS_3_1_Runtime_API_Time", parsed.result.time);
 
         $("#ams-navbar-nodescount").text(nodescount.toString());
         $("#ams-navbar-machinescount").text(machinescount.toString());
         $("#ams-navbar-hashrate").text(thashrate_cgm.toFixed(2).toString()+" / "+thashrate_theo.toFixed(2).toString());
     });
+
+    $.ajax({
+        async: true,
+        type: "GET",
+        url: ams_api_url + "lasttime"
+    }).done(function(data, textStatus, jqXHR){
+
+        var parsed = JSON.parse(jqXHR.responseText);
+        console.log(jqXHR.responseText);
+        $.jStorage.set("AMS_3_1_Runtime_API_Time", parsed.result);
+
+    });
+
 
     var t = setTimeout(AMS_NavBar_MiscInfo_UpdateText, 5000);
 }

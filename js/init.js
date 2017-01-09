@@ -21,8 +21,8 @@
             opacity: .5, // Opacity of modal background
             in_duration: 300, // Transition in duration
             out_duration: 200, // Transition out duration
-            starting_top: '95%', // Starting top style attribute
-            //ending_top: '100%' // Ending top style attribute
+            starting_top: '0%', // Starting top style attribute
+            ending_top: '1%' // Ending top style attribute
 
         };
 
@@ -31,7 +31,8 @@
             opacity: .5, // Opacity of modal background
             in_duration: 300, // Transition in duration
             out_duration: 200, // Transition out duration
-            starting_top: '95%', // Starting top style attribute
+            starting_top: '0%', // Starting top style attribute
+            ending_top: '1%' // Ending top style attribute
         };
 
         $('.modal').modal();
@@ -61,7 +62,7 @@
 
         $("#ams-apisettings-window-form-url").val($.jStorage.get("ams_api_url", "/api/"));
 
-        AMS_Chart_FoundBlocks();
+        //AMS_Chart_FoundBlocks();
         AMS_Chart_HashRate();
         AMS_Chart_NormalNodes();
 

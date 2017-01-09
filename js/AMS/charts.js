@@ -54,7 +54,7 @@ function AMS_Chart_HashRate() {
 
     var apitime = $.jStorage.get("AMS_3_1_Runtime_API_Time", 0).toString();
 
-    var serialized_hashrate_req = '{"scope": "farm", "start": 1480848722, "end": 1483440722}';
+    var serialized_hashrate_req = '{"scope": "farm", "start": 1480848722, "end": ' + apitime + '}';
 
     $.ajax({
         async: true,
@@ -66,22 +66,57 @@ function AMS_Chart_HashRate() {
     }).done(function(data, textStatus, jqXHR){
         Materialize.toast("Debug: API request /hashrate" + " success",3000);
         var parsed = JSON.parse(jqXHR.responseText);
-        var array_res = parsed.result[0].values;
+        var array_res_local = parsed.result[0].values;
+        var array_res_kano = parsed.result[1].values;
+        var array_res_cksolo = parsed.result[2].values;
 
 
-        var xaxis = [];
-        var yaxis = [];
+        var xaxis_local = [];
+        var yaxis_local = [];
 
-        for (var thisres in array_res) {
-            xaxis.push(array_res[thisres].x);
-            yaxis.push(array_res[thisres].y);
+        var xaxis_kano = [];
+        var yaxis_kano = [];
+
+        var xaxis_cksolo = [];
+        var yaxis_cksolo = [];
+
+        var oqo_local = 5;
+
+        for (var thisres_local in array_res_local) {
+
+            if (oqo_local === 0) {
+                var thisdate_local = new Date(array_res_local[thisres_local].x * 1000);
+
+                xaxis_local.push(thisdate_local);
+                yaxis_local.push((array_res_local[thisres_local].y / 1000 / 1000 / 1000 / 1000).toFixed(3));
+                oqo_local = 5;
+            } else {
+                oqo_local--;
+            }
         }
+
+        for (var thisres_kano in array_res_kano) {
+
+            var thisdate_kano = new Date(array_res_kano[thisres_kano].x*1000);
+
+            xaxis_kano.push(thisdate_kano);
+            yaxis_kano.push((array_res_kano[thisres_kano].y / 1000 / 1000 / 1000 / 1000).toFixed(3));
+        }
+
+        for (var thisres_cksolo in array_res_cksolo) {
+
+            var thisdate_cksolo = new Date(array_res_cksolo[thisres_cksolo].x*1000);
+
+            xaxis_cksolo.push(thisdate_cksolo);
+            yaxis_cksolo.push((array_res_cksolo[thisres_cksolo].y / 1000 / 1000 / 1000 / 1000).toFixed(3));
+        }
+
 
 
 
         var ctx = document.getElementById("ams-mainpage-card-hashrate-chart");
         var chartdata = {
-            labels: xaxis,
+            labels: xaxis_local,
             datasets: [
                 {
                     label: "local",
@@ -102,7 +137,7 @@ function AMS_Chart_HashRate() {
                     pointHoverBorderWidth: 2,
                     pointRadius: 1,
                     pointHitRadius: 10,
-                    data: yaxis,
+                    data: yaxis_local,
                     spanGaps: false,
                 },
                 {
@@ -124,7 +159,7 @@ function AMS_Chart_HashRate() {
                     pointHoverBorderWidth: 2,
                     pointRadius: 1,
                     pointHitRadius: 10,
-                    data: [65, 59, 80, 81, 233, 55, 40],
+                    data: yaxis_kano,
                     spanGaps: false,
                 },
                 {
@@ -146,7 +181,7 @@ function AMS_Chart_HashRate() {
                     pointHoverBorderWidth: 2,
                     pointRadius: 1,
                     pointHitRadius: 10,
-                    data: [22, 11, 23, 44, 111, 3, 6],
+                    data: yaxis_cksolo,
                     spanGaps: false,
                 }
             ]
@@ -157,6 +192,26 @@ function AMS_Chart_HashRate() {
             data: chartdata,
             options: {
                 scales: {
+                    xAxes: [{
+                        type: 'time',
+                        time: {
+                            displayFormats: {
+                                'millisecond': 'YY-MM-DD',
+                                'second': 'YY-MM-DD',
+                                'minute': 'YY-MM-DD',
+                                'hour': 'YY-MM-DD',
+                                'day': 'YY-MM-DD',
+                                'week': 'YY-MM-DD',
+                                'month': 'YY-MM-DD',
+                                'quarter': 'YY-MM-DD',
+                                'year': 'YY-MM-DD',
+                            },
+                            tooltipFormat: "YYYY-MM-DD HH:MM:SS"
+                        },
+                        ticks: {
+                            beginAtZero:true
+                        }
+                    }],
                     yAxes: [{
                         ticks: {
                             beginAtZero:true
@@ -174,68 +229,142 @@ function AMS_Chart_HashRate() {
 
 
 function AMS_Chart_NormalNodes() {
-    var ctx = document.getElementById("ams-mainpage-card-normalnodes-chart");
-    var data = {
-        labels: ["12.28", "12.29", "12.30", "12.31", "1.1", "1.2", "1.3"],
-        datasets: [
-            {
-                label: "机器",
-                fill: false,
-                lineTension: 0.1,
-                backgroundColor: "rgba(220,0,0,0.4)",
-                borderColor: "rgba(220,0,0,1)",
-                borderCapStyle: 'butt',
-                borderDash: [],
-                borderDashOffset: 0.0,
-                borderJoinStyle: 'miter',
-                pointBorderColor: "rgba(220,0,0,1)",
-                pointBackgroundColor: "#fff",
-                pointBorderWidth: 1,
-                pointHoverRadius: 5,
-                pointHoverBackgroundColor: "rgba(220,0,0,1)",
-                pointHoverBorderColor: "rgba(220,220,220,1)",
-                pointHoverBorderWidth: 2,
-                pointRadius: 1,
-                pointHitRadius: 10,
-                data: [65, 59, 80, 81, 233, 55, 40],
-                spanGaps: false,
-            },
-            {
-                label: "控制器",
-                fill: false,
-                lineTension: 0.1,
-                backgroundColor: "rgba(255,165,0,0.4)",
-                borderColor: "rgba(255,165,0,1)",
-                borderCapStyle: 'butt',
-                borderDash: [],
-                borderDashOffset: 0.0,
-                borderJoinStyle: 'miter',
-                pointBorderColor: "rgba(255,165,0,1)",
-                pointBackgroundColor: "#fff",
-                pointBorderWidth: 1,
-                pointHoverRadius: 5,
-                pointHoverBackgroundColor: "rgba(255,165,0,1)",
-                pointHoverBorderColor: "rgba(220,220,220,1)",
-                pointHoverBorderWidth: 2,
-                pointRadius: 1,
-                pointHitRadius: 10,
-                data: [22, 11, 23, 44, 111, 3, 6],
-                spanGaps: false,
-            }
-        ]
-    };
 
-    var myChart = new Chart(ctx, {
-        type: 'line',
-        data: data,
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero:true
-                    }
-                }]
+
+    var apitime = $.jStorage.get("AMS_3_1_Runtime_API_Time", 0).toString();
+
+    var serialized_hashrate_req = '{"scope": "farm", "start": 1480848722, "end": ' + apitime + '}';
+
+    $.ajax({
+        async: true,
+        type: "POST",
+        data: serialized_hashrate_req,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        url: ams_api_url + "aliverate"
+    }).done(function(data, textStatus, jqXHR){
+        Materialize.toast("Debug: API request /aliverate" + " success",3000);
+        var parsed = JSON.parse(jqXHR.responseText);
+        var array_res_nodes = parsed.result[0].values;
+        var array_res_modules = parsed.result[1].values;
+
+        var xaxis_nodes = [];
+        var yaxis_nodes = [];
+
+        var xaxis_modules = [];
+        var yaxis_modules = [];
+
+        var oqo_local = 5;
+
+        for (var thisres_nodes in array_res_nodes) {
+
+            if (oqo_local === 0) {
+                var thisdate_nodes = new Date(array_res_nodes[thisres_nodes].x * 1000);
+
+                xaxis_nodes.push(thisdate_nodes);
+                yaxis_nodes.push(array_res_nodes[thisres_nodes].y);
+                oqo_local = 5;
+            } else {
+                oqo_local--;
             }
         }
+
+        for (var thisres_modules in array_res_modules) {
+
+            var thisdate_modules = new Date(array_res_modules[thisres_modules].x*1000);
+
+            xaxis_modules.push(thisdate_modules);
+            yaxis_modules.push(array_res_modules[thisres_modules].y);
+        }
+
+
+
+
+        var ctx = document.getElementById("ams-mainpage-card-normalnodes-chart");
+        var chartdata = {
+            labels: xaxis_nodes,
+            datasets: [
+                {
+                    label: "机器",
+                    fill: false,
+                    lineTension: 0.1,
+                    backgroundColor: "rgba(220,0,0,0.4)",
+                    borderColor: "rgba(220,0,0,1)",
+                    borderCapStyle: 'butt',
+                    borderDash: [],
+                    borderDashOffset: 0.0,
+                    borderJoinStyle: 'miter',
+                    pointBorderColor: "rgba(220,0,0,1)",
+                    pointBackgroundColor: "#fff",
+                    pointBorderWidth: 1,
+                    pointHoverRadius: 5,
+                    pointHoverBackgroundColor: "rgba(220,0,0,1)",
+                    pointHoverBorderColor: "rgba(220,220,220,1)",
+                    pointHoverBorderWidth: 2,
+                    pointRadius: 1,
+                    pointHitRadius: 10,
+                    data: yaxis_modules,
+                    spanGaps: false,
+                },
+                {
+                    label: "控制器",
+                    fill: false,
+                    lineTension: 0.1,
+                    backgroundColor: "rgba(255,165,0,0.4)",
+                    borderColor: "rgba(255,165,0,1)",
+                    borderCapStyle: 'butt',
+                    borderDash: [],
+                    borderDashOffset: 0.0,
+                    borderJoinStyle: 'miter',
+                    pointBorderColor: "rgba(255,165,0,1)",
+                    pointBackgroundColor: "#fff",
+                    pointBorderWidth: 1,
+                    pointHoverRadius: 5,
+                    pointHoverBackgroundColor: "rgba(255,165,0,1)",
+                    pointHoverBorderColor: "rgba(220,220,220,1)",
+                    pointHoverBorderWidth: 2,
+                    pointRadius: 1,
+                    pointHitRadius: 10,
+                    data: yaxis_nodes,
+                    spanGaps: false,
+                }
+            ]
+        };
+
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: chartdata,
+            options: {
+                scales: {
+                    xAxes: [{
+                        type: 'time',
+                        time: {
+                            displayFormats: {
+                                'millisecond': 'YY-MM-DD',
+                                'second': 'YY-MM-DD',
+                                'minute': 'YY-MM-DD',
+                                'hour': 'YY-MM-DD',
+                                'day': 'YY-MM-DD',
+                                'week': 'YY-MM-DD',
+                                'month': 'YY-MM-DD',
+                                'quarter': 'YY-MM-DD',
+                                'year': 'YY-MM-DD',
+                            },
+                            tooltipFormat: "YYYY-MM-DD HH:MM:SS"
+                        },
+                        ticks: {
+                            beginAtZero:true
+                        }
+                    }],
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero:true
+                        }
+                    }]
+                }
+            }
+        });
+
+
     });
 }

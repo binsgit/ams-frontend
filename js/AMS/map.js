@@ -26,6 +26,8 @@ function AMS_Map_Append_Block(line,dead,ip,port,mhs,mod_num,temp,tmax,cs) {
             s += ' style="background-color: '+ams_t2c(temp)+' !important;"';
     }
 
+    s += ' onclick="AMS_NodeDetails_Inline(\''+ip+'\','+port+');"';
+
     s += '><span class="valign">';
 
 

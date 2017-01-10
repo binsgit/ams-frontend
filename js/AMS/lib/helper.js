@@ -11,3 +11,11 @@ function Reimu_MakeAllFormSubmitOnEnter() {
     //     }
     // });
 }
+
+function Reimu_ToogleCardTitleLoadingIcon(fulldomid, enabled) {
+    if (enabled) {
+        $('#'+fulldomid).append('<img src="assets/loading.gif" width="18px" height="18px">');
+    } else {
+        $('#'+fulldomid+' > img').remove();
+    }
+}

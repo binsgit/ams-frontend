@@ -37,7 +37,7 @@ function AMS_Map_Append_Block(line,dead,ip,port,mhs,mod_num,temp,tmax,cs) {
         if (mhs)
             s += (mhs / 1000000).toPrecision(4).toString();
         else
-            s += '?';
+            s += '0';
 
         s += ' TH/s<br>';
 
@@ -62,6 +62,8 @@ function AMS_Map_Append_Block(line,dead,ip,port,mhs,mod_num,temp,tmax,cs) {
 }
 
 function AMS_Map_Update(){
+
+    Reimu_ToogleCardTitleLoadingIcon('ams-mainpage-map-title-loading',true);
 
     var apitime = $.jStorage.get("AMS_3_1_Runtime_API_Time", 0).toString();
 
@@ -99,12 +101,13 @@ function AMS_Map_Update(){
         // for (var j in lines)
         $('.tooltipped').tooltip();
 
+        Reimu_ToogleCardTitleLoadingIcon('ams-mainpage-map-title-loading',false);
 
 
 
     });
 
-    //var t = setTimeout(AMS_NavBar_MiscInfo_UpdateText, 5000);
+    var t = setTimeout(AMS_Map_Update, 15000);
 }
 
 function AMS_Map_UpdateBlockColor() {

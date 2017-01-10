@@ -33,7 +33,7 @@ function AMS_NavBar_MiscInfo_UpdateText(){
             Materialize.toast("API连接成功 ["+__AMS_API_URL+"]",3000);
         }
 
-        Materialize.toast("Debug: API request /shortlog success",3000);
+        Log.d("API request /shortlog success");
 
         var parsed = JSON.parse(jqXHR.responseText);
 

@@ -220,12 +220,14 @@
                 <th data-field="nodes-table-th-action">操作</th>
             </tr></thead>
 
-            <tbody id="nodes-table-tbody">
+            <tbody id="ams-nodesmanage-nodes-table-tbody">
 
             <tr><td>192.168.1.233</td><td>2333</td><td>20</td>
                 <td>
-                    <a href="#" class="waves-effect waves-orange btn-flat ams-button-table-action black-text"><i class="material-icons">&#xE3C9;</i></a>
-                    <a href="#" class="waves-effect waves-red btn-flat btn-floating black-text"><i class="material-icons">&#xE14C;</i></a>
+                    <a href="#" class="waves-effect waves-orange btn-flat btn-floating">
+                        <i class="material-icons black-text">&#xE3C9;</i></a>
+                    <a href="#" class="waves-effect waves-red btn-flat btn-floating">
+                        <i class="material-icons black-text">&#xE14C;</i></a>
 
                 </td></tr>
 
@@ -278,6 +280,8 @@
             <div class="card hoverable">
                 <div class="card-content">
                     <span class="card-title">场地概况</span>
+                    &nbsp;
+                    <span id="ams-mainpage-map-title-loading"></span>
 
                     <br>
                     <div class="right-align">
@@ -353,6 +357,8 @@
             <div class="card hoverable large">
                 <div class="card-content">
                     <span class="card-title">算力</span>
+                    &nbsp;
+                    <span id="ams-mainpage-hashrate-title-loading"></span>
                     <div id="ams-mainpage-hashrate-card-loading" class="ams-maparea">
                         <div class="preloader-wrapper big active">
                             <div class="spinner-layer spinner-blue">
@@ -402,6 +408,8 @@
             <div class="card hoverable large">
                 <div class="card-content">
                     <span class="card-title">工作正常的设备数量</span>
+                    &nbsp;
+                    <span id="ams-mainpage-aliverate-title-loading"></span>
                     <div id="ams-mainpage-aliverate-card-loading" class="ams-maparea">
                         <div class="preloader-wrapper big active">
                             <div class="spinner-layer spinner-blue">
@@ -470,6 +478,8 @@
         <div class="card hoverable">
             <div class="card-content">
                 <span class="card-title">故障列表</span>
+                &nbsp;
+                <span id="ams-mainpage-issues-title-loading"></span>
 
                 <br>
 
@@ -504,12 +514,12 @@
 
                     <tbody id="ams-mainpage-badmachines-table-tbody">
 
-                    <tr>
-                        <td>192.168.1.233:4028</td>
-                        <td>0</td>
-                        <td>1</td>
-                        <td>喵喵喵</td>
-                    </tr>
+                    <!--<tr>-->
+                    <!--<td>192.168.1.233:4028</td>-->
+                    <!--<td>0</td>-->
+                    <!--<td>1</td>-->
+                    <!--<td>喵喵喵</td>-->
+                    <!--</tr>-->
 
 
                     </tbody>

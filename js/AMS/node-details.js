@@ -9,7 +9,7 @@ var ams_nodedatails_openedwindowlist = {};
  */
 function AMS_NodeDetails_GenTable(){
     var ret = '<a href="#" class="modal-action waves-effect waves-orange btn-flat">重启CGMiner</a>' +
-        '<a href="#" class="modal-action waves-effect waves-red btn-flat">关闭CGMiner</a>' +
+        // '<a href="#" class="modal-action waves-effect waves-red btn-flat">关闭CGMiner</a>' +
         '<a href="#" class="modal-action waves-effect waves-light btn-flat">调试信息</a>' +
         '<ul class="collapsible" data-collapsible="expandable"><li>' +
         '<div class="collapsible-header active"><i class="material-icons">&#xE8D2;</i>概要</div>' +
@@ -134,6 +134,7 @@ function AMS_NodeDetails_GenTableData(ip,port,fulldomid){
         url: __AMS_API_URL + "status/pool/latest/" + ip + '/' + port.toString(),
         error : function () {
             Materialize.toast("无法载入矿池详情：API请求失败",3000);
+            pwindow.find('#loading-placeholder-pool').remove();
         }
     }).done(function(data, textStatus, jqXHR){
         var parsed = JSON.parse(jqXHR.responseText);
@@ -177,6 +178,7 @@ function AMS_NodeDetails_GenTableData(ip,port,fulldomid){
         url: __AMS_API_URL + "status/device/latest/" + ip + '/' + port.toString(),
         error : function () {
             Materialize.toast("无法载入设备详情：API请求失败",3000);
+            pwindow.find('#loading-placeholder-devices').remove();
         }
     }).done(function(data, textStatus, jqXHR){
         var parsed = JSON.parse(jqXHR.responseText);

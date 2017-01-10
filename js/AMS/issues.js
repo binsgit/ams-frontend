@@ -2,10 +2,9 @@
  * Created by root on 17-1-3.
  */
 
-var ams_api_url = $.jStorage.get("__AMS_API_URL", "/api/");
-
 function AMS_Issues_Table_Append(ip,port,auc,module,dna,err) {
-    $("#ams-mainpage-badmachines-table-tbody").append("<tr><td>"+ip+":"+port+"</td><td>"+auc+"</td><td>"+module+"</td>"+"<td>"+dna+"</td>"+"<td>"+err+"</td></tr>");
+    $("#ams-mainpage-badmachines-table-tbody").append('<tr onclick="AMS_NodeDetails_Inline(\''+ip+'\','+port+');">'+
+        '<td>'+ip+':'+port+'</td><td>'+auc+'</td><td>'+module+'</td>'+'<td>'+dna+'</td>'+'<td>'+err+'</td></tr>');
 }
 
 function AMS_Issues_Table_Append_Node(ip,port,err){
@@ -18,13 +17,14 @@ function AMS_Issues_Table_Flush(){
 
 function AMS_Issues_Update(){
 
+    Reimu_ToogleCardTitleLoadingIcon('ams-mainpage-issues-title-loading',true);
     var apitime = $.jStorage.get("AMS_3_1_Runtime_API_Time", 0).toString();
 
 
     $.ajax({
         async: true,
         type: "GET",
-        url: ams_api_url + "issue/" + apitime
+        url: __AMS_API_URL + "issue/" + apitime
     }).done(function(data, textStatus, jqXHR){
         Log.d("API request /issues/" + apitime + " success");
         var parsed = JSON.parse(jqXHR.responseText);
@@ -49,6 +49,7 @@ function AMS_Issues_Update(){
                     array_ec[thisec].echu_3));
         }
 
+        Reimu_ToogleCardTitleLoadingIcon('ams-mainpage-issues-title-loading',false);
 
     });
 

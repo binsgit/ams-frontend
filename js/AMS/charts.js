@@ -49,6 +49,8 @@ function AMS_Chart_FoundBlocks() {
 
 function AMS_Chart_HashRate() {
 
+    Reimu_ToogleCardTitleLoadingIcon('ams-mainpage-hashrate-title-loading',true);
+
     var serialized_hashrate_req = '{"scope": "farm", "start": 1480848722, "end": ' + __AMS_API_TimeStr + '}';
 
     $.ajax({
@@ -218,6 +220,7 @@ function AMS_Chart_HashRate() {
 
 
         $('#ams-mainpage-hashrate-card-loading').remove();
+        Reimu_ToogleCardTitleLoadingIcon('ams-mainpage-hashrate-title-loading',false);
 
 
     });
@@ -228,6 +231,7 @@ function AMS_Chart_HashRate() {
 
 function AMS_Chart_NormalNodes() {
 
+    Reimu_ToogleCardTitleLoadingIcon('ams-mainpage-aliverate-title-loading',true);
 
     var serialized_hashrate_req = '{"scope": "farm", "start": 1480848722, "end": ' + __AMS_API_TimeStr + '}';
 
@@ -330,6 +334,7 @@ function AMS_Chart_NormalNodes() {
         var myChart = new Chart(ctx, {
             type: 'line',
             data: chartdata,
+
             options: {
                 scales: {
                     xAxes: [{
@@ -362,7 +367,7 @@ function AMS_Chart_NormalNodes() {
         });
 
         $('#ams-mainpage-aliverate-card-loading').remove();
-
+        Reimu_ToogleCardTitleLoadingIcon('ams-mainpage-aliverate-title-loading',false);
 
     });
 }

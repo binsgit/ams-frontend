@@ -1,6 +1,8 @@
 (function($){
     $(function(){
 
+
+        // Chart.defaults.global.tooltips.
         // Side Navbar Menu Width
         $('.button-collapse').sideNav({
             menuWidth: 245
@@ -58,6 +60,9 @@
             }
         );
 
+
+        // Chart.defaults.global.hover.intersect = false;
+        Chart.defaults.global.tooltips.mode = 'index';
         // Load saved API URL
         __AMS_API_URL = $.jStorage.get("AMS_3_1_Config_API_URL", "/api/");
 

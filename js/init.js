@@ -7,32 +7,31 @@
         });
 
         var modal_cfg_center_small = {
-            dismissible: true, // Modal can be dismissed by clicking outside of the modal
-            opacity: .5, // Opacity of modal background
-            in_duration: 300, // Transition in duration
-            out_duration: 200, // Transition out duration
-            starting_top: '30%', // Starting top style attribute
-            ending_top: '30%', // Ending top style attribute
-
+            dismissible: true, 
+            opacity: .5, 
+            in_duration: 300,
+            out_duration: 200,
+            starting_top: '30%',
+            ending_top: '30%'
         };
 
         var modal_cfg_big_window = {
-            dismissible: false, // Modal can be dismissed by clicking outside of the modal
-            opacity: .5, // Opacity of modal background
-            in_duration: 300, // Transition in duration
-            out_duration: 200, // Transition out duration
-            starting_top: '0%', // Starting top style attribute
-            ending_top: '1%' // Ending top style attribute
+            dismissible: false, 
+            opacity: .5, 
+            in_duration: 300,
+            out_duration: 200,
+            starting_top: '0%',
+            ending_top: '1%'
 
         };
 
         var modal_cfg_big_window_dismissible = {
-            dismissible: true, // Modal can be dismissed by clicking outside of the modal
-            opacity: .5, // Opacity of modal background
-            in_duration: 300, // Transition in duration
-            out_duration: 200, // Transition out duration
-            starting_top: '0%', // Starting top style attribute
-            ending_top: '1%' // Ending top style attribute
+            dismissible: true, 
+            opacity: .5, 
+            in_duration: 300,
+            out_duration: 200,
+            starting_top: '0%',
+            ending_top: '1%'
         };
 
         $('.modal').modal();
@@ -43,7 +42,7 @@
         $('#ams-themesettings-window').modal(modal_cfg_center_small);
 
         $('#ams-firmwareupgrade-window').modal(modal_cfg_big_window);
-        $('#ams-nodesmanage-window').modal(modal_cfg_big_window);
+        $('#ams-nodesmanage-window').modal();
         $('#ams-poolmanage-window').modal(modal_cfg_big_window);
 
         $('#ams-nodedetails-window').modal(modal_cfg_big_window_dismissible);
@@ -59,26 +58,36 @@
             }
         );
 
+        // Load saved API URL
+        __AMS_API_URL = $.jStorage.get("AMS_3_1_Config_API_URL", "/api/");
 
-        $("#ams-apisettings-window-form-url").val($.jStorage.get("ams_api_url", "/api/"));
+        // Set API URL of the API settings window
+        $("#ams-apisettings-window-form-url").val(__AMS_API_URL);
 
-        //AMS_Chart_FoundBlocks();
+        // Make all forms submit on enter
+        Reimu_MakeAllFormSubmitOnEnter();
+
+        // Load & auto refresh the charts
         AMS_Chart_HashRate();
         AMS_Chart_NormalNodes();
 
-
+        // FIXME: Placeholder
         AMS_NavBar_IP_Selector_AppendEntry("192.168.1.0/24");
-        AMS_NavBar_IP_Selector_AppendEntry("192.168.2.0/24");
-        AMS_NavBar_IP_Selector_AppendEntry("192.168.3.0/24");
-        AMS_NavBar_IP_Selector_AppendEntry("192.168.4.0/24");
 
+        // Detect logged in user on page load
         AMS_StartupTask_ProcessLoggedInUser();
 
-        //AMS_Map();
+        // Realtime clock on navbar
         AMSNavBarClock();
+
+        // Realtime hashrate and alive nodes&modules count on navbar
         AMS_NavBar_MiscInfo_UpdateText();
+
+        // Auto refreshes issues card
         AMS_Issues_Update();
+
+        // Auto refreshes map card
         AMS_Map_Update();
 
     }); // end of document ready
-})(jQuery); // end of jQuery name space
+})(jQuery); // end of jQuery name space 喵喵喵

@@ -2,7 +2,7 @@
  * Created by root on 17-1-3.
  */
 
-var ams_api_url = $.jStorage.get("ams_api_url", "/api/");
+var ams_api_url = $.jStorage.get("__AMS_API_URL", "/api/");
 
 function AMS_Issues_Table_Append(ip,port,auc,module,dna,err) {
     $("#ams-mainpage-badmachines-table-tbody").append("<tr><td>"+ip+":"+port+"</td><td>"+auc+"</td><td>"+module+"</td>"+"<td>"+dna+"</td>"+"<td>"+err+"</td></tr>");
@@ -24,9 +24,9 @@ function AMS_Issues_Update(){
     $.ajax({
         async: true,
         type: "GET",
-        url: ams_api_url + "issue/" + apitime,
+        url: ams_api_url + "issue/" + apitime
     }).done(function(data, textStatus, jqXHR){
-        Materialize.toast("Debug: API request /issues/" + apitime + " success",3000);
+        Log.d("API request /issues/" + apitime + " success");
         var parsed = JSON.parse(jqXHR.responseText);
         var array_node = parsed.result.node;
         var array_ec = parsed.result.ec;
@@ -45,7 +45,7 @@ function AMS_Issues_Update(){
 
             AMS_Issues_Table_Append(array_ec[thisec].ip,array_ec[thisec].port,array_ec[thisec].device_id,
                 array_ec[thisec].module_id,array_ec[thisec].dna,
-                ams_ec_strerror(array_ec[thisec].echu_0|array_ec[thisec].echu_1|array_ec[thisec].echu_2|
+                avalon_ec_strerror(array_ec[thisec].echu_0|array_ec[thisec].echu_1|array_ec[thisec].echu_2|
                     array_ec[thisec].echu_3));
         }
 

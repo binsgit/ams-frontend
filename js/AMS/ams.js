@@ -3,7 +3,10 @@
  */
 
 
-var ams_api_url = $.jStorage.get("ams_api_url", "/api/");
+var __AMS_API_URL;
+var __AMS_API_Time = Math.floor(Date.now() / 1000);
+var __AMS_API_TimeStr = __AMS_API_Time.toString();
+
 
 var ams_map_tc = 0;
 var ams_map_tr = 0;
@@ -18,7 +21,7 @@ function AMS_NavBar_MiscInfo_UpdateText(){
     $.ajax({
         async: true,
         type: "GET",
-        url: ams_api_url + "shortlog",
+        url: __AMS_API_URL + "shortlog",
         error: function () {
             ams_api_connectok_noticed = 0;
             Materialize.toast("API请求失败！请检查您的网络、服务器证书和API地址配置是否正确",3000);
@@ -27,7 +30,7 @@ function AMS_NavBar_MiscInfo_UpdateText(){
 
         if (ams_api_connectok_noticed === 0) {
             ams_api_connectok_noticed = 1;
-            Materialize.toast("API连接成功 ["+ams_api_url+"]",3000);
+            Materialize.toast("API连接成功 ["+__AMS_API_URL+"]",3000);
         }
 
         Materialize.toast("Debug: API request /shortlog success",3000);
@@ -51,11 +54,15 @@ function AMS_NavBar_MiscInfo_UpdateText(){
     $.ajax({
         async: true,
         type: "GET",
-        url: ams_api_url + "lasttime"
+        url: __AMS_API_URL + "lasttime"
     }).done(function(data, textStatus, jqXHR){
 
         var parsed = JSON.parse(jqXHR.responseText);
         console.log(jqXHR.responseText);
+
+        __AMS_API_Time = parsed.result;
+        __AMS_API_TimeStr = parsed.result.toString();
+
         $.jStorage.set("AMS_3_1_Runtime_API_Time", parsed.result);
 
     });
@@ -109,15 +116,7 @@ function AMS_LocalStorage_WipeLoggedInUserInfo(){
     $.jStorage.deleteKey("AMS_3_1_Config_CurrentUser_Name");
 }
 
-/**
- * @return {number}
- */
-function AMS_LocalStorage_IsUserLoggedIn(){
-    if (AMS_LocalStorage_GetLoggedInUserToken === 0)
-        return 0;
-    else
-        return 1;
-}
+
 
 function AMS_StartupTask_ProcessLoggedInUser() {
     var usr = AMS_LocalStorage_GetLoggedInUserName();
@@ -129,11 +128,11 @@ function AMS_StartupTask_ProcessLoggedInUser() {
 }
 
 
-function AMS_Action_ChangeAPI(){
+function AMS_API_Change(){
     var newams_api_url = $("#ams-apisettings-window-form-url").val();
 
-    $.jStorage.set("ams_api_url", newams_api_url);
-    ams_api_url = newams_api_url;
+    $.jStorage.set("AMS_3_1_Config_API_URL", newams_api_url);
+    __AMS_API_URL = newams_api_url;
 }
 
 function AMS_Action_Map_TR_Switch(){

@@ -2,8 +2,6 @@
  * Created by root on 16-12-30.
  */
 
-var ams_api_url = $.jStorage.get("ams_api_url", "/api/");
-
 function AMS_Map_Flush(){
     $("#ams-mainpage-card-maparea > div").remove();
 }
@@ -71,9 +69,9 @@ function AMS_Map_Update(){
     $.ajax({
         async: true,
         type: "GET",
-        url: ams_api_url + "farmmap/" + apitime,
+        url: __AMS_API_URL + "farmmap/" + apitime,
     }).done(function(data, textStatus, jqXHR){
-        Materialize.toast("Debug: API request /farmmap/" + apitime + " success",3000);
+        Log.d("API request /farmmap/" + apitime + " success");
         var parsed = JSON.parse(jqXHR.responseText);
         var array_res = parsed.result;
 

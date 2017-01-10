@@ -8,7 +8,10 @@ var ams_nodedatails_openedwindowlist = {};
  * @return {string}
  */
 function AMS_NodeDetails_GenTable(){
-    var ret = '<ul class="collapsible" data-collapsible="expandable"><li>' +
+    var ret = '<a href="#" class="modal-action waves-effect waves-orange btn-flat">重启CGMiner</a>' +
+        '<a href="#" class="modal-action waves-effect waves-red btn-flat">关闭CGMiner</a>' +
+        '<a href="#" class="modal-action waves-effect waves-light btn-flat">调试信息</a>' +
+        '<ul class="collapsible" data-collapsible="expandable"><li>' +
         '<div class="collapsible-header active"><i class="material-icons">&#xE8D2;</i>概要</div>' +
         '<div class="collapsible-body"><table class="highlight centered responsive-table">' +
         '<thead><tr>' +
@@ -95,11 +98,13 @@ function AMS_NodeDetails_GenTableData(ip,port,fulldomid){
     $.ajax({
         async: true,
         type: "GET",
-        url: ams_api_url + "status/summary/latest/" + ip + '/' + port.toString(),
+        url: __AMS_API_URL + "status/summary/latest/" + ip + '/' + port.toString(),
         error : function () {
             Materialize.toast("无法载入控制器详情：API请求失败",3000);
         }
     }).done(function(data, textStatus, jqXHR){
+
+        Log.d("API request " + "/status/summary/latest/" + ip + '/' + port.toString() + ' success');
         var parsed = JSON.parse(jqXHR.responseText);
         var r = parsed.result[0];
 
@@ -126,7 +131,7 @@ function AMS_NodeDetails_GenTableData(ip,port,fulldomid){
     $.ajax({
         async: true,
         type: "GET",
-        url: ams_api_url + "status/pool/latest/" + ip + '/' + port.toString(),
+        url: __AMS_API_URL + "status/pool/latest/" + ip + '/' + port.toString(),
         error : function () {
             Materialize.toast("无法载入矿池详情：API请求失败",3000);
         }
@@ -169,7 +174,7 @@ function AMS_NodeDetails_GenTableData(ip,port,fulldomid){
     $.ajax({
         async: true,
         type: "GET",
-        url: ams_api_url + "status/device/latest/" + ip + '/' + port.toString(),
+        url: __AMS_API_URL + "status/device/latest/" + ip + '/' + port.toString(),
         error : function () {
             Materialize.toast("无法载入设备详情：API请求失败",3000);
         }
@@ -211,7 +216,7 @@ function AMS_NodeDetails_GenTableData(ip,port,fulldomid){
     $.ajax({
         async: true,
         type: "GET",
-        url: ams_api_url + "status/module/latest/" + ip + '/' + port.toString(),
+        url: __AMS_API_URL + "status/module/latest/" + ip + '/' + port.toString(),
         error : function () {
             Materialize.toast("无法载入状态详情：API请求失败",3000);
         }

@@ -125,7 +125,7 @@
                 <div class="row">
                     <div class="input-field col s12">
                         <i class="material-icons prefix">&#xE897;</i>
-                        <input id="ams-userlogin-window-form-passwd" type="password" class="validate">
+                        <input id="ams-userlogin-window-form-passwd" onkeypress="AMS_User_LoginUserFromForm()" type="password" class="validate">
                         <label for="ams-userlogin-window-form-passwd">密码</label>
                     </div>
                 </div>
@@ -161,7 +161,7 @@
     <div class="modal-footer">
         <a href="#" class="modal-action modal-close waves-effect waves-red btn-flat">取消</a>
         <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat"
-           onclick="AMS_Action_ChangeAPI()">
+           onclick="AMS_API_Change()" onkeypress="AMS_API_Change()">
             确定
         </a>
     </div>
@@ -174,7 +174,7 @@
     </div>
     <div class="modal-footer">
         <a href="#" class="modal-action modal-close waves-effect waves-red btn-flat">不要嘛</a>
-        <a href="#" onclick="AMS_User_LogoutUser()" class="modal-action modal-close waves-effect waves-green btn-flat">嗯嗯！</a>
+        <a href="#" onkeypress="AMS_User_LogoutUser()" onclick="AMS_User_LogoutUser()" class="modal-action modal-close waves-effect waves-green btn-flat">嗯嗯！</a>
     </div>
 </div>
 
@@ -193,9 +193,7 @@
         <a href="#" onclick="" class="modal-action modal-close"><i class="material-icons right black-text">&#xE14C;</i></a>
         <a href="#" onclick="" class="modal-action modal-close"><i class="material-icons right black-text">&#xE15B;</i></a>
         <h4>192.168.1.21:4028</h4>
-        <a href="#" class="modal-action waves-effect waves-orange btn-flat">重启CGMiner</a>
-        <a href="#" class="modal-action waves-effect waves-red btn-flat">关闭CGMiner</a>
-        <a href="#" class="modal-action waves-effect waves-light btn-flat">调试信息</a>
+
         <!--<div class="divider grey lighten-1"></div>-->
 
     </div>
@@ -209,11 +207,30 @@
     </div>
 </div>
 
-<div id="ams-nodesmanage-window" class="modal modal-fixed-footer modal-big-window">
+<div id="ams-nodesmanage-window" class="modal modal-fixed-footer">
     <div class="modal-content">
         <a href="#" onclick="" class="modal-action modal-close"><i class="material-icons right black-text">&#xE14C;</i></a>
         <h4>控制器管理</h4>
-        <p>A bunch of text</p>
+
+        <table class="highlight centered responsive-table">
+            <thead><tr>
+                <th data-field="nodes-table-th-ip">IP地址</th>
+                <th data-field="nodes-table-th-port">端口</th>
+                <th data-field="nodes-table-th-mods">机器数量</th>
+                <th data-field="nodes-table-th-action">操作</th>
+            </tr></thead>
+
+            <tbody id="nodes-table-tbody">
+
+            <tr><td>192.168.1.233</td><td>2333</td><td>20</td>
+                <td>
+                    <a href="#" class="waves-effect waves-orange btn-flat ams-button-table-action black-text"><i class="material-icons">&#xE3C9;</i></a>
+                    <a href="#" class="waves-effect waves-red btn-flat btn-floating black-text"><i class="material-icons">&#xE14C;</i></a>
+
+                </td></tr>
+
+            </tbody>
+        </table>
     </div>
 </div>
 
@@ -245,7 +262,7 @@
     <li><div class="divider blue darken-3"></div></li>
     <li><a class="subheader white-text text-darken-1">管理</a></li>
     <li><a href="#ams-firmwareupgrade-window" class="white-text msyh waves-effect waves-light"><i class="material-icons white-text">&#xE864;</i>固件升级</a></li>
-    <li><a href="#ams-nodesmanage-window" class="white-text msyh waves-effect waves-light"><i class="material-icons white-text">&#xE875;</i>控制器管理</a></li>
+    <li><a href="#" onclick="AMS_NodeManagment_OpenUI()" class="white-text msyh waves-effect waves-light"><i class="material-icons white-text">&#xE875;</i>控制器管理</a></li>
     <li><a href="#ams-poolmanage-window" class="white-text msyh waves-effect waves-light"><i class="material-icons white-text">&#xE80B;</i>矿池管理</a></li>
     <li><div class="divider blue darken-3"></div></li>
     <li><a class="subheader white-text text-darken-1">系统</a></li>
@@ -279,52 +296,48 @@
                         </div>
                     </div>
                     <div class="ams-maparea" id="ams-mainpage-card-maparea">
-                        <div class="ams-mapline">
-                            <div class="row" style="display: flex">
 
-                                <div class="ams-mapblock tooltipped" data-position="top"
-                                     data-delay="50" data-tooltip="192.168.1.21:4028" onclick="$('#ams-nodedetails-window').modal('open')">喵</div>
-                                &nbsp;
-                                <div class="ams-mapblock tooltipped" data-position="top"
-                                     data-delay="50" data-tooltip="192.168.1.22:4028">喵</div>
-                                &nbsp;
-                                <div class="ams-mapblock">喵</div>
-                                &nbsp;
-                                <div class="ams-mapblock">喵</div>
-                                &nbsp;
-                                <div class="ams-mapblock">喵</div>
-                                &nbsp;
-                                <div class="ams-mapblock">喵</div>
-                                &nbsp;
-                                <div class="ams-mapblock">喵</div>
-                                &nbsp;
-                                <div class="ams-mapblock">喵</div>
-
+                        <div id="map-loading">
+                            <div class="preloader-wrapper big active">
+                                <div class="spinner-layer spinner-blue">
+                                    <div class="circle-clipper left">
+                                        <div class="circle"></div>
+                                    </div><div class="gap-patch">
+                                    <div class="circle"></div>
+                                </div><div class="circle-clipper right">
+                                    <div class="circle"></div>
+                                </div>
+                                </div>
+                                <div class="spinner-layer spinner-red">
+                                    <div class="circle-clipper left">
+                                        <div class="circle"></div>
+                                    </div><div class="gap-patch">
+                                    <div class="circle"></div>
+                                </div><div class="circle-clipper right">
+                                    <div class="circle"></div>
+                                </div>
+                                </div>
+                                <div class="spinner-layer spinner-yellow">
+                                    <div class="circle-clipper left">
+                                        <div class="circle"></div>
+                                    </div><div class="gap-patch">
+                                    <div class="circle"></div>
+                                </div><div class="circle-clipper right">
+                                    <div class="circle"></div>
+                                </div>
+                                </div>
+                                <div class="spinner-layer spinner-green">
+                                    <div class="circle-clipper left">
+                                        <div class="circle"></div>
+                                    </div><div class="gap-patch">
+                                    <div class="circle"></div>
+                                </div><div class="circle-clipper right">
+                                    <div class="circle"></div>
+                                </div>
+                                </div>
                             </div>
                         </div>
 
-
-                        <div class="ams-mapline">
-                            <div class="row" style="display: flex">
-
-                                <div class="ams-mapblock">喵</div>
-                                &nbsp;
-                                <div class="ams-mapblock">喵</div>
-                                &nbsp;
-                                <div class="ams-mapblock">喵</div>
-                                &nbsp;
-                                <div class="ams-mapblock">喵</div>
-                                &nbsp;
-                                <div class="ams-mapblock">喵</div>
-                                &nbsp;
-                                <div class="ams-mapblock">喵</div>
-                                &nbsp;
-                                <div class="ams-mapblock">喵</div>
-                                &nbsp;
-                                <div class="ams-mapblock">喵</div>
-
-                            </div>
-                        </div>
 
                     </div>
 
@@ -340,6 +353,46 @@
             <div class="card hoverable large">
                 <div class="card-content">
                     <span class="card-title">算力</span>
+                    <div id="ams-mainpage-hashrate-card-loading" class="ams-maparea">
+                        <div class="preloader-wrapper big active">
+                            <div class="spinner-layer spinner-blue">
+                                <div class="circle-clipper left">
+                                    <div class="circle"></div>
+                                </div><div class="gap-patch">
+                                <div class="circle"></div>
+                            </div><div class="circle-clipper right">
+                                <div class="circle"></div>
+                            </div>
+                            </div>
+                            <div class="spinner-layer spinner-red">
+                                <div class="circle-clipper left">
+                                    <div class="circle"></div>
+                                </div><div class="gap-patch">
+                                <div class="circle"></div>
+                            </div><div class="circle-clipper right">
+                                <div class="circle"></div>
+                            </div>
+                            </div>
+                            <div class="spinner-layer spinner-yellow">
+                                <div class="circle-clipper left">
+                                    <div class="circle"></div>
+                                </div><div class="gap-patch">
+                                <div class="circle"></div>
+                            </div><div class="circle-clipper right">
+                                <div class="circle"></div>
+                            </div>
+                            </div>
+                            <div class="spinner-layer spinner-green">
+                                <div class="circle-clipper left">
+                                    <div class="circle"></div>
+                                </div><div class="gap-patch">
+                                <div class="circle"></div>
+                            </div><div class="circle-clipper right">
+                                <div class="circle"></div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
                     <canvas id="ams-mainpage-card-hashrate-chart" width="auto" height="140%"></canvas>
                 </div>
             </div>
@@ -349,26 +402,66 @@
             <div class="card hoverable large">
                 <div class="card-content">
                     <span class="card-title">工作正常的设备数量</span>
-                    <canvas id="ams-mainpage-card-normalnodes-chart" width="auto" height="140%"></canvas>
+                    <div id="ams-mainpage-aliverate-card-loading" class="ams-maparea">
+                        <div class="preloader-wrapper big active">
+                            <div class="spinner-layer spinner-blue">
+                                <div class="circle-clipper left">
+                                    <div class="circle"></div>
+                                </div><div class="gap-patch">
+                                <div class="circle"></div>
+                            </div><div class="circle-clipper right">
+                                <div class="circle"></div>
+                            </div>
+                            </div>
+                            <div class="spinner-layer spinner-red">
+                                <div class="circle-clipper left">
+                                    <div class="circle"></div>
+                                </div><div class="gap-patch">
+                                <div class="circle"></div>
+                            </div><div class="circle-clipper right">
+                                <div class="circle"></div>
+                            </div>
+                            </div>
+                            <div class="spinner-layer spinner-yellow">
+                                <div class="circle-clipper left">
+                                    <div class="circle"></div>
+                                </div><div class="gap-patch">
+                                <div class="circle"></div>
+                            </div><div class="circle-clipper right">
+                                <div class="circle"></div>
+                            </div>
+                            </div>
+                            <div class="spinner-layer spinner-green">
+                                <div class="circle-clipper left">
+                                    <div class="circle"></div>
+                                </div><div class="gap-patch">
+                                <div class="circle"></div>
+                            </div><div class="circle-clipper right">
+                                <div class="circle"></div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                    <canvas id="ams-mainpage-card-normalnodes-chart" width="auto" height="auto"></canvas>
                 </div>
             </div>
         </div>
 
         <!--<div class="col s12">-->
-            <!--<div class="card hoverable large">-->
-                <!--<div class="card-content">-->
-                    <!--<span class="card-title">找到的区块数量</span>-->
+        <!--<div class="card hoverable large">-->
+        <!--<div class="card-content">-->
+        <!--<span class="card-title">找到的区块数量</span>-->
 
-                    <!--<canvas id="ams-mainpage-card-foundblocks-chart" width="auto" height="140%"></canvas>-->
+        <!--<canvas id="ams-mainpage-card-foundblocks-chart" width="auto" height="140%"></canvas>-->
 
 
-                <!--</div>-->
+        <!--</div>-->
 
-                <!--&lt;!&ndash;<div class="card-action">&ndash;&gt;-->
-                <!--&lt;!&ndash;<a href="#">This is a link</a>&ndash;&gt;-->
-                <!--&lt;!&ndash;<a href="#">This is a link</a>&ndash;&gt;-->
-                <!--&lt;!&ndash;</div>&ndash;&gt;-->
-            <!--</div>-->
+        <!--&lt;!&ndash;<div class="card-action">&ndash;&gt;-->
+        <!--&lt;!&ndash;<a href="#">This is a link</a>&ndash;&gt;-->
+        <!--&lt;!&ndash;<a href="#">This is a link</a>&ndash;&gt;-->
+        <!--&lt;!&ndash;</div>&ndash;&gt;-->
+        <!--</div>-->
         <!--</div>-->
 
     </div>
@@ -435,33 +528,39 @@
 </div>
 
 
-<!--  Scripts-->
+<!--Scripts-->
+<!--3rdparty libraries-->
 <script src="js/json2.js"></script>
 <script src="js/jquery-2.1.1.min.js"></script>
 <script src="js/jstorage.js"></script>
 <script src="js/materialize.js"></script>
-<script src="js/init.js"></script>
-<script src="js/AMS/temp2color.js"></script>
-<script src="js/AMS/urlparams.js"></script>
-<script src="js/AMS/ams.js"></script>
-<script src="js/AMS/user.js"></script>
-<script src="js/AMS/inet.js"></script>
-<script src="js/AMS/windows.js"></script>
-<script src="js/AMS/node-details.js"></script>
-<script src="js/AMS/navbar-clock.js"></script>
-<script src="js/AMS/errcode.js"></script>
-<script src="js/AMS/issues.js"></script>
-
-
 <script src="js/Chart.js/2.4.0/Chart.min.js"></script>
 <script src="js/Chart.js/2.4.0/Chart.bundle.min.js"></script>
 
-<!--<script src="js/highcharts/highcharts.js"></script>-->
-<!--<script src="js/highcharts/modules/heatmap.js"></script>-->
-<!--<script src="js/highcharts/modules/exporting.js"></script>-->
+<!--init script-->
+<script src="js/init.js"></script>
 
+<!--AMS libraries-->
+<script src="js/AMS/lib/temp2color.js"></script>
+<script src="js/AMS/lib/urlparams.js"></script>
+<script src="js/AMS/lib/navbar-clock.js"></script>
+<script src="js/AMS/lib/avalon-errno.js"></script>
+<script src="js/AMS/lib/inet.js"></script>
+<script src="js/AMS/lib/windows.js"></script>
+<script src="js/AMS/lib/helper.js"></script>
+
+<!--AMS components-->
+<script src="js/AMS/ams.js"></script>
+<script src="js/AMS/user.js"></script>
+<script src="js/AMS/issues.js"></script>
 <script src="js/AMS/map.js"></script>
 <script src="js/AMS/charts.js"></script>
+<script src="js/AMS/node-details.js"></script>
+<script src="js/AMS/node-managment.js"></script>
+<script src="js/AMS/pool-managment.js"></script>
+<script src="js/AMS/firmware-update.js"></script>
+<script src="js/AMS/debug.js"></script>
+
 
 </body>
 </html>

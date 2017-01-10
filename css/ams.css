@@ -91,3 +91,11 @@
     height: 96% !important;
     max-height: 96% !important;
 }
+
+.ams-button-table-action {
+    width: inherit;
+    display: inline-block;
+    text-align: center;
+    font-size: 1.6rem;
+    line-height: 40px;
+}

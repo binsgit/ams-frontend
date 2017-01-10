@@ -2,9 +2,6 @@
  * Created by root on 16-12-30.
  */
 
-var ams_api_url = $.jStorage.get("ams_api_url", "/api/");
-
-
 function AMS_Chart_FoundBlocks() {
     var ctx = document.getElementById("ams-mainpage-card-foundblocks-chart");
     var data = {
@@ -52,9 +49,7 @@ function AMS_Chart_FoundBlocks() {
 
 function AMS_Chart_HashRate() {
 
-    var apitime = $.jStorage.get("AMS_3_1_Runtime_API_Time", 0).toString();
-
-    var serialized_hashrate_req = '{"scope": "farm", "start": 1480848722, "end": ' + apitime + '}';
+    var serialized_hashrate_req = '{"scope": "farm", "start": 1480848722, "end": ' + __AMS_API_TimeStr + '}';
 
     $.ajax({
         async: true,
@@ -62,9 +57,9 @@ function AMS_Chart_HashRate() {
         data: serialized_hashrate_req,
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        url: ams_api_url + "hashrate"
+        url: __AMS_API_URL + "hashrate"
     }).done(function(data, textStatus, jqXHR){
-        Materialize.toast("Debug: API request /hashrate" + " success",3000);
+        Log.d("API request /hashrate" + " success");
         var parsed = JSON.parse(jqXHR.responseText);
         var array_res_local = parsed.result[0].values;
         var array_res_kano = parsed.result[1].values;
@@ -222,6 +217,9 @@ function AMS_Chart_HashRate() {
         });
 
 
+        $('#ams-mainpage-hashrate-card-loading').remove();
+
+
     });
 
 
@@ -231,9 +229,7 @@ function AMS_Chart_HashRate() {
 function AMS_Chart_NormalNodes() {
 
 
-    var apitime = $.jStorage.get("AMS_3_1_Runtime_API_Time", 0).toString();
-
-    var serialized_hashrate_req = '{"scope": "farm", "start": 1480848722, "end": ' + apitime + '}';
+    var serialized_hashrate_req = '{"scope": "farm", "start": 1480848722, "end": ' + __AMS_API_TimeStr + '}';
 
     $.ajax({
         async: true,
@@ -241,9 +237,9 @@ function AMS_Chart_NormalNodes() {
         data: serialized_hashrate_req,
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        url: ams_api_url + "aliverate"
+        url: __AMS_API_URL + "aliverate"
     }).done(function(data, textStatus, jqXHR){
-        Materialize.toast("Debug: API request /aliverate" + " success",3000);
+        Log.d("API request /aliverate" + " success");
         var parsed = JSON.parse(jqXHR.responseText);
         var array_res_nodes = parsed.result[0].values;
         var array_res_modules = parsed.result[1].values;
@@ -348,7 +344,7 @@ function AMS_Chart_NormalNodes() {
                                 'week': 'YY-MM-DD',
                                 'month': 'YY-MM-DD',
                                 'quarter': 'YY-MM-DD',
-                                'year': 'YY-MM-DD',
+                                'year': 'YY-MM-DD'
                             },
                             tooltipFormat: "YYYY-MM-DD HH:MM:SS"
                         },
@@ -364,6 +360,8 @@ function AMS_Chart_NormalNodes() {
                 }
             }
         });
+
+        $('#ams-mainpage-aliverate-card-loading').remove();
 
 
     });

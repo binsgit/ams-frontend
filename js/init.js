@@ -60,8 +60,6 @@
             }
         );
 
-
-        // Chart.defaults.global.hover.intersect = false;
         Chart.defaults.global.tooltips.mode = 'index';
         // Load saved API URL
         __AMS_API_URL = $.jStorage.get("AMS_3_1_Config_API_URL", "/api/");
@@ -70,7 +68,7 @@
         $("#ams-apisettings-window-form-url").val(__AMS_API_URL);
 
         // Make all forms submit on enter
-        Reimu_MakeAllFormSubmitOnEnter();
+        //Reimu_MakeAllFormSubmitOnEnter();
 
         // Load & auto refresh the charts
         AMS_Chart_HashRate();

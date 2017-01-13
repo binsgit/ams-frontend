@@ -71,8 +71,70 @@ function avalon_ec_invalid_pll_value(e){
     return e & 65536;
 }
 
-function avalon_ec_strerror(errno) {
+function avalon_ec_abnormal_wu(ver, wu) {
+    if (ver[1] === '2')
+        return wu < 79400;
+
+    if (ver[1] === '4')
+        return wu < 101400;
+}
+
+function avalon_ec_abnormal_dh(ver, dh) {
+    if (ver[1] === '2')
+        return dh > 3.5;
+
+    if (ver[1] === '4')
+        return dh > 3;
+}
+
+function avalon_ec_abnormal_mw(mod_obj) {
+    for (var mwid1 = 0; mwid1 < 4; mwid1++) {
+        for (var mwid2 = 0; mwid2 < 18; mwid2++) {
+            if (mod_obj['mw'+mwid1.toString()+'_'+mwid2.toString()] === 0)
+                return true;
+        }
+    }
+    return false;
+}
+
+function avalon_ec_abnormal_crc(mod_obj) {
+    for (var crcid = 0; crcid < 4; crcid++) {
+            if (mod_obj['crc_'+crcid.toString()] !== 0)
+                return true;
+    }
+    return false;
+}
+
+function avalon_ec_strerror(mode,mod_obj) {
+
+    var errno = mod_obj.echu_combined;
+    var ver = mod_obj.ver;
+
+    var err_wu = avalon_ec_abnormal_wu(ver,mod_obj.wu);
+    var err_dh = avalon_ec_abnormal_dh(ver,mod_obj.dh);
+    var err_mw = avalon_ec_abnormal_mw(mod_obj);
+    var err_crc = avalon_ec_abnormal_crc(mod_obj);
+
+    if (mode !== -1) {
+        if ( !((mode & errno) || (mode === 'wu' && err_wu) || (mode === 'dh' && err_dh) || (mode === 'mw' && err_mw)
+            || (mode === 'crc' && err_crc)))
+            return null;
+    }
+
+
     var errstr = "";
+
+    if (err_wu)
+        errstr += "WU异常；";
+
+    if (err_mw)
+        errstr += "MW异常；";
+
+    if (err_crc)
+        errstr += "CRC异常；";
+
+    if (err_dh)
+        errstr += "DH过高；";
 
     if (avalon_ec_idle(errno))
         errstr += "空闲；";

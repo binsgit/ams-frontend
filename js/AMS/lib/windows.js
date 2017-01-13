@@ -55,6 +55,8 @@ function AMS_Windows_Open(domid){
     var fulldomid = AMS_Windows_FullDomId(domid);
     var jqm = "#"+fulldomid;
     $(jqm).modal('open');
+    $(".material-tooltip").attr('style','display: none');
+
 }
 
 function AMS_Windows_Hide(domid){

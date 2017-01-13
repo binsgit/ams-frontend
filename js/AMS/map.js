@@ -72,6 +72,9 @@ function AMS_Map_Update(){
         async: true,
         type: "GET",
         url: __AMS_API_URL + "farmmap/" + apitime,
+        error: function () {
+            Reimu_ToogleCardTitleLoadingIcon('ams-mainpage-map-title-loading',false);
+        }
     }).done(function(data, textStatus, jqXHR){
         Log.d("API request /farmmap/" + apitime + " success");
         var parsed = JSON.parse(jqXHR.responseText);

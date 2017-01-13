@@ -51,7 +51,8 @@ function AMS_Chart_HashRate() {
 
     Reimu_ToogleCardTitleLoadingIcon('ams-mainpage-hashrate-title-loading',true);
 
-    var serialized_hashrate_req = '{"scope": "farm", "start": 1480848722, "end": ' + __AMS_API_TimeStr + '}';
+    var serialized_hashrate_req = '{"scope": "farm", "start": ' + (__AMS_API_Time - 86400 * 7).toString() +
+        ', "end": ' + __AMS_API_TimeStr + '}';
 
     $.ajax({
         async: true,
@@ -59,7 +60,10 @@ function AMS_Chart_HashRate() {
         data: serialized_hashrate_req,
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        url: __AMS_API_URL + "hashrate"
+        url: __AMS_API_URL + "hashrate",
+        error: function () {
+            Reimu_ToogleCardTitleLoadingIcon('ams-mainpage-hashrate-title-loading',false);
+        }
     }).done(function(data, textStatus, jqXHR){
         Log.d("API request /hashrate" + " success");
         var parsed = JSON.parse(jqXHR.responseText);
@@ -77,7 +81,7 @@ function AMS_Chart_HashRate() {
         var xaxis_cksolo = [];
         var yaxis_cksolo = [];
 
-        var oqo_local = 5;
+        var oqo_local = 0;
 
         for (var thisres_local in array_res_local) {
 
@@ -86,7 +90,7 @@ function AMS_Chart_HashRate() {
 
                 xaxis_local.push(thisdate_local);
                 yaxis_local.push((array_res_local[thisres_local].y / 1000 / 1000 / 1000 / 1000).toFixed(3));
-                oqo_local = 5;
+                oqo_local = 0;
             } else {
                 oqo_local--;
             }
@@ -201,7 +205,7 @@ function AMS_Chart_HashRate() {
                                 'week': 'YY-MM-DD',
                                 'month': 'YY-MM-DD',
                                 'quarter': 'YY-MM-DD',
-                                'year': 'YY-MM-DD',
+                                'year': 'YY-MM-DD'
                             },
                             tooltipFormat: "YYYY-MM-DD HH:MM:SS"
                         },
@@ -212,6 +216,10 @@ function AMS_Chart_HashRate() {
                     yAxes: [{
                         ticks: {
                             beginAtZero:true
+                        },
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'TH/s'
                         }
                     }]
                 }
@@ -233,7 +241,8 @@ function AMS_Chart_NormalNodes() {
 
     Reimu_ToogleCardTitleLoadingIcon('ams-mainpage-aliverate-title-loading',true);
 
-    var serialized_hashrate_req = '{"scope": "farm", "start": 1480848722, "end": ' + __AMS_API_TimeStr + '}';
+    var serialized_hashrate_req = '{"scope": "farm", "start": ' + (__AMS_API_Time - 86400 * 7).toString() +
+        ', "end": ' + __AMS_API_TimeStr + '}';
 
     $.ajax({
         async: true,
@@ -241,7 +250,10 @@ function AMS_Chart_NormalNodes() {
         data: serialized_hashrate_req,
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        url: __AMS_API_URL + "aliverate"
+        url: __AMS_API_URL + "aliverate",
+        error: function () {
+            Reimu_ToogleCardTitleLoadingIcon('ams-mainpage-aliverate-title-loading',false);
+        }
     }).done(function(data, textStatus, jqXHR){
         Log.d("API request /aliverate" + " success");
         var parsed = JSON.parse(jqXHR.responseText);
@@ -254,7 +266,7 @@ function AMS_Chart_NormalNodes() {
         var xaxis_modules = [];
         var yaxis_modules = [];
 
-        var oqo_local = 5;
+        var oqo_local = 0;
 
         for (var thisres_nodes in array_res_nodes) {
 
@@ -263,7 +275,7 @@ function AMS_Chart_NormalNodes() {
 
                 xaxis_nodes.push(thisdate_nodes);
                 yaxis_nodes.push(array_res_nodes[thisres_nodes].y);
-                oqo_local = 5;
+                oqo_local = 0;
             } else {
                 oqo_local--;
             }

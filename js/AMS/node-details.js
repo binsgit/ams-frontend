@@ -4,14 +4,31 @@
 
 var ams_nodedatails_openedwindowlist = {};
 
+function AMS_NodeDetails_ToggleLED(ip,port,devid,modid,state){
+
+    var slrreq = '{modules: [{ip: "' + ip.toString() + '", port: "' + port.toString() + '", device_id: ' +
+        devid.toString() + ', module_id: ' + modid.toString() + ', led: ' + state.toString() + '}]}';
+
+    $.ajax({
+        async: true,
+        type: "POST",
+        url: __AMS_API_URL + "led",
+        data: slrreq,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        error : function () {
+            Materialize.toast("无法开关LED：API请求失败",3000);
+        }
+    }).done(function(data, textStatus, jqXHR){
+
+    });
+}
+
 /**
  * @return {string}
  */
 function AMS_NodeDetails_GenTable(){
-    var ret = '<a href="#" class="modal-action waves-effect waves-orange btn-flat">重启CGMiner</a>' +
-        // '<a href="#" class="modal-action waves-effect waves-red btn-flat">关闭CGMiner</a>' +
-        '<a href="#" class="modal-action waves-effect waves-light btn-flat">调试信息</a>' +
-        '<ul class="collapsible" data-collapsible="expandable"><li>' +
+    var ret = '<ul class="collapsible" data-collapsible="expandable"><li>' +
         '<div class="collapsible-header active"><i class="material-icons">&#xE8D2;</i>概要</div>' +
         '<div class="collapsible-body"><table class="highlight centered responsive-table">' +
         '<thead><tr>' +
@@ -111,9 +128,9 @@ function AMS_NodeDetails_GenTableData(ip,port,fulldomid){
         table_summary.append(
             '<tr><td>'+
             // Elapsed
-            r.elapsed.toString()+'</td><td>'+
+            Reimu_Time_Sec2HMS(r.elapsed)+'</td><td>'+
             // GHSav
-            (r.mhs_av/1000).toString()+'</td><td>'+
+            (r.mhs_av/1000).toFixed(2).toString()+'</td><td>'+
             // Accepted
             r.accepted.toString()+'</td><td>'+
             // Rejected
@@ -162,7 +179,7 @@ function AMS_NodeDetails_GenTableData(ip,port,fulldomid){
                 // Stale
                 parsed.result[tr].stale.toString() + '</td><td>' +
                 // LST
-                parsed.result[tr].last_share_time.toString() + '</td><td>' +
+                Reimu_Time_unix2rfc3339(parsed.result[tr].last_share_time) + '</td><td>' +
                 // LSD
                 parsed.result[tr].last_share_difficulty.toString() + '</td></tr>'
             );
@@ -187,7 +204,8 @@ function AMS_NodeDetails_GenTableData(ip,port,fulldomid){
             table_devices.append(
                 '<tr><td>' +
                 // Device
-                tr.toString() + '</td><td>' +
+                'ASC' + parsed.result[tr].asc.toString() + '-' + parsed.result[tr].name + '-' +
+                parsed.result[tr].id.toString() + '</td><td>' +
                 // MM Count
                 parsed.result[tr].mm_count.toString() + '</td><td>' +
                 // Enabled
@@ -197,17 +215,17 @@ function AMS_NodeDetails_GenTableData(ip,port,fulldomid){
                 // T(C)
                 parsed.result[tr].temperature.toString() + '</td><td>' +
                 // GHSav
-                (parsed.result[tr].mhs_av/1000).toPrecision(10).toString() + '</td><td>' +
+                (parsed.result[tr].mhs_av/1000).toFixed(2).toString() + '</td><td>' +
                 // GHSav
-                (parsed.result[tr].mhs_5s/1000).toPrecision(10).toString() + '</td><td>' +
+                (parsed.result[tr].mhs_5s/1000).toFixed(2).toString() + '</td><td>' +
                 // GHS1m
-                (parsed.result[tr].mhs_1m/1000).toPrecision(10).toString() + '</td><td>' +
+                (parsed.result[tr].mhs_1m/1000).toFixed(2).toString() + '</td><td>' +
                 // GHS5m
-                (parsed.result[tr].mhs_5m/1000).toPrecision(10).toString() + '</td><td>' +
+                (parsed.result[tr].mhs_5m/1000).toFixed(2).toString() + '</td><td>' +
                 // GHS15m
-                (parsed.result[tr].mhs_15m/1000).toPrecision(10).toString() + '</td><td>' +
+                (parsed.result[tr].mhs_15m/1000).toFixed(2).toString() + '</td><td>' +
                 // last_valid_work
-                parsed.result[tr].last_valid_work.toString() + '</td></tr>'
+                Reimu_Time_unix2rfc3339(parsed.result[tr].last_valid_work) + '</td></tr>'
             );
         }
 
@@ -225,17 +243,45 @@ function AMS_NodeDetails_GenTableData(ip,port,fulldomid){
     }).done(function(data, textStatus, jqXHR){
         var parsed = JSON.parse(jqXHR.responseText);
 
+        var ids = [];
+
         for (var tr in parsed.result) {
+            var adcol = "";
+
+            var idind = ids.indexOf(parsed.result[tr].device_id);
+
+            if (idind === -1) {
+                ids.push(parsed.result[tr].device_id);
+                idind = ids.indexOf(parsed.result[tr].device_id);
+            }
+
+            if ((idind+2)%2 === 1)
+                adcol = ' class="grey lighten-2"';
+
+            var echu_combined  = parsed.result[tr].echu_0 | parsed.result[tr].echu_1 | parsed.result[tr].echu_2 |
+                parsed.result[tr].echu_3;
+
+            if (echu_combined !== 0)
+                adcol = ' class="yellow"';
+
+            var ledcol = 'waves-green';
+
+            if (parsed.result[tr].led === '1') {
+                ledcol = 'waves-light light-green accent-3';
+            }
+
             table_stats.append(
-                '<tr><td>' +
+                '<tr' + adcol + ' id="' + parsed.result[tr].dna + '"><td>' +
                 // LED
-                '<a href="#" class="waves-effect waves-green btn-flat"><i class="material-icons">&#xE42E;</i></a>' +
+                '<a href="#" class="waves-effect ' + ledcol + ' btn-flat" onclick="AMS_ToggleLED(\''+
+                parsed.result[tr].ip+'\','+parsed.result[tr].port.toString()+','+parsed.result[tr].device_id.toString()+
+                ','+ parsed.result[tr].module_id.toString()+',$(this))"><i class="material-icons">&#xE42E;</i></a>' +
                 '</td><td>' +
                 // Reboot
                 '<a href="#" class="waves-effect waves-red btn-flat"><i class="material-icons">&#xE042;</i></a>' +
                 '</td><td>' +
                 // Elapsed
-                parsed.result[tr].elapsed.toString() + '</td><td>' +
+                Reimu_Time_Sec2HMS(parsed.result[tr].elapsed) + '</td><td>' +
                 // Device
                 parsed.result[tr].device_id.toString() + '-' + parsed.result[tr].module_id.toString() + '</td><td>' +
                 // MM
@@ -245,13 +291,13 @@ function AMS_NodeDetails_GenTableData(ip,port,fulldomid){
                 // LocalWorks
                 parsed.result[tr].lw.toString() + '</td><td>' +
                 // DH
-                parsed.result[tr].dh.toString() + '</td><td>' +
+                parsed.result[tr].dh.toFixed(3).toString() + '%</td><td>' +
                 // GHS
                 parsed.result[tr].ghsmm.toString() + '</td><td>' +
                 // WU
                 parsed.result[tr].wu.toString() + '</td><td>' +
                 // Temp
-                parsed.result[tr].temp.toString() + '</td><td>' +
+                parsed.result[tr].temp.toString() + ' / ' + parsed.result[tr].tmax.toString() + '</td><td>' +
                 // Fan
                 parsed.result[tr].fan.toString() + ' (' + parsed.result[tr].fanr.toString() + '%)' + '</td><td>' +
                 // PG
@@ -264,6 +310,8 @@ function AMS_NodeDetails_GenTableData(ip,port,fulldomid){
             );
         }
 
+        ids = null;
+
         pwindow.find('#loading-placeholder-stats').remove();
 
     });
@@ -271,15 +319,30 @@ function AMS_NodeDetails_GenTableData(ip,port,fulldomid){
 
 }
 
-function AMS_NodeDetails_Inline(ip,port) {
+function AMS_NodeDetails_Inline(ip,port,focus) {
 
     var mydomid = 'nd-' + inet_pton("AF_INET", ip) + '-' + port.toString();
     var fulldomid = AMS_Windows_FullDomId(mydomid);
 
+    var buttons = '<a href="#" class="modal-action waves-effect waves-orange btn-flat">重启CGMiner</a>' +
+        // '<a href="#" class="modal-action waves-effect waves-red btn-flat">关闭CGMiner</a>' +
+        '<a href="#" class="modal-action waves-effect waves-light btn-flat">调试信息</a>' +
+        '<a href="#" onclick="AMS_NodeDetails_Export2CSV(\'' + ip + '\',' + port.toString() + ')"' +
+        ' class="modal-action waves-effect waves-light btn-flat tooltipped" data-position="bottom" data-delay="50"' +
+        ' data-tooltip="此功能暂时只支持Google Chrome浏览器">另存为表格</a>';
+
+
+
     if ($('#'+fulldomid).length === 0) {
-        AMS_Windows_Add(mydomid, "big", ip + ':' + port.toString(), AMS_NodeDetails_GenTable());
-        $('#'+fulldomid).find('.collapsible').collapsible();
+        AMS_Windows_Add(mydomid, "big", ip + ':' + port.toString(), buttons + AMS_NodeDetails_GenTable());
+        var ddd = $('#'+fulldomid);
+        ddd.find('.collapsible').collapsible();
+        ddd.find('.tooltipped').tooltip();
         AMS_NodeDetails_GenTableData(ip,port,fulldomid);
+    }
+
+    if (focus === 3) {
+
     }
 
     AMS_Windows_Open(mydomid);

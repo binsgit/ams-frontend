@@ -37,7 +37,7 @@ function AMS_NavBar_MiscInfo_UpdateText(){
 
         var parsed = JSON.parse(jqXHR.responseText);
 
-        console.log(jqXHR.responseText);
+        // console.log(jqXHR.responseText);
 
         var nodescount = parsed.result.node_num;
         var machinescount = parsed.result.module_num;
@@ -58,7 +58,7 @@ function AMS_NavBar_MiscInfo_UpdateText(){
     }).done(function(data, textStatus, jqXHR){
 
         var parsed = JSON.parse(jqXHR.responseText);
-        console.log(jqXHR.responseText);
+        // console.log(jqXHR.responseText);
 
         __AMS_API_Time = parsed.result;
         __AMS_API_TimeStr = parsed.result.toString();

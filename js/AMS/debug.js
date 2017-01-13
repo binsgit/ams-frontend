@@ -3,7 +3,7 @@
  */
 
 var Log = {
-    debug_enabled: 1,
+    debug_enabled: 0,
     d: function (s) {
         if (Log.debug_enabled)
             Materialize.toast('Debug: '+s, 3000);

@@ -81,8 +81,8 @@ function AMS_NavBar_IP_Selector_AppendEntry(ip) {
 }
 
 function AMS_SideBar_UserInfo_Update(islogined, username){
-    sut = $("#ams-sidebar-userinfo-text");
-    sutt = sut.parent();
+    var sut = $("#ams-sidebar-userinfo-text");
+    var sutt = sut.parent();
     if ( islogined == 1 ) {
         sut.text(username);
         sutt.attr("data-tooltip", "点此退出登录");

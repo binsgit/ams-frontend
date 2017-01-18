@@ -59,24 +59,23 @@ function AMS_Map_Append_Block(line,dead,ip,port,mhs,mod_num,temp,tmax,cs) {
 
     $("#ams-mainpage-card-maparea-line-row-"+line.toString()).append(s);
 
+    s = null;
+
 }
 
 function AMS_Map_Update(){
 
     Reimu_ToogleCardTitleLoadingIcon('ams-mainpage-map-title-loading',true);
 
-    var apitime = $.jStorage.get("AMS_3_1_Runtime_API_Time", 0).toString();
-
-
     $.ajax({
         async: true,
         type: "GET",
-        url: __AMS_API_URL + "farmmap/" + apitime,
+        url: __AMS_API_URL + "farmmap/latest",
         error: function () {
             Reimu_ToogleCardTitleLoadingIcon('ams-mainpage-map-title-loading',false);
         }
     }).done(function(data, textStatus, jqXHR){
-        Log.d("API request /farmmap/" + apitime + " success");
+        Log.d("API request /farmmap/" + __AMS_API_TimeStr + " success");
         var parsed = JSON.parse(jqXHR.responseText);
         var array_res = parsed.result;
 
@@ -102,10 +101,12 @@ function AMS_Map_Update(){
         }
 
         // for (var j in lines)
-        $('.tooltipped').tooltip();
+        $("#ams-mainpage-card-maparea").find('.tooltipped').tooltip();
 
         Reimu_ToogleCardTitleLoadingIcon('ams-mainpage-map-title-loading',false);
 
+        // Force gc
+        parsed = null;
 
 
     });
@@ -115,5 +116,4 @@ function AMS_Map_Update(){
 
 function AMS_Map_UpdateBlockColor() {
     $(".ams-mapblock").style()
-    
 }

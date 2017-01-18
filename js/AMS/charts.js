@@ -183,7 +183,7 @@ function AMS_Chart_HashRate() {
                     pointRadius: 1,
                     pointHitRadius: 10,
                     data: yaxis_cksolo,
-                    spanGaps: false,
+                    spanGaps: false
                 }
             ]
         };
@@ -230,6 +230,21 @@ function AMS_Chart_HashRate() {
         $('#ams-mainpage-hashrate-card-loading').remove();
         Reimu_ToogleCardTitleLoadingIcon('ams-mainpage-hashrate-title-loading',false);
 
+
+        ctx = null;
+
+        parsed = null;
+
+        xaxis_local = null;
+        yaxis_local = null;
+
+        xaxis_cksolo = null;
+        yaxis_cksolo = null;
+
+        xaxis_kano = null;
+        yaxis_kano = null;
+
+        myChart = null;
 
     });
 

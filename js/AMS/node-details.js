@@ -21,6 +21,8 @@ function AMS_NodeDetails_ToggleLED(ip,port,devid,modid,state){
         }
     }).done(function(data, textStatus, jqXHR){
 
+
+        slrreq = null;
     });
 }
 
@@ -143,6 +145,8 @@ function AMS_NodeDetails_GenTableData(ip,port,fulldomid){
 
         pwindow.find('#loading-placeholder-summary').remove();
 
+        parsed = null;
+
     });
 
     $.ajax({
@@ -187,6 +191,8 @@ function AMS_NodeDetails_GenTableData(ip,port,fulldomid){
 
         pwindow.find('#loading-placeholder-pool').remove();
 
+        parsed = null;
+
     });
 
     $.ajax({
@@ -230,6 +236,8 @@ function AMS_NodeDetails_GenTableData(ip,port,fulldomid){
         }
 
         pwindow.find('#loading-placeholder-devices').remove();
+
+        parsed = null;
 
     });
 
@@ -314,20 +322,49 @@ function AMS_NodeDetails_GenTableData(ip,port,fulldomid){
 
         pwindow.find('#loading-placeholder-stats').remove();
 
+        parsed = null;
+
     });
 
 
 }
 
-function AMS_NodeDetails_Inline(ip,port,focus) {
+function AMS_NodeDetails_ShowDebug(ip,port){
 
     var mydomid = 'nd-' + inet_pton("AF_INET", ip) + '-' + port.toString();
     var fulldomid = AMS_Windows_FullDomId(mydomid);
 
+    Materialize.toast("正在载入调试信息，请稍候……",2000);
+
+    $.ajax({
+        async: true,
+        type: "GET",
+        url: __AMS_API_URL + "debug/" + ip + '/' + port.toString() + '/html',
+        error : function () {
+            Materialize.toast("无法载入调试信息：API请求失败",3000);
+        }
+    }).done(function(data, textStatus, jqXHR) {
+        console.log(jqXHR);
+        $('#' + fulldomid).find('.collapsible').prepend('<li class="active"><div class="collapsible-header active">' +
+            '<i class="material-icons">&#xE86F;</i>调试信息 - ' + Reimu_Time_unix2rfc3339() +
+            '</div><div class="collapsible-body"><div class="row"><div class="col l11">' + jqXHR.responseText +
+            '</div></div></div></li>');
+        $('#' + fulldomid).find('.collapsible').collapsible();
+    });
+
+}
+
+function AMS_NodeDetails_Inline(ip,port,focus) {
+
+    var portstr = port.toString();
+    var mydomid = 'nd-' + inet_pton("AF_INET", ip) + '-' + portstr;
+    var fulldomid = AMS_Windows_FullDomId(mydomid);
+
     var buttons = '<a href="#" class="modal-action waves-effect waves-orange btn-flat">重启CGMiner</a>' +
         // '<a href="#" class="modal-action waves-effect waves-red btn-flat">关闭CGMiner</a>' +
-        '<a href="#" class="modal-action waves-effect waves-light btn-flat">调试信息</a>' +
-        '<a href="#" onclick="AMS_NodeDetails_Export2CSV(\'' + ip + '\',' + port.toString() + ')"' +
+        '<a href="#" onclick="AMS_NodeDetails_ShowDebug(\'' + ip + '\',' + portstr + ')"' +
+        ' class="modal-action waves-effect waves-light btn-flat">调试信息</a>' +
+        '<a href="#" onclick="AMS_NodeDetails_Export2CSV(\'' + ip + '\',' + portstr + ')"' +
         ' class="modal-action waves-effect waves-light btn-flat tooltipped" data-position="bottom" data-delay="50"' +
         ' data-tooltip="此功能暂时只支持Google Chrome浏览器">另存为表格</a>';
 
@@ -346,6 +383,10 @@ function AMS_NodeDetails_Inline(ip,port,focus) {
     }
 
     AMS_Windows_Open(mydomid);
+
+    mydomid = null;
+    fulldomid = null;
+    buttons = null;
 
 
 }

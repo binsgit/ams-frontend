@@ -32,15 +32,13 @@ function AMS_Issues_Update(){
     }
 
     Reimu_ToogleCardTitleLoadingIcon('ams-mainpage-issues-title-loading',true);
-    var apitime = $.jStorage.get("AMS_3_1_Runtime_API_Time", 0).toString();
-
 
     $.ajax({
         async: true,
         type: "GET",
         url: __AMS_API_URL + "issue/" + 'latest'
     }).done(function(data, textStatus, jqXHR){
-        Log.d("API request /issues/" + apitime + " success");
+        Log.d("API request /issues/" + __AMS_API_TimeStr + " success");
         var parsed = JSON.parse(jqXHR.responseText);
         var array_node = parsed.result.node;
         var array_ec = parsed.result.ec;
@@ -84,9 +82,7 @@ function AMS_Issues_Update(){
                     }
                 }).done(function(data, textStatus, jqXHR){
 
-                    // console.log('Done loading mod info for '+tn_ip);
                     var parsed = JSON.parse(jqXHR.responseText);
-
                     var mods = parsed.result;
 
                     for (var thismod in mods) {
@@ -99,28 +95,24 @@ function AMS_Issues_Update(){
                             AMS_Issues_Table_Append(mods[thismod].ip,mods[thismod].port,mods[thismod].device_id,
                                 mods[thismod].module_id,mods[thismod].dna,errstr);
 
-                        // __AMS_ModsArray.push(mods[thismod]);
-
+                        errstr = null;
 
                     }
 
+                    // Force gc
+                    parsed = null;
 
                 });
 
             }
 
-            // __AMS_ModsDB = TAFFY(__AMS_ModsArray);
-            //
-            // __AMS_ModsDB({echu_combined:{"!is":0}}).each(function (record,recordnumber) {
-            //     AMS_Issues_Table_Append(record['ip'],record['port'],record['device_id'],
-            //         record['module_id'],record['dna'],
-            //         record['echu_combined'].toString());
-            // });
-
-
-
+            // Force gc
+            parsed = null;
 
         });
+
+        // Force gc
+        parsed = null;
 
     });
 

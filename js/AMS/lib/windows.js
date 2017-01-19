@@ -12,21 +12,40 @@ function AMS_Windows_Add(domid,appearance,caption,html_body,html_footer) {
 
     var classes = "modal";
     var mp_dismissible = true;
+    var mp_enable_titlebar_close = false;
+    var mp_enable_titlebar_hide = false;
+    var mp_starting_top = '4%';
+    var mp_ending_top = '10%';
 
-    if (appearance==="big") {
-        classes += " modal-fixed-footer modal-big-window";
-    } else if (appearance==="d-s-nd") {
-        mp_dismissible = false;
+    if (appearance.windowsize === "big") {
+        classes += " modal-fixed-footer modal-size-big";
+        mp_starting_top = '1%';
+        mp_ending_top = '1%';
     }
+
+    if (appearance.windowtype === "window") {
+        mp_enable_titlebar_close = true;
+        mp_enable_titlebar_hide = true;
+    } else if (appearance.windowtype === "dialog") {
+        mp_enable_titlebar_close = true;
+    }
+
+    if (appearance.notdismissible)
+        mp_dismissible = false;
 
     var fulldomid = AMS_Windows_FullDomId(domid);
     var whtml = '<div id="' + fulldomid + '" class="' + classes + '">' +
-        '<div class="modal-content">' +
-        '<a href="#" onclick="var a = $(\'#' + fulldomid + '\');a.modal(\'close\');a.remove()" class="modal-action">' +
-        '<i class="material-icons right black-text">&#xE14C;</i></a>' +
-        '<a href="#" class="modal-action modal-close">' +
-        '<i class="material-icons right black-text">&#xE15B;</i></a><h4>' + caption + '</h4>';
+        '<div class="modal-content">';
 
+    if (mp_enable_titlebar_close)
+        whtml += '<a href="#" onclick="var a = $(\'#' + fulldomid + '\');a.modal(\'close\');a.remove()"' +
+            'class="modal-action"><i class="material-icons right black-text">&#xE14C;</i></a>';
+
+    if (mp_enable_titlebar_hide)
+        whtml += '<a href="#" class="modal-action modal-close">' +
+            '<i class="material-icons right black-text">&#xE15B;</i></a>';
+
+    whtml += '<h4>' + caption + '</h4>';
     whtml += html_body;
 
     whtml += "</div>";
@@ -48,8 +67,8 @@ function AMS_Windows_Add(domid,appearance,caption,html_body,html_footer) {
         opacity: .5, // Opacity of modal background
         in_duration: 300, // Transition in duration
         out_duration: 200, // Transition out duration
-        starting_top: '0%', // Starting top style attribute
-        ending_top: '1%' // Ending top style attribute
+        starting_top: mp_starting_top, // Starting top style attribute
+        ending_top: mp_ending_top // Ending top style attribute
     });
 }
 
@@ -67,7 +86,6 @@ function AMS_Windows_Open(domid){
     var jqm = "#"+fulldomid;
     $(jqm).modal('open');
     $(".material-tooltip").attr('style','display: none');
-
 }
 
 function AMS_Windows_Hide(domid){

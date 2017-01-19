@@ -44,7 +44,7 @@ function AMS_NodeDetails_RebootMM(ip,port,devid,modid){
     var mydomid = 'ndrc-' + inet_pton("AF_INET", ip) + '-' + port.toString() + '-' + devid.toString() + '-' +
         modid.toString();
 
-    AMS_Windows_Add(mydomid, "d-s-nd", "重启", '<p>您真的想要重启此设备吗？</p>',
+    AMS_Windows_Add(mydomid, {windowtype:'dialog',notdismissible:true}, "重启", '<p>您真的想要重启此设备吗？</p>',
         '<a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">取消</a>' +
         '<a href="#" onclick="AMS_NodeDetails_RebootMM_Req(\'' + ip + '\',' + port.toString() + ',' + devid.toString() +
         ',' + modid.toString() +
@@ -413,7 +413,7 @@ function AMS_NodeDetails_Inline(ip,port,focus) {
 
 
     if ($('#'+fulldomid).length === 0) {
-        AMS_Windows_Add(mydomid, "big", ip + ':' + port.toString(), buttons + AMS_NodeDetails_GenTable());
+        AMS_Windows_Add(mydomid, {windowsize:'big',windowtype:'window'}, ip + ':' + port.toString(), buttons + AMS_NodeDetails_GenTable());
         var ddd = $('#'+fulldomid);
         ddd.find('.collapsible').collapsible();
         ddd.find('.tooltipped').tooltip();

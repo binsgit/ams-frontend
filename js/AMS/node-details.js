@@ -26,6 +26,32 @@ function AMS_NodeDetails_ToggleLED(ip,port,devid,modid,state){
     });
 }
 
+function AMS_NodeDetails_RebootMM_Req(ip,port,devid,modid){
+    $.ajax({
+        async: true,
+        type: "GET",
+        url: __AMS_API_URL + "reboot_mm/" + ip + '/' + port.toString() + '/' + devid.toString() +
+        '/' + modid.toString(),
+        error : function () {
+            Materialize.toast("无法重启机器：API请求失败",3000);
+        }
+    }).done(function(data, textStatus, jqXHR){
+        Materialize.toast("机器已重启")
+    });
+}
+
+function AMS_NodeDetails_RebootMM(ip,port,devid,modid){
+    var mydomid = 'ndrc-' + inet_pton("AF_INET", ip) + '-' + port.toString() + '-' + devid.toString() + '-' +
+        modid.toString();
+
+    AMS_Windows_Add(mydomid, "d-s-nd", "重启", '<p>您真的想要重启此设备吗？</p>',
+        '<a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">取消</a>' +
+        '<a href="#" onclick="AMS_NodeDetails_RebootMM_Req(\'' + ip + '\',' + port.toString() + ',' + devid.toString() +
+        ',' + modid.toString() +
+        ')" class="modal-action modal-close waves-effect waves-orange btn-flat red-text">重启</a>');
+
+    AMS_Windows_Open(mydomid);
+}
 /**
  * @return {string}
  */
@@ -34,6 +60,7 @@ function AMS_NodeDetails_GenTable(){
         '<div class="collapsible-header active"><i class="material-icons">&#xE8D2;</i>概要</div>' +
         '<div class="collapsible-body"><table class="highlight centered responsive-table">' +
         '<thead><tr>' +
+        '<th data-field="summary-table-th-elapsed">固件版本</th>' +
         '<th data-field="summary-table-th-elapsed">Elapsed</th>' +
         '<th data-field="summary-table-th-ghsav">GHSav</th>' +
         '<th data-field="summary-table-th-accepted">Accepted</th>' +
@@ -128,7 +155,7 @@ function AMS_NodeDetails_GenTableData(ip,port,fulldomid){
         var r = parsed.result[0];
 
         table_summary.append(
-            '<tr><td>'+
+            '<tr><td class="ndt-s-td-fwver">正在载入…</td><td>'+
             // Elapsed
             Reimu_Time_Sec2HMS(r.elapsed)+'</td><td>'+
             // GHSav
@@ -146,6 +173,19 @@ function AMS_NodeDetails_GenTableData(ip,port,fulldomid){
         pwindow.find('#loading-placeholder-summary').remove();
 
         parsed = null;
+
+
+        $.ajax({
+            async: true,
+            type: "GET",
+            url: __AMS_API_URL + "fwver/" + ip,
+            error : function () {
+                Materialize.toast("无法载入固件版本：API请求失败",3000);
+                $('#'+fulldomid).find('.ndt-s-td-fwver').text('请求失败');
+            }
+        }).done(function(data, textStatus, jqXHR){
+            $('#'+fulldomid).find('.ndt-s-td-fwver').text(jqXHR.responseText);
+        });
 
     });
 
@@ -286,7 +326,9 @@ function AMS_NodeDetails_GenTableData(ip,port,fulldomid){
                 ','+ parsed.result[tr].module_id.toString()+',$(this))"><i class="material-icons">&#xE42E;</i></a>' +
                 '</td><td>' +
                 // Reboot
-                '<a href="#" class="waves-effect waves-red btn-flat"><i class="material-icons">&#xE042;</i></a>' +
+                '<a href="#" onclick="AMS_NodeDetails_RebootMM(\'' + ip + '\',' + port.toString() + ',' +
+                parsed.result[tr].device_id.toString() + ',' + parsed.result[tr].module_id.toString() +
+                ')" class="waves-effect waves-red btn-flat"><i class="material-icons">&#xE042;</i></a>' +
                 '</td><td>' +
                 // Elapsed
                 Reimu_Time_Sec2HMS(parsed.result[tr].elapsed) + '</td><td>' +

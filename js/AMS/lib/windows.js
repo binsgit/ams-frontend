@@ -8,12 +8,15 @@ function AMS_Windows_FullDomId(domid){
     return "ams-dynamic-window-" + domid;
 }
 
-function AMS_Windows_Add(domid,appearance,caption,innerhtml) {
+function AMS_Windows_Add(domid,appearance,caption,html_body,html_footer) {
 
     var classes = "modal";
+    var mp_dismissible = true;
 
     if (appearance==="big") {
         classes += " modal-fixed-footer modal-big-window";
+    } else if (appearance==="d-s-nd") {
+        mp_dismissible = false;
     }
 
     var fulldomid = AMS_Windows_FullDomId(domid);
@@ -24,16 +27,24 @@ function AMS_Windows_Add(domid,appearance,caption,innerhtml) {
         '<a href="#" class="modal-action modal-close">' +
         '<i class="material-icons right black-text">&#xE15B;</i></a><h4>' + caption + '</h4>';
 
-    whtml += innerhtml;
+    whtml += html_body;
 
-    whtml += "</div></div>";
+    whtml += "</div>";
+
+    if (html_footer) {
+        whtml += '<div class="modal-footer">';
+        whtml += html_footer;
+        whtml += '</div>';
+    }
+
+    whtml += '</div>';
 
 
     $("body").prepend(whtml);
 
     var jqm = "#"+fulldomid;
     $(jqm).modal({
-        dismissible: true, // Modal can be dismissed by clicking outside of the modal
+        dismissible: mp_dismissible, // Modal can be dismissed by clicking outside of the modal
         opacity: .5, // Opacity of modal background
         in_duration: 300, // Transition in duration
         out_duration: 200, // Transition out duration

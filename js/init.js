@@ -1,16 +1,22 @@
 (function($){
     $(function(){
 
+        jQuery.fn.extend({
+            disable: function(state) {
+                return this.each(function() {
+                    this.disabled = state;
+                });
+            }
+        });
 
-        // Chart.defaults.global.tooltips.
         // Side Navbar Menu Width
         $('.button-collapse').sideNav({
             menuWidth: 245
         });
 
         var modal_cfg_center_small = {
-            dismissible: true, 
-            opacity: .5, 
+            dismissible: true,
+            opacity: .5,
             in_duration: 300,
             out_duration: 200,
             starting_top: '30%',
@@ -18,18 +24,26 @@
         };
 
         var modal_cfg_big_window = {
-            dismissible: false, 
-            opacity: .5, 
+            dismissible: false,
+            opacity: .5,
             in_duration: 300,
             out_duration: 200,
             starting_top: '0%',
             ending_top: '1%'
+        };
 
+        var modal_cfg_med_window = {
+            dismissible: false,
+            opacity: .5,
+            in_duration: 300,
+            out_duration: 200,
+            starting_top: '10%',
+            ending_top: '10%'
         };
 
         var modal_cfg_big_window_dismissible = {
-            dismissible: true, 
-            opacity: .5, 
+            dismissible: true,
+            opacity: .5,
             in_duration: 300,
             out_duration: 200,
             starting_top: '0%',
@@ -42,8 +56,43 @@
         $('#ams-userlogout-window').modal(modal_cfg_center_small);
         $('#ams-apisettings-window').modal(modal_cfg_center_small);
         $('#ams-themesettings-window').modal(modal_cfg_center_small);
+        $('#ams-fwupgrade-new-window').modal(modal_cfg_center_small);
 
-        $('#ams-firmwareupgrade-window').modal(modal_cfg_big_window);
+        $('#ams-supertac-window').modal({
+            ready: function(modal, trigger) {
+                AMS_SuperRTAC_UpdateStatus();
+            },
+            complete: function() {
+                clearTimeout(t_supertac_UpdateStatus);
+            }
+        });
+
+        $('#ams-supertac-new-window').modal({
+            dismissible: true,
+            opacity: .5,
+            in_duration: 300,
+            out_duration: 200,
+            starting_top: '20%',
+            ending_top: '20%'
+        });
+        $('#ams-supertac-scripts-window').modal(modal_cfg_center_small);
+        $('#ams-supertac-editor-window').modal(modal_cfg_big_window_dismissible);
+
+        $('#ams-fwupgrade-window').modal({
+            dismissible: false,
+            opacity: .5,
+            in_duration: 300,
+            out_duration: 200,
+            starting_top: '10%',
+            ending_top: '10%',
+            ready: function(modal, trigger) { // Callback for Modal open. Modal and trigger parameters available.
+                t_FwUpd_UpdateStatus = setTimeout(AMS_FwUpd_UpdateStatus,1000);
+            },
+            complete: function() {
+                clearTimeout(t_FwUpd_UpdateStatus);
+            }
+        });
+
         $('#ams-nodesmanage-window').modal();
         $('#ams-poolmanage-window').modal(modal_cfg_big_window);
 
@@ -66,9 +115,6 @@
 
         // Set API URL of the API settings window
         $("#ams-apisettings-window-form-url").val(__AMS_API_URL);
-
-        // Make all forms submit on enter
-        //Reimu_MakeAllFormSubmitOnEnter();
 
         // Load & auto refresh the charts
         AMS_Chart_HashRate();

@@ -6,7 +6,7 @@
 var __AMS_API_URL;
 var __AMS_API_Time = Math.floor(Date.now() / 1000);
 var __AMS_API_TimeStr = __AMS_API_Time.toString();
-
+var __AMS_CurrentUser_Token = AMS_LocalStorage_GetLoggedInUserToken();
 
 var ams_map_tc = 0;
 var ams_map_tr = 0;
@@ -107,8 +107,9 @@ function AMS_LocalStorage_SetLoggedInUserName(name) {
     return $.jStorage.set("AMS_3_1_Config_CurrentUser_Name", name);
 }
 
-function AMS_LocalStorage_SetLoggedInUserToken(name) {
-    return $.jStorage.set("AMS_3_1_Config_CurrentUser_Token", name);
+function AMS_LocalStorage_SetLoggedInUserToken(token) {
+    __AMS_CurrentUser_Token = token;
+    return $.jStorage.set("AMS_3_1_Config_CurrentUser_Token", token);
 }
 
 function AMS_LocalStorage_WipeLoggedInUserInfo(){
@@ -131,8 +132,10 @@ function AMS_StartupTask_ProcessLoggedInUser() {
 function AMS_API_Change(){
     var newams_api_url = $("#ams-apisettings-window-form-url").val();
 
+    AMS_LocalStorage_WipeLoggedInUserInfo();
     $.jStorage.set("AMS_3_1_Config_API_URL", newams_api_url);
     __AMS_API_URL = newams_api_url;
+    location.reload();
 }
 
 function AMS_Action_Map_TR_Switch(){

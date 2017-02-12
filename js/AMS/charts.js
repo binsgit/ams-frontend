@@ -2,52 +2,20 @@
  * Created by root on 16-12-30.
  */
 
+var _Chart_Hashrate = null;
+var _Chart_Aliverate = null;
+
 function AMS_Chart_FoundBlocks() {
     var ctx = document.getElementById("ams-mainpage-card-foundblocks-chart");
-    var data = {
-        labels: ["12.28", "12.29", "12.30", "12.31", "1.1", "1.2", "1.3"],
-        datasets: [
-            {
-                label: "区块",
-                fill: false,
-                lineTension: 0.1,
-                backgroundColor: "rgba(75,192,192,0.4)",
-                borderColor: "rgba(75,192,192,1)",
-                borderCapStyle: 'butt',
-                borderDash: [],
-                borderDashOffset: 0.0,
-                borderJoinStyle: 'miter',
-                pointBorderColor: "rgba(75,192,192,1)",
-                pointBackgroundColor: "#fff",
-                pointBorderWidth: 1,
-                pointHoverRadius: 5,
-                pointHoverBackgroundColor: "rgba(75,192,192,1)",
-                pointHoverBorderColor: "rgba(220,220,220,1)",
-                pointHoverBorderWidth: 2,
-                pointRadius: 1,
-                pointHitRadius: 10,
-                data: [65, 59, 80, 81, 233, 55, 40],
-                spanGaps: false,
-            }
-        ]
-    };
 
-    var myChart = new Chart(ctx, {
-        type: 'line',
-        data: data,
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero:true
-                    }
-                }]
-            }
-        }
-    });
 }
 
 function AMS_Chart_HashRate() {
+
+    if (_Chart_Hashrate) {
+        _Chart_Hashrate.destroy();
+        _Chart_Hashrate = null; // Force gc
+    }
 
     Reimu_ToogleCardTitleLoadingIcon('ams-mainpage-hashrate-title-loading',true);
 
@@ -67,49 +35,47 @@ function AMS_Chart_HashRate() {
     }).done(function(data, textStatus, jqXHR){
         Log.d("API request /hashrate" + " success");
         var parsed = JSON.parse(jqXHR.responseText);
-        var array_res_local = parsed.result[0].values;
-        var array_res_kano = parsed.result[1].values;
-        var array_res_cksolo = parsed.result[2].values;
 
+        var time_xaxis = [];
+        var datasets = [];
 
-        var xaxis_local = [];
-        var yaxis_local = [];
+        var pools = parsed.result;
 
-        var xaxis_kano = [];
-        var yaxis_kano = [];
+        for (var tt in pools[0].values.x)
+            time_xaxis.push(new Date(pools[0].values.x[tt] * 1000));
 
-        var xaxis_cksolo = [];
-        var yaxis_cksolo = [];
+        for (var pthispool in pools) {
 
-        var oqo_local = 0;
+            var thiscolor = 'rgba(' + Reimu_RandomColor();
 
-        for (var thisres_local in array_res_local) {
+            var thispool = pools[pthispool];
+            var thisyaxis = [];
+            for (var thisy in thispool.values.y)
+                thisyaxis.push(thispool.values.y[thisy] / 1000000000000);
 
-            if (oqo_local === 0) {
-                var thisdate_local = new Date(array_res_local[thisres_local].x * 1000);
+            datasets.push({
+                label: thispool.key,
+                fill: false,
+                lineTension: 0.1,
+                backgroundColor: thiscolor+",0.4)",
+                borderColor: thiscolor+",1)",
+                borderCapStyle: 'butt',
+                borderDash: [],
+                borderDashOffset: 0.0,
+                borderJoinStyle: 'miter',
+                pointBorderColor: thiscolor+",1)",
+                pointBackgroundColor: "#fff",
+                pointBorderWidth: 1,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: thiscolor+",1)",
+                pointHoverBorderColor: "rgba(220,220,220,1)",
+                pointHoverBorderWidth: 2,
+                pointRadius: 1,
+                pointHitRadius: 10,
+                data: thisyaxis,
+                spanGaps: false
+            });
 
-                xaxis_local.push(thisdate_local);
-                yaxis_local.push((array_res_local[thisres_local].y / 1000 / 1000 / 1000 / 1000).toFixed(3));
-                oqo_local = 0;
-            } else {
-                oqo_local--;
-            }
-        }
-
-        for (var thisres_kano in array_res_kano) {
-
-            var thisdate_kano = new Date(array_res_kano[thisres_kano].x*1000);
-
-            xaxis_kano.push(thisdate_kano);
-            yaxis_kano.push((array_res_kano[thisres_kano].y / 1000 / 1000 / 1000 / 1000).toFixed(3));
-        }
-
-        for (var thisres_cksolo in array_res_cksolo) {
-
-            var thisdate_cksolo = new Date(array_res_cksolo[thisres_cksolo].x*1000);
-
-            xaxis_cksolo.push(thisdate_cksolo);
-            yaxis_cksolo.push((array_res_cksolo[thisres_cksolo].y / 1000 / 1000 / 1000 / 1000).toFixed(3));
         }
 
 
@@ -117,78 +83,11 @@ function AMS_Chart_HashRate() {
 
         var ctx = document.getElementById("ams-mainpage-card-hashrate-chart");
         var chartdata = {
-            labels: xaxis_local,
-            datasets: [
-                {
-                    label: "local",
-                    fill: false,
-                    lineTension: 0.1,
-                    backgroundColor: "rgba(31,119,180,0.4)",
-                    borderColor: "rgba(31,119,180,1)",
-                    borderCapStyle: 'butt',
-                    borderDash: [],
-                    borderDashOffset: 0.0,
-                    borderJoinStyle: 'miter',
-                    pointBorderColor: "rgba(31,119,180,1)",
-                    pointBackgroundColor: "#fff",
-                    pointBorderWidth: 1,
-                    pointHoverRadius: 5,
-                    pointHoverBackgroundColor: "rgba(31,119,180,1)",
-                    pointHoverBorderColor: "rgba(220,220,220,1)",
-                    pointHoverBorderWidth: 2,
-                    pointRadius: 1,
-                    pointHitRadius: 10,
-                    data: yaxis_local,
-                    spanGaps: false,
-                },
-                {
-                    label: "kano",
-                    fill: false,
-                    lineTension: 0.1,
-                    backgroundColor: "rgba(174,199,232,0.4)",
-                    borderColor: "rgba(174,199,232,1)",
-                    borderCapStyle: 'butt',
-                    borderDash: [],
-                    borderDashOffset: 0.0,
-                    borderJoinStyle: 'miter',
-                    pointBorderColor: "rgba(174,199,232,1)",
-                    pointBackgroundColor: "#fff",
-                    pointBorderWidth: 1,
-                    pointHoverRadius: 5,
-                    pointHoverBackgroundColor: "rgba(174,199,232,1)",
-                    pointHoverBorderColor: "rgba(220,220,220,1)",
-                    pointHoverBorderWidth: 2,
-                    pointRadius: 1,
-                    pointHitRadius: 10,
-                    data: yaxis_kano,
-                    spanGaps: false,
-                },
-                {
-                    label: "cksolo",
-                    fill: false,
-                    lineTension: 0.1,
-                    backgroundColor: "rgba(255,127,14,0.4)",
-                    borderColor: "rgba(255,127,14,1)",
-                    borderCapStyle: 'butt',
-                    borderDash: [],
-                    borderDashOffset: 0.0,
-                    borderJoinStyle: 'miter',
-                    pointBorderColor: "rgba(255,127,14,1)",
-                    pointBackgroundColor: "#fff",
-                    pointBorderWidth: 1,
-                    pointHoverRadius: 5,
-                    pointHoverBackgroundColor: "rgba(255,127,14,1)",
-                    pointHoverBorderColor: "rgba(220,220,220,1)",
-                    pointHoverBorderWidth: 2,
-                    pointRadius: 1,
-                    pointHitRadius: 10,
-                    data: yaxis_cksolo,
-                    spanGaps: false
-                }
-            ]
+            labels: time_xaxis,
+            datasets: datasets
         };
 
-        var myChart = new Chart(ctx, {
+        _Chart_Hashrate = new Chart(ctx, {
             type: 'line',
             data: chartdata,
             options: {
@@ -197,15 +96,15 @@ function AMS_Chart_HashRate() {
                         type: 'time',
                         time: {
                             displayFormats: {
-                                'millisecond': 'YY-MM-DD',
-                                'second': 'YY-MM-DD',
-                                'minute': 'YY-MM-DD',
-                                'hour': 'YY-MM-DD',
-                                'day': 'YY-MM-DD',
-                                'week': 'YY-MM-DD',
-                                'month': 'YY-MM-DD',
-                                'quarter': 'YY-MM-DD',
-                                'year': 'YY-MM-DD'
+                                'millisecond': 'M-DD',
+                                'second': 'M-DD',
+                                'minute': 'M-DD',
+                                'hour': 'M-DD',
+                                'day': 'M-DD',
+                                'week': 'M-DD',
+                                'month': 'M-DD',
+                                'quarter': 'M-DD',
+                                'year': 'M-DD'
                             },
                             tooltipFormat: "YYYY-MM-DD HH:MM:SS"
                         },
@@ -232,18 +131,7 @@ function AMS_Chart_HashRate() {
 
 
         ctx = null;
-
         parsed = null;
-
-        xaxis_local = null;
-        yaxis_local = null;
-
-        xaxis_cksolo = null;
-        yaxis_cksolo = null;
-
-        xaxis_kano = null;
-        yaxis_kano = null;
-
         myChart = null;
 
     });
@@ -253,6 +141,11 @@ function AMS_Chart_HashRate() {
 
 
 function AMS_Chart_NormalNodes() {
+
+    if (_Chart_Aliverate) {
+        _Chart_Aliverate.destroy();
+        _Chart_Aliverate = null; // Force gc
+    }
 
     Reimu_ToogleCardTitleLoadingIcon('ams-mainpage-aliverate-title-loading',true);
 
@@ -275,41 +168,17 @@ function AMS_Chart_NormalNodes() {
         var array_res_nodes = parsed.result[0].values;
         var array_res_modules = parsed.result[1].values;
 
-        var xaxis_nodes = [];
-        var yaxis_nodes = [];
+        var time_xaxis = [];
 
-        var xaxis_modules = [];
-        var yaxis_modules = [];
-
-        var oqo_local = 0;
-
-        for (var thisres_nodes in array_res_nodes) {
-
-            if (oqo_local === 0) {
-                var thisdate_nodes = new Date(array_res_nodes[thisres_nodes].x * 1000);
-
-                xaxis_nodes.push(thisdate_nodes);
-                yaxis_nodes.push(array_res_nodes[thisres_nodes].y);
-                oqo_local = 0;
-            } else {
-                oqo_local--;
-            }
-        }
-
-        for (var thisres_modules in array_res_modules) {
-
-            var thisdate_modules = new Date(array_res_modules[thisres_modules].x*1000);
-
-            xaxis_modules.push(thisdate_modules);
-            yaxis_modules.push(array_res_modules[thisres_modules].y);
-        }
+        for (var thisres_nodes in array_res_nodes.x)
+            time_xaxis.push(new Date(array_res_nodes.x[thisres_nodes] * 1000));
 
 
 
 
         var ctx = document.getElementById("ams-mainpage-card-normalnodes-chart");
         var chartdata = {
-            labels: xaxis_nodes,
+            labels: time_xaxis,
             datasets: [
                 {
                     label: "机器",
@@ -330,8 +199,8 @@ function AMS_Chart_NormalNodes() {
                     pointHoverBorderWidth: 2,
                     pointRadius: 1,
                     pointHitRadius: 10,
-                    data: yaxis_modules,
-                    spanGaps: false,
+                    data: array_res_modules.y,
+                    spanGaps: false
                 },
                 {
                     label: "控制器",
@@ -352,13 +221,13 @@ function AMS_Chart_NormalNodes() {
                     pointHoverBorderWidth: 2,
                     pointRadius: 1,
                     pointHitRadius: 10,
-                    data: yaxis_nodes,
-                    spanGaps: false,
+                    data: array_res_nodes.y,
+                    spanGaps: false
                 }
             ]
         };
 
-        var myChart = new Chart(ctx, {
+        _Chart_Aliverate = new Chart(ctx, {
             type: 'line',
             data: chartdata,
 
@@ -368,15 +237,15 @@ function AMS_Chart_NormalNodes() {
                         type: 'time',
                         time: {
                             displayFormats: {
-                                'millisecond': 'YY-MM-DD',
-                                'second': 'YY-MM-DD',
-                                'minute': 'YY-MM-DD',
-                                'hour': 'YY-MM-DD',
-                                'day': 'YY-MM-DD',
-                                'week': 'YY-MM-DD',
-                                'month': 'YY-MM-DD',
-                                'quarter': 'YY-MM-DD',
-                                'year': 'YY-MM-DD'
+                                'millisecond': 'M-DD',
+                                'second': 'M-DD',
+                                'minute': 'M-DD',
+                                'hour': 'M-DD',
+                                'day': 'M-DD',
+                                'week': 'M-DD',
+                                'month': 'M-DD',
+                                'quarter': 'M-DD',
+                                'year': 'M-DD'
                             },
                             tooltipFormat: "YYYY-MM-DD HH:MM:SS"
                         },

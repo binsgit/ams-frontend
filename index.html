@@ -20,9 +20,9 @@
 <ul id="ams-mainpage-badmachines-critical-errs-list" class="dropdown-content">
     <li><a href="#" onclick="AMS_Issues_ApplyFilterMode(1)"><i class="material-icons left">&#xE068;</i>空闲</a></li>
     <li><a href="#" onclick="AMS_Issues_ApplyFilterMode(4)"><i class="material-icons left">&#xE332;</i>无风扇</a></li>
-    <li><a href="#"><i class="material-icons left">&#xE047;</i>停止工作</a></li>
+    <!--<li><a href="#"><i class="material-icons left">&#xE047;</i>停止工作</a></li>-->
     <li><a href="#" onclick="AMS_Issues_ApplyFilterMode(64)"><i class="material-icons left">&#xE80E;</i>温度过高</a></li>
-    <li><a href="#"><i class="material-icons left">&#xE040;</i>机器运行时间异常</a></li>
+    <!--<li><a href="#"><i class="material-icons left">&#xE040;</i>机器运行时间异常</a></li>-->
 </ul>
 
 <ul id="ams-mainpage-badmachines-warnings-list" class="dropdown-content">
@@ -31,7 +31,7 @@
     <li><a href="#" onclick="AMS_Issues_ApplyFilterMode('crc')"><i class="material-icons left">&#xE01E;</i>CRC异常</a></li>
     <!--<li><a href="#"><i class="material-icons left">&#xEB3B;</i>温度过低</a></li>-->
     <li><a href="#" onclick="AMS_Issues_ApplyFilterMode('dh')"><i class="material-icons left">&#xE8E5;</i>DH过高</a></li>
-    <li><a href="#"><i class="material-icons left">&#xE8E3;</i>算力过低</a></li>
+    <!--<li><a href="#"><i class="material-icons left">&#xE8E3;</i>算力过低</a></li>-->
 
     <li><a href="#" onclick="AMS_Issues_ApplyFilterMode(128)"><i class="material-icons left">&#xE80E;</i>曾经温度过高</a></li>
     <li><a href="#" onclick="AMS_Issues_ApplyFilterMode(1024)"><i class="material-icons left">&#xE0DB;</i>没有检测到PMU</a></li>
@@ -97,14 +97,7 @@
                 </a>
                 </li>
 
-
-
-
             </ul>
-
-            <!--<ul id="nav-mobile" class="side-nav">-->
-            <!--<li><a href="#">Navbar Link</a></li>-->
-            <!--</ul>-->
 
         </div>
     </nav>
@@ -195,7 +188,7 @@
 <div id="ams-rebootconfirm-window" class="modal">
     <div class="modal-content">
         <h4>重启设备</h4>
-            <p>您真的想要重启此设备吗？</p>
+        <p>您真的想要重启此设备吗？</p>
     </div>
     <div class="modal-footer">
         <a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">取消</a>
@@ -209,20 +202,245 @@
         <a href="#" onclick="" class="modal-action modal-close"><i class="material-icons right black-text">&#xE15B;</i></a>
         <h4>192.168.1.21:4028</h4>
 
-        <!--<div class="divider grey lighten-1"></div>-->
-
     </div>
 </div>
 
-<div id="ams-firmwareupgrade-window" class="modal modal-fixed-footer modal-size-big">
+<div id="ams-supertac-window" class="modal modal-fixed-footer modal-size-med">
+    <div class="modal-content">
+        <a href="#" onclick="" class="modal-action modal-close"><i class="material-icons right black-text">&#xE14C;</i></a>
+        <h4>Super RTAC</h4>
+
+        <table class="highlight">
+            <thead>
+            <tr>
+                <th data-field="ams-mainpage-srtac-table-th-ip">IP</th>
+                <th data-field="ams-mainpage-srtac-table-th-script">脚本</th>
+                <th data-field="ams-mainpage-srtac-table-th-startime">开始时间</th>
+                <th data-field="ams-mainpage-srtac-table-th-status">状态</th>
+                <th data-field="ams-mainpage-srtac-table-th-output" style="width: 65%">当前输出</th>
+                <th data-field="ams-mainpage-srtac-table-th-ops">操作</th>
+
+            </tr>
+            </thead>
+
+            <tbody id="ams-mainpage-srtac-table-tbody">
+
+            </tbody>
+        </table>
+
+    </div>
+
+    <div class="modal-footer">
+        <a href="#" onclick="AMS_SuperRTAC_Req_Clear()" class="waves-effect waves-red btn-flat">清空已结束的操作</a>
+        <a href="#ams-supertac-scripts-window" onclick="AMS_SuperRTAC_UpdateScriptList()" class="waves-effect waves-green btn-flat">脚本列表</a>
+    </div>
+</div>
+
+<div id="ams-supertac-new-window" class="modal modal-fixed-footer">
+    <div class="modal-content">
+        <a href="#" onclick="" class="modal-action modal-close"><i class="material-icons right black-text">&#xE14C;</i></a>
+        <a href="#" onclick="AMS_SuperRTAC_Help_Exec()" class="modal-action"><i class="material-icons right black-text">&#xE887;</i></a>
+        <h4>执行</h4>
+
+
+        <div class="row">
+            <form class="col s12">
+                <div class="row">
+                    <span style="font-size: 1.1rem"><b>要执行的脚本：</b><span id="ams-supertac-new-scriptname"></span></span>
+                </div>
+
+                <div class="row">
+                    <input class="with-gap black-text" name="ams-supertac-new-ipsmode" type="radio"
+                           onchange="DisableThem(['#ams-supertacnew-window-form-iplist']);
+                           DontDisableThem(['#ams-supertacnew-window-form-ipst','#ams-supertacnew-window-form-iped']);"
+                           id="asni-range" checked="checked"/>
+                    <label for="asni-range">IP段</label>
+                </div>
+
+                <div class="row">
+                    <div class="input-field col s9">
+                        <input id="ams-supertacnew-window-form-ipst" type="text" placeholder="例如：192.168.1.50" value="">
+                        <label for="ams-supertacnew-window-form-ipst">IP地址（起始）</label>
+                    </div>
+                    <div class="input-field col s3">
+                        <input id="ams-supertacnew-window-form-iped" type="text" placeholder="例如：100" value="">
+                        <label for="ams-supertacnew-window-form-iped">IP地址结束</label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <input class="with-gap black-text" name="ams-supertac-new-ipsmode" type="radio"
+                           onchange="DontDisableThem(['#ams-supertacnew-window-form-iplist']);
+                                  DisableThem(['#ams-supertacnew-window-form-ipst','#ams-supertacnew-window-form-iped']);"
+                           id="asni-list" />
+                    <label for="asni-list">IP列表</label>
+                </div>
+
+                <div class="row">
+                    <div class="input-field col s12">
+                    <textarea disabled id="ams-supertacnew-window-form-iplist" class="materialize-textarea"
+                              placeholder="每行一个；和上面的地址段只能任选其一"></textarea>
+                        <label for="ams-supertacnew-window-form-iplist">IP列表</label>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <input type="checkbox" class="filled-in black-text" id="asni-mlc"
+                           onchange="if (this.checked)
+                           DontDisableThem(['#ams-supertacnew-window-form-user','#ams-supertacnew-window-form-passwd']);
+                                     else
+                           DisableThem(['#ams-supertacnew-window-form-user','#ams-supertacnew-window-form-passwd'])"/>
+                    <label for="asni-mlc">指定登录信息</label>
+                </div>
+
+                <div class="row">
+                    <div class="input-field col s5">
+                        <input id="ams-supertacnew-window-form-user" type="text" placeholder="root" value="" disabled>
+                        <label for="ams-supertacnew-window-form-user">用户名</label>
+                    </div>
+                    <div class="input-field col s7">
+                        <input id="ams-supertacnew-window-form-passwd" type="password" placeholder="q123456 :)" value="" disabled>
+                        <label for="ams-supertacnew-window-form-passwd">密码</label>
+                    </div>
+                </div>
+
+
+            </form>
+        </div>
+
+    </div>
+
+    <div class="modal-footer">
+        <a href="#" class="modal-close waves-effect waves-red btn-flat">取消</a>
+        <a href="#" onclick="AMS_SuperRTAC_CheckExec()" class="waves-effect waves-green btn-flat">确定</a>
+    </div>
+</div>
+
+<div id="ams-supertac-scripts-window" class="modal">
+    <div class="modal-content">
+        <a href="#" onclick="" class="modal-action modal-close"><i class="material-icons right black-text">&#xE14C;</i></a>
+        <h4>脚本列表</h4>
+
+
+        <table class="highlight">
+            <thead>
+            <tr>
+                <th data-field="ams-mainpage-srtac-table-th-ip">名称</th>
+                <th data-field="ams-mainpage-srtac-table-th-script">上次修改时间</th>
+                <th data-field="ams-mainpage-srtac-table-th-status">操作</th>
+
+            </tr>
+            </thead>
+
+            <tbody id="ams-mainpage-srtac-scripts-table-tbody">
+
+            </tbody>
+        </table>
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="modal-close waves-effect waves-light btn-flat">完成</a>
+        <a href="#" onclick="AMS_SuperRTAC_OpenEditor()" class="waves-effect waves-green btn-flat">新增</a>
+    </div>
+</div>
+
+<div id="ams-supertac-editor-window" class="modal modal-fixed-footer modal-size-big">
+    <div class="modal-content">
+        <a href="#" onclick="" class="modal-action modal-close"><i class="material-icons right black-text">&#xE14C;</i></a>
+        <h4>编辑脚本</h4>
+
+        <div id="ams-supertac-editor-editor" style="height: calc(100% - 56px - 84px);"></div>
+
+        <div class="row"></div>
+        <div class="input-field col s12">
+            <input id="ams-supertac-editor-filename" type="text" class="validate" value="">
+            <label for="ams-supertac-editor-filename" style="left: 0">文件名</label>
+        </div>
+    </div>
+
+    <div class="modal-footer">
+        <a href="#" class="modal-close waves-effect waves-light btn-flat">取消</a>
+        <a href="#" onclick="AMS_SuperRTAC_CommitEdit();AMS_SuperRTAC_UpdateScriptList()" class="waves-effect waves-green btn-flat">保存</a>
+    </div>
+</div>
+
+<div id="ams-fwupgrade-window" class="modal modal-fixed-footer modal-size-med">
     <div class="modal-content">
         <a href="#" onclick="" class="modal-action modal-close"><i class="material-icons right black-text">&#xE14C;</i></a>
         <h4>固件升级</h4>
-        <p>A bunch of text</p>
+
+        <table class="highlight">
+            <thead>
+            <tr>
+                <th data-field="ams-mainpage-fwupd-table-th-ip" style="width: 13%">IP</th>
+                <th data-field="ams-mainpage-fwupd-table-th-cat" style="width: 12%">升级类型</th>
+                <th data-field="ams-mainpage-fwupd-table-th-status" style="width: 50%">当前状态</th>
+                <th data-field="ams-mainpage-fwupd-table-th-progress" style="width: 25%">进度</th>
+
+            </tr>
+            </thead>
+
+            <tbody id="ams-mainpage-fwupd-table-tbody">
+
+            </tbody>
+        </table>
+
+    </div>
+
+    <div class="modal-footer">
+
+        <a href="#" onclick="AMS_FwUpd_Req_Clear()" class="waves-effect waves-red btn-flat">清空已结束的升级</a>
+        <a href="#ams-fwupgrade-new-window" class="waves-effect waves-green btn-flat">新增升级</a>
     </div>
 </div>
 
-<div id="ams-nodesmanage-window" class="modal modal-fixed-footer">
+<div id="ams-fwupgrade-new-window" class="modal">
+    <div class="modal-content">
+        <a href="#" onclick="" class="modal-action modal-close"><i class="material-icons right black-text">&#xE14C;</i></a>
+        <h4>新增</h4>
+    </div>
+
+    <div class="row">
+        <form class="col s12">
+            <div class="row">
+                <div class="input-field col s12">
+                    <p>升级类型：</p>
+                    <input class="with-gap" name="ams-fwupdnew-window-form-updmode" type="radio" id="ams-fwupdnew-window-form-updmode-mm" checked="checked"/>
+                    <label for="ams-fwupdnew-window-form-updmode-mm" class="black-text">MM固件</label>
+                    &nbsp;&nbsp;
+                    <input class="with-gap" name="ams-fwupdnew-window-form-updmode" type="radio" id="ams-fwupdnew-window-form-updmode-ctl" />
+                    <label for="ams-fwupdnew-window-form-updmode-ctl" class="black-text">控制器固件</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s12">
+                    <input id="ams-fwupdnew-window-form-fwpkgurl" type="text" class="validate" value="https://mirrors.makai.moe/avalon/avalon7/mm/2016-12-30/MM721.mcs">
+                    <label for="ams-fwupdnew-window-form-fwpkgurl">固件地址</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="input-field col s9">
+                    <input id="ams-fwupdnew-window-form-ipst" type="text" class="validate" value="192.168.1.50">
+                    <label for="ams-fwupdnew-window-form-ipst">IP地址（起始）</label>
+                </div>
+                <div class="input-field col s3">
+                    <input id="ams-fwupdnew-window-form-iped" type="text" class="validate" value="150">
+                    <label for="ams-fwupdnew-window-form-iped">IP地址结束</label>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="modal-footer">
+        <a href="#" class="modal-close waves-effect waves-red btn-flat">取消</a>
+        <a href="#" class="modal-close waves-effect waves-green btn-flat">确定</a>
+    </div>
+</div>
+
+<div id="ams-nodesmanage-window" class="modal modal-fixed-footer" onload="AMS_NodeManagment_FillCurrentNodes()">
     <div class="modal-content">
         <a href="#" onclick="" class="modal-action modal-close"><i class="material-icons right black-text">&#xE14C;</i></a>
         <h4>控制器管理</h4>
@@ -237,17 +455,15 @@
 
             <tbody id="ams-nodesmanage-nodes-table-tbody">
 
-            <tr><td>192.168.1.233</td><td>2333</td><td>20</td>
-                <td>
-                    <a href="#" class="waves-effect waves-orange btn-flat btn-floating">
-                        <i class="material-icons black-text">&#xE3C9;</i></a>
-                    <a href="#" class="waves-effect waves-red btn-flat btn-floating">
-                        <i class="material-icons black-text">&#xE14C;</i></a>
-
-                </td></tr>
+            <tr><td>正在载入，请稍候…</td><td></td><td></td><td></td></tr>
 
             </tbody>
         </table>
+    </div>
+    <div class="modal-footer">
+        <!--<a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">取消</a>-->
+        <a href="#" id="btn_bulkmodify" onclick="" class="modal-action waves-effect waves-green btn-flat disabled">批量修改</a>
+        <a href="#" id="btn_add" onclick="AMS_NodeManagment_NewNode()" class="modal-action waves-effect waves-green btn-flat disabled">添加</a>
     </div>
 </div>
 
@@ -267,7 +483,7 @@
         </div>
         <br>
         <span class="ams mainmenu-header-first codename">AMS</span>
-        <span class="ams mainmenu-header version">v3.0.1-ffffffff</span>
+        <span class="ams mainmenu-header version">v3.0.2-dev</span>
     </div></li>
 
     <li><a href="#" class="white-text msyh waves-effect waves-light tooltipped" data-position="right" data-delay="50" data-tooltip="喵喵喵">
@@ -278,9 +494,12 @@
     <li><a href="#" class="white-text msyh waves-effect waves-light"><i class="material-icons white-text">&#xE88A;</i>概览</a></li>
     <li><div class="divider blue darken-3"></div></li>
     <li><a class="subheader white-text text-darken-1">管理</a></li>
-    <li><a href="#ams-firmwareupgrade-window" class="white-text msyh waves-effect waves-light"><i class="material-icons white-text">&#xE864;</i>固件升级</a></li>
+    <li><a href="#ams-fwupgrade-window" class="white-text msyh waves-effect waves-light"><i class="material-icons white-text">&#xE864;</i>固件升级</a></li>
     <li><a href="#" onclick="AMS_NodeManagment_OpenUI()" class="white-text msyh waves-effect waves-light"><i class="material-icons white-text">&#xE875;</i>控制器管理</a></li>
     <li><a href="#ams-poolmanage-window" class="white-text msyh waves-effect waves-light"><i class="material-icons white-text">&#xE80B;</i>矿池管理</a></li>
+    <li><a href="#ams-supertac-window" class="white-text msyh waves-effect waves-light">
+        <i class="material-icons white-text">&#xE869;</i>Super RTAC</a>
+    </li>
     <li><div class="divider blue darken-3"></div></li>
     <li><a class="subheader white-text text-darken-1">系统</a></li>
     <li><a href="#ams-themesettings-window" class="white-text msyh waves-effect waves-light"><i class="material-icons white-text">&#xE3B7;</i>主题</a></li>
@@ -299,21 +518,22 @@
                     <span id="ams-mainpage-map-title-loading"></span>
 
                     <br>
-                    <div class="right-align">
-                        <div class="ams-mapline">
-                            <a href="#" class="dropdown-button waves-effect waves-green btn-flat"
-                               data-activates="ams-mainpage-map-tr-list">
-                                取值<i class="material-icons right">&#xE313;</i>
-                            </a>
+                    <!--<div class="right-align">-->
+                    <!--<div class="ams-mapline">-->
+                    <!--<a href="#" class="dropdown-button waves-effect waves-green btn-flat"-->
+                    <!--data-activates="ams-mainpage-map-tr-list">-->
+                    <!--取值<i class="material-icons right">&#xE313;</i>-->
+                    <!--</a>-->
 
-                            <a href="#"  class="dropdown-button waves-effect waves-green btn-flat"
-                               data-activates="ams-mainpage-map-td-list">
-                                显示<i class="material-icons right">&#xE313;</i>
-                            </a>
-                            &nbsp;&nbsp;
-                            <br><br>
-                        </div>
-                    </div>
+                    <!--<a href="#"  class="dropdown-button waves-effect waves-green btn-flat"-->
+                    <!--data-activates="ams-mainpage-map-td-list">-->
+                    <!--显示<i class="material-icons right">&#xE313;</i>-->
+                    <!--</a>-->
+                    <!--&nbsp;&nbsp;-->
+                    <!--<br><br>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <br>
                     <div class="ams-maparea" id="ams-mainpage-card-maparea">
 
                         <div id="map-loading">
@@ -361,10 +581,6 @@
                     </div>
 
                 </div>
-                <!--<div class="card-action">-->
-                <!--<a href="#">This is a link</a>-->
-                <!--<a href="#">This is a link</a>-->
-                <!--</div>-->
             </div>
         </div>
 
@@ -561,6 +777,7 @@
 <script src="js/jstorage.js"></script>
 <script src="js/materialize.js"></script>
 <script src="js/taffy.js"></script>
+<script src="js/Ace/ace.js"></script>
 <script src="js/Chart.js/2.4.0/Chart.min.js"></script>
 <script src="js/Chart.js/2.4.0/Chart.bundle.min.js"></script>
 
@@ -589,6 +806,7 @@
 <script src="js/AMS/node-managment.js"></script>
 <script src="js/AMS/pool-managment.js"></script>
 <script src="js/AMS/firmware-update.js"></script>
+<script src="js/AMS/supertac.js"></script>
 <script src="js/AMS/datasource.js"></script>
 <script src="js/AMS/debug.js"></script>
 

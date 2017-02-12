@@ -44,6 +44,9 @@
     font-size: 1.1rem !important;
 }
 
+.monospace {
+    font-family:Ubuntu Mono, DejaVu Sans Mono, Consolas, Monaco, Lucida Console, Liberation Mono, Bitstream Vera Sans Mono, Courier New, monospace !important;
+}
 
 .codename {
     font-size: 20px;
@@ -92,6 +95,12 @@
     max-height: 96% !important;
 }
 
+.modal-size-med {
+    height: 80% !important;
+    max-height: 80% !important;
+    width: 80% !important;
+}
+
 .ams-button-table-action {
     width: inherit;
     display: inline-block;
@@ -100,10 +109,24 @@
     line-height: 40px;
 }
 
+.progress-in-td {
+    margin: 0;
+    height: 10px;
+}
+
 td, tr {
     border-radius: 0 !important;
 }
 
 td, th {
     padding: 7px 5px !important;
+}
+
+.textbox-center {
+    text-align: center;
+}
+
+#toast-container {
+    max-height: 85%;
+    overflow: auto;
 }

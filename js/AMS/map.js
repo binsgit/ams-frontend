@@ -79,29 +79,33 @@ function AMS_Map_Update(){
         var parsed = JSON.parse(jqXHR.responseText);
         var array_res = parsed.result;
 
-        AMS_Map_Flush();
+        if (jqXHR.responseText !== '{"result": []}') {
 
-        var lines = 0;
-        var thisline_blocks = 0;
+            AMS_Map_Flush();
 
-        for (var thisres in array_res) {
+            var lines = 0;
+            var thisline_blocks = 0;
 
-            if (thisline_blocks === 10) {
-                thisline_blocks = 0;
-                lines++;
+            for (var thisres in array_res) {
+
+                if (thisline_blocks === 10) {
+                    thisline_blocks = 0;
+                    lines++;
+                }
+
+                if (thisline_blocks === 0)
+                    AMS_Map_Append_Line(lines);
+
+                AMS_Map_Append_Block(lines, array_res[thisres].dead, array_res[thisres].ip, array_res[thisres].port,
+                    array_res[thisres].mhs, array_res[thisres].mod_num, array_res[thisres].temp, array_res[thisres].tmax, 0);
+
+                thisline_blocks++;
             }
 
-            if (thisline_blocks === 0)
-                AMS_Map_Append_Line(lines);
+            // for (var j in lines)
+            $("#ams-mainpage-card-maparea").find('.tooltipped').tooltip();
 
-            AMS_Map_Append_Block(lines,array_res[thisres].dead,array_res[thisres].ip,array_res[thisres].port,
-                array_res[thisres].mhs,array_res[thisres].mod_num,array_res[thisres].temp,array_res[thisres].tmax,0);
-
-            thisline_blocks++;
         }
-
-        // for (var j in lines)
-        $("#ams-mainpage-card-maparea").find('.tooltipped').tooltip();
 
         Reimu_ToogleCardTitleLoadingIcon('ams-mainpage-map-title-loading',false);
 

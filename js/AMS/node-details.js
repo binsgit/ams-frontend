@@ -20,8 +20,6 @@ function AMS_NodeDetails_ToggleLED(ip,port,devid,modid,state){
             Materialize.toast("无法开关LED：API请求失败",3000);
         }
     }).done(function(data, textStatus, jqXHR){
-
-
         slrreq = null;
     });
 }
@@ -174,7 +172,6 @@ function AMS_NodeDetails_GenTableData(ip,port,fulldomid){
 
         parsed = null;
 
-
         $.ajax({
             async: true,
             type: "GET",
@@ -287,6 +284,7 @@ function AMS_NodeDetails_GenTableData(ip,port,fulldomid){
         url: __AMS_API_URL + "status/module/latest/" + ip + '/' + port.toString(),
         error : function () {
             Materialize.toast("无法载入状态详情：API请求失败",3000);
+
         }
     }).done(function(data, textStatus, jqXHR){
         var parsed = JSON.parse(jqXHR.responseText);
@@ -387,7 +385,8 @@ function AMS_NodeDetails_ShowDebug(ip,port){
         }
     }).done(function(data, textStatus, jqXHR) {
         console.log(jqXHR);
-        $('#' + fulldomid).find('.collapsible').prepend('<li class="active"><div class="collapsible-header active">' +
+        $('#' + fulldomid).find('.nd-debuginfo').remove();
+        $('#' + fulldomid).find('.collapsible').prepend('<li class="active nd-debuginfo"><div class="collapsible-header active">' +
             '<i class="material-icons">&#xE86F;</i>调试信息 - ' + Reimu_Time_unix2rfc3339() +
             '</div><div class="collapsible-body"><div class="row"><div class="col l11">' + jqXHR.responseText +
             '</div></div></div></li>');

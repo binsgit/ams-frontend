@@ -20,29 +20,29 @@ function AMS_NavBar_IP_UpdateText(ip) {
 function AMS_NavBar_MiscInfo_UpdateText(){
     $.ajax({
         async: true,
-        type: "GET",
-        url: __AMS_API_URL + "shortlog",
-        error: function () {
+        type: "POST",
+        url: __AMS_API_URL,
+        data: '{"operation": "glimpse", "data": {}}',
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        error : function (data, textStatus, jqXHR) {
             ams_api_connectok_noticed = 0;
-            Materialize.toast("API请求失败！请检查您的网络、服务器证书和API地址配置是否正确",3000);
+            Materialize.toast("API请求失败！请检查您的网络、服务器证书和API地址配置是否正确", 3000);
         }
     }).done(function(data, textStatus, jqXHR){
+        var ret = JSON.parse(jqXHR.responseText);
+        var retdata = ret.data;
 
         if (ams_api_connectok_noticed === 0) {
             ams_api_connectok_noticed = 1;
             Materialize.toast("API连接成功 ["+__AMS_API_URL+"]",3000);
         }
-
-        Log.d("API request /shortlog success");
-
-        var parsed = JSON.parse(jqXHR.responseText);
-
         // console.log(jqXHR.responseText);
 
-        var nodescount = parsed.result.node_num;
-        var machinescount = parsed.result.module_num;
-        var thashrate_cgm = parsed.result.hashrate_cgminer / 1000 / 1000 / 1000;
-        var thashrate_theo = parsed.result.hashrate / 1000 / 1000 / 1000;
+        var nodescount = retdata.ctls;
+        var machinescount = retdata.mods
+        var thashrate_cgm = retdata.mhs / 1000 / 1000 / 1000;
+        var thashrate_theo = retdata.mhs_t / 1000 / 1000 / 1000;
 
         // $.jStorage.set("AMS_3_1_Runtime_API_Time", parsed.result.time);
 
@@ -51,21 +51,21 @@ function AMS_NavBar_MiscInfo_UpdateText(){
         $("#ams-navbar-hashrate").text(thashrate_cgm.toFixed(2).toString()+" / "+thashrate_theo.toFixed(2).toString());
     });
 
-    $.ajax({
-        async: true,
-        type: "GET",
-        url: __AMS_API_URL + "lasttime"
-    }).done(function(data, textStatus, jqXHR){
-
-        var parsed = JSON.parse(jqXHR.responseText);
-        // console.log(jqXHR.responseText);
-
-        __AMS_API_Time = parsed.result;
-        __AMS_API_TimeStr = parsed.result.toString();
-
-        $.jStorage.set("AMS_3_1_Runtime_API_Time", parsed.result);
-
-    });
+    // $.ajax({
+    //     async: true,
+    //     type: "GET",
+    //     url: __AMS_API_URL + "lasttime"
+    // }).done(function(data, textStatus, jqXHR){
+    //
+    //     var parsed = JSON.parse(jqXHR.responseText);
+    //     // console.log(jqXHR.responseText);
+    //
+    //     __AMS_API_Time = parsed.result;
+    //     __AMS_API_TimeStr = parsed.result.toString();
+    //
+    //     $.jStorage.set("AMS_3_1_Runtime_API_Time", parsed.result);
+    //
+    // });
 
 
     var t = setTimeout(AMS_NavBar_MiscInfo_UpdateText, 5000);

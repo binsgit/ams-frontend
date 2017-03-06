@@ -6,13 +6,14 @@ var ams_nodedatails_openedwindowlist = {};
 
 function AMS_NodeDetails_ToggleLED(ip,port,devid,modid,state){
 
-    var slrreq = '{modules: [{ip: "' + ip.toString() + '", port: "' + port.toString() + '", device_id: ' +
-        devid.toString() + ', module_id: ' + modid.toString() + ', led: ' + state.toString() + '}]}';
+    var slrreq = '{"operation": "ascset", "data": {"ip":"' + ip +
+        '","port":' + port.toString() + ', "op":"led", "modid":' + modid.toString() +
+        ', "devid":' + devid.toString() + ', "state":' + state.toString() + '}}';
 
     $.ajax({
         async: true,
         type: "POST",
-        url: __AMS_API_URL + "led",
+        url: __AMS_API_URL,
         data: slrreq,
         contentType: "application/json; charset=utf-8",
         dataType: "json",
@@ -25,15 +26,23 @@ function AMS_NodeDetails_ToggleLED(ip,port,devid,modid,state){
 }
 
 function AMS_NodeDetails_RebootMM_Req(ip,port,devid,modid){
+
+    var slrreq = '{"operation": "ascset", "data": {"ip":"' + ip +
+        '","port":' + port.toString() + ', "op":"reboot", "modid":' + modid.toString() +
+        ', "devid":' + devid.toString() + '}}';
+
     $.ajax({
         async: true,
-        type: "GET",
-        url: __AMS_API_URL + "reboot_mm/" + ip + '/' + port.toString() + '/' + devid.toString() +
-        '/' + modid.toString(),
+        type: "POST",
+        url: __AMS_API_URL,
+        data: slrreq,
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
         error : function () {
-            Materialize.toast("无法重启机器：API请求失败",3000);
+            Materialize.toast("无法开关LED：API请求失败",3000);
         }
     }).done(function(data, textStatus, jqXHR){
+        slrreq = null;
         Materialize.toast("机器已重启")
     });
 }
@@ -141,36 +150,40 @@ function AMS_NodeDetails_GenTableData(ip,port,fulldomid){
     // /api/status/summary
     $.ajax({
         async: true,
-        type: "GET",
-        url: __AMS_API_URL + "status/summary/latest/" + ip + '/' + port.toString(),
-        error : function () {
-            Materialize.toast("无法载入控制器详情：API请求失败",3000);
+        type: "POST",
+        url: __AMS_API_URL,
+        data: '{"operation": "status", "data": {"ip":"'+ip+'","port":'+port.toString()+'}}',
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        error : function (data, textStatus, jqXHR) {
+
         }
     }).done(function(data, textStatus, jqXHR){
-
-        Log.d("API request " + "/status/summary/latest/" + ip + '/' + port.toString() + ' success');
-        var parsed = JSON.parse(jqXHR.responseText);
-        var r = parsed.result[0];
+        var ret = JSON.parse(jqXHR.responseText);
+        var status = ret.data.Status;
+        var summary = status.Summary;
+        var devices = status.Devices;
+        var pools = status.Pools;
+        var modules = status.Modules;
 
         table_summary.append(
             '<tr><td class="ndt-s-td-fwver">正在载入…</td><td>'+
             // Elapsed
-            Reimu_Time_Sec2HMS(r.elapsed)+'</td><td>'+
+            Reimu_Time_Sec2HMS(summary.Elapsed)+'</td><td>'+
             // GHSav
-            (r.mhs_av/1000).toFixed(2).toString()+'</td><td>'+
+            (summary.MHSav/1000).toFixed(2).toString()+'</td><td>'+
             // Accepted
-            r.accepted.toString()+'</td><td>'+
+            summary.Accepted.toString()+'</td><td>'+
             // Rejected
-            r.rejected.toString()+'</td><td>'+
+            summary.Rejected.toString()+'</td><td>'+
             // NetworkBlocks
-            r.network_blocks.toString()+'</td><td>'+
+            summary.NetworkBlocks.toString()+'</td><td>'+
             // BestShare
-            r.best_share.toString()+'</td></tr>'
+            summary.BestShare.toString()+'</td></tr>'
         );
 
         pwindow.find('#loading-placeholder-summary').remove();
 
-        parsed = null;
 
         $.ajax({
             async: true,
@@ -184,91 +197,65 @@ function AMS_NodeDetails_GenTableData(ip,port,fulldomid){
             $('#'+fulldomid).find('.ndt-s-td-fwver').text(jqXHR.responseText);
         });
 
-    });
-
-    $.ajax({
-        async: true,
-        type: "GET",
-        url: __AMS_API_URL + "status/pool/latest/" + ip + '/' + port.toString(),
-        error : function () {
-            Materialize.toast("无法载入矿池详情：API请求失败",3000);
-            pwindow.find('#loading-placeholder-pool').remove();
-        }
-    }).done(function(data, textStatus, jqXHR){
-        var parsed = JSON.parse(jqXHR.responseText);
 
 
-        for (var tr in parsed.result) {
+        for (var tr in pools) {
             table_pool.append(
                 '<tr><td>' +
                 // Pool
-                tr.toString() + '</td><td>' +
+                pools[tr].PoolID.toString() + '</td><td>' +
                 // URL
-                parsed.result[tr].url + '</td><td>' +
+                pools[tr].URL + '</td><td>' +
                 // StratumActive
-                parsed.result[tr].stratum_active.toString() + '</td><td>' +
+                pools[tr].StratumActive.toString() + '</td><td>' +
                 // User
-                parsed.result[tr].user + '</td><td>' +
+                pools[tr].User + '</td><td>' +
                 // Status
-                parsed.result[tr].status.toString() + '</td><td>' +
+                pools[tr].Status.toString() + '</td><td>' +
                 // GetWorks
-                parsed.result[tr].getworks.toString() + '</td><td>' +
+                pools[tr].GetWorks.toString() + '</td><td>' +
                 // Accepted
-                parsed.result[tr].accepted.toString() + '</td><td>' +
+                pools[tr].Accepted.toString() + '</td><td>' +
                 // Rejected
-                parsed.result[tr].rejected.toString() + '</td><td>' +
+                pools[tr].Rejected.toString() + '</td><td>' +
                 // Stale
-                parsed.result[tr].stale.toString() + '</td><td>' +
+                pools[tr].Stale.toString() + '</td><td>' +
                 // LST
-                Reimu_Time_unix2rfc3339(parsed.result[tr].last_share_time) + '</td><td>' +
+                Reimu_Time_unix2rfc3339(pools[tr].LastShareTime) + '</td><td>' +
                 // LSD
-                parsed.result[tr].last_share_difficulty.toString() + '</td></tr>'
+                pools[tr].LastShareDifficulty.toString() + '</td></tr>'
             );
         }
 
         pwindow.find('#loading-placeholder-pool').remove();
 
-        parsed = null;
 
-    });
-
-    $.ajax({
-        async: true,
-        type: "GET",
-        url: __AMS_API_URL + "status/device/latest/" + ip + '/' + port.toString(),
-        error : function () {
-            Materialize.toast("无法载入设备详情：API请求失败",3000);
-            pwindow.find('#loading-placeholder-devices').remove();
-        }
-    }).done(function(data, textStatus, jqXHR){
-        var parsed = JSON.parse(jqXHR.responseText);
-
-        for (var tr in parsed.result) {
+        for (var tr in devices) {
             table_devices.append(
                 '<tr><td>' +
                 // Device
-                'ASC' + parsed.result[tr].asc.toString() + '-' + parsed.result[tr].name + '-' +
-                parsed.result[tr].id.toString() + '</td><td>' +
+                'ASC' + devices[tr].ASC.toString() + '-' + devices[tr].Name + '-' +
+                devices[tr].ID.toString() + '</td><td>' +
                 // MM Count
-                parsed.result[tr].mm_count.toString() + '</td><td>' +
+                devices[tr].MMCount.toString() + '</td><td>' +
                 // Enabled
-                parsed.result[tr].enabled + '</td><td>' +
+                devices[tr].Enabled + '</td><td>' +
                 // Status
-                parsed.result[tr].status + '</td><td>' +
+                devices[tr].Status + '</td><td>' +
                 // T(C)
-                parsed.result[tr].temperature.toString() + '</td><td>' +
+                devices[tr].Temperature.toFixed(2).toString() + '</td><td>' +
                 // GHSav
-                (parsed.result[tr].mhs_av/1000).toFixed(2).toString() + '</td><td>' +
-                // GHSav
-                (parsed.result[tr].mhs_5s/1000).toFixed(2).toString() + '</td><td>' +
+                (devices[tr].MHSav/1000).toFixed(2).toString() + '</td><td>' +
+                // GHS5s
+                (devices[tr].MHS5s/1000).toFixed(2).toString() + '</td><td>' +
                 // GHS1m
-                (parsed.result[tr].mhs_1m/1000).toFixed(2).toString() + '</td><td>' +
+                (devices[tr].MHS1m/1000).toFixed(2).toString() + '</td><td>' +
                 // GHS5m
-                (parsed.result[tr].mhs_5m/1000).toFixed(2).toString() + '</td><td>' +
+                (devices[tr].MHS5m/1000).toFixed(2).toString() + '</td><td>' +
                 // GHS15m
-                (parsed.result[tr].mhs_15m/1000).toFixed(2).toString() + '</td><td>' +
+                (devices[tr].MHS15m/1000).toFixed(2).toString() + '</td><td>' +
                 // last_valid_work
-                Reimu_Time_unix2rfc3339(parsed.result[tr].last_valid_work) + '</td></tr>'
+                Reimu_Time_unix2rfc3339(devices[tr].LastValidWork) + '</td></tr>'
             );
         }
 
@@ -276,85 +263,73 @@ function AMS_NodeDetails_GenTableData(ip,port,fulldomid){
 
         parsed = null;
 
-    });
-
-    $.ajax({
-        async: true,
-        type: "GET",
-        url: __AMS_API_URL + "status/module/latest/" + ip + '/' + port.toString(),
-        error : function () {
-            Materialize.toast("无法载入状态详情：API请求失败",3000);
-
-        }
-    }).done(function(data, textStatus, jqXHR){
-        var parsed = JSON.parse(jqXHR.responseText);
 
         var ids = [];
 
-        for (var tr in parsed.result) {
+        for (var tr in modules) {
             var adcol = "";
 
-            var idind = ids.indexOf(parsed.result[tr].device_id);
+            var idind = ids.indexOf(modules[tr].DeviceID);
 
             if (idind === -1) {
-                ids.push(parsed.result[tr].device_id);
-                idind = ids.indexOf(parsed.result[tr].device_id);
+                ids.push(modules[tr].DeviceID);
+                idind = ids.indexOf(modules[tr].DeviceID);
             }
 
             if ((idind+2)%2 === 1)
                 adcol = ' class="grey lighten-2"';
 
-            var echu_combined  = parsed.result[tr].echu_0 | parsed.result[tr].echu_1 | parsed.result[tr].echu_2 |
-                parsed.result[tr].echu_3;
+            var echu_combined  = modules[tr].ECHU[0] | modules[tr].ECHU[1] | modules[tr].ECHU[2] |
+                modules[tr].ECHU[3];
 
             if (echu_combined !== 0)
                 adcol = ' class="yellow"';
 
             var ledcol = 'waves-green';
 
-            if (parsed.result[tr].led === '1') {
+            if (modules[tr].led === '1') {
                 ledcol = 'waves-light light-green accent-3';
             }
 
             table_stats.append(
-                '<tr' + adcol + ' id="' + parsed.result[tr].dna + '"><td>' +
+                '<tr' + adcol + ' id="' + modules[tr].DNA + '"><td>' +
                 // LED
                 '<a href="#" class="waves-effect ' + ledcol + ' btn-flat" onclick="AMS_ToggleLED(\''+
-                parsed.result[tr].ip+'\','+parsed.result[tr].port.toString()+','+parsed.result[tr].device_id.toString()+
-                ','+ parsed.result[tr].module_id.toString()+',$(this))"><i class="material-icons">&#xE42E;</i></a>' +
+                ip+'\','+port.toString()+','+modules[tr].DeviceID.toString()+
+                ','+ modules[tr].ModuleID.toString()+',$(this))"><i class="material-icons">&#xE42E;</i></a>' +
                 '</td><td>' +
                 // Reboot
                 '<a href="#" onclick="AMS_NodeDetails_RebootMM(\'' + ip + '\',' + port.toString() + ',' +
-                parsed.result[tr].device_id.toString() + ',' + parsed.result[tr].module_id.toString() +
+                modules[tr].DeviceID.toString() + ',' + modules[tr].ModuleID.toString() +
                 ')" class="waves-effect waves-red btn-flat"><i class="material-icons">&#xE042;</i></a>' +
                 '</td><td>' +
                 // Elapsed
-                Reimu_Time_Sec2HMS(parsed.result[tr].elapsed) + '</td><td>' +
+                Reimu_Time_Sec2HMS(modules[tr].Elapsed) + '</td><td>' +
                 // Device
-                parsed.result[tr].device_id.toString() + '-' + parsed.result[tr].module_id.toString() + '</td><td>' +
+                modules[tr].DeviceID.toString() + '-' + modules[tr].ModuleID.toString() + '</td><td>' +
                 // MM
-                parsed.result[tr].ver + '</td><td>' +
+                modules[tr].Ver + '</td><td>' +
                 // DNA
-                parsed.result[tr].dna + '</td><td>' +
+                modules[tr].DNA + '</td><td>' +
                 // LocalWorks
-                parsed.result[tr].lw.toString() + '</td><td>' +
+                modules[tr].LW.toString() + '</td><td>' +
                 // DH
-                parsed.result[tr].dh.toFixed(3).toString() + '%</td><td>' +
+                modules[tr].DH.toFixed(3).toString() + '%</td><td>' +
                 // GHS
-                parsed.result[tr].ghsmm.toString() + '</td><td>' +
+                modules[tr].GHSmm.toFixed(3).toString() + '</td><td>' +
                 // WU
-                parsed.result[tr].wu.toString() + '</td><td>' +
+                modules[tr].WU.toFixed(3).toString() + '</td><td>' +
                 // Temp
-                parsed.result[tr].temp.toString() + ' / ' + parsed.result[tr].tmax.toString() + '</td><td>' +
+                modules[tr].Temp.toString() + ' / ' + modules[tr].TMax.toString() + '</td><td>' +
                 // Fan
-                parsed.result[tr].fan.toString() + ' (' + parsed.result[tr].fanr.toString() + '%)' + '</td><td>' +
+                modules[tr].Fan.toString() + ' (' + modules[tr].FanR.toString() + '%)' + '</td><td>' +
                 // PG
-                parsed.result[tr].pg.toString() + '</td><td>' +
+                modules[tr].PG.toString() + '</td><td>' +
                 // ECHU
-                parsed.result[tr].echu_0.toString() + ' ' + parsed.result[tr].echu_1.toString() + ' ' +
-                parsed.result[tr].echu_2.toString() + ' ' + parsed.result[tr].echu_3.toString() + '</td><td>' +
+                modules[tr].ECHU[0].toString() + ' ' + modules[tr].ECHU[1].toString() + ' ' +
+                modules[tr].ECHU[2].toString() + ' ' + modules[tr].ECHU[3].toString() + '</td><td>' +
                 // ECMM
-                parsed.result[tr].ecmm.toString() + '</td></tr>'
+                modules[tr].ECMM.toString() + '</td></tr>'
             );
         }
 

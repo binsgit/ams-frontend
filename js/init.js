@@ -111,7 +111,7 @@
 
         Chart.defaults.global.tooltips.mode = 'index';
         // Load saved API URL
-        __AMS_API_URL = $.jStorage.get("AMS_3_1_Config_API_URL", "/api/");
+        __AMS_API_URL = $.jStorage.get("AMS_3_1_Config_API_URL", "/ams/api/ams_cgi.moe");
 
         // Set API URL of the API settings window
         $("#ams-apisettings-window-form-url").val(__AMS_API_URL);

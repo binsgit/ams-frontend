@@ -25,36 +25,38 @@ function AMS_Chart_HashRate() {
     $.ajax({
         async: true,
         type: "POST",
-        data: serialized_hashrate_req,
+        url: __AMS_API_URL,
+        data: '{"operation": "history", "data": {"type":"hashrate"}}',
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        url: __AMS_API_URL + "hashrate",
-        error: function () {
-            Reimu_ToogleCardTitleLoadingIcon('ams-mainpage-hashrate-title-loading',false);
+        error : function (data, textStatus, jqXHR) {
+
         }
     }).done(function(data, textStatus, jqXHR){
-        Log.d("API request /hashrate" + " success");
-        var parsed = JSON.parse(jqXHR.responseText);
+        var ret = JSON.parse(jqXHR.responseText);
+        var retdata = ret.data;
+        var rawtime = retdata.times;
+        var rawpools = retdata.mdzz;
 
         var time_xaxis = [];
         var datasets = [];
 
-        var pools = parsed.result;
+        for (var tt in rawtime)
+            time_xaxis.push(new Date(rawtime[tt] * 1000));
 
-        for (var tt in pools[0].values.x)
-            time_xaxis.push(new Date(pools[0].values.x[tt] * 1000));
-
-        for (var pthispool in pools) {
+        for (var pthispool in rawpools) {
 
             var thiscolor = 'rgba(' + Reimu_RandomColor();
 
-            var thispool = pools[pthispool];
+            var thispool = rawpools[pthispool];
+
             var thisyaxis = [];
-            for (var thisy in thispool.values.y)
-                thisyaxis.push(thispool.values.y[thisy] / 1000000000000);
+
+            for (var thisy in thispool.hashrates)
+                thisyaxis.push((thispool.hashrates[thisy] / 1000).toFixed(3));
 
             datasets.push({
-                label: thispool.key,
+                label: thispool.url,
                 fill: false,
                 lineTension: 0.1,
                 backgroundColor: thiscolor+",0.4)",
@@ -96,20 +98,20 @@ function AMS_Chart_HashRate() {
                         type: 'time',
                         time: {
                             displayFormats: {
-                                'millisecond': 'M-DD',
-                                'second': 'M-DD',
-                                'minute': 'M-DD',
-                                'hour': 'M-DD',
-                                'day': 'M-DD',
-                                'week': 'M-DD',
-                                'month': 'M-DD',
-                                'quarter': 'M-DD',
-                                'year': 'M-DD'
+                                'millisecond': 'M-DD HH:MM',
+                                'second': 'M-DD HH:MM',
+                                'minute': 'M-DD HH:MM',
+                                'hour': 'M-DD HH:MM',
+                                'day': 'M-DD HH:MM',
+                                'week': 'M-DD HH:MM',
+                                'month': 'M-DD HH:MM',
+                                'quarter': 'M-DD HH:MM',
+                                'year': 'M-DD HH:MM'
                             },
                             tooltipFormat: "YYYY-MM-DD HH:MM:SS"
                         },
                         ticks: {
-                            beginAtZero:true
+                            beginAtZero:false
                         }
                     }],
                     yAxes: [{
@@ -130,9 +132,6 @@ function AMS_Chart_HashRate() {
         Reimu_ToogleCardTitleLoadingIcon('ams-mainpage-hashrate-title-loading',false);
 
 
-        ctx = null;
-        parsed = null;
-        myChart = null;
 
     });
 
@@ -155,24 +154,25 @@ function AMS_Chart_NormalNodes() {
     $.ajax({
         async: true,
         type: "POST",
-        data: serialized_hashrate_req,
+        url: __AMS_API_URL,
+        data: '{"operation": "history", "data": {"type":"aliverate"}}',
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        url: __AMS_API_URL + "aliverate",
-        error: function () {
+        error : function (data, textStatus, jqXHR) {
             Reimu_ToogleCardTitleLoadingIcon('ams-mainpage-aliverate-title-loading',false);
         }
     }).done(function(data, textStatus, jqXHR){
-        Log.d("API request /aliverate" + " success");
-        var parsed = JSON.parse(jqXHR.responseText);
-        var array_res_nodes = parsed.result[0].values;
-        var array_res_modules = parsed.result[1].values;
+        var ret = JSON.parse(jqXHR.responseText);
+        var retdata = ret.data;
+        var rawtimes = retdata.times;
+        var ctls = retdata.ctls;
+        var mods = retdata.mods;
+
 
         var time_xaxis = [];
 
-        for (var thisres_nodes in array_res_nodes.x)
-            time_xaxis.push(new Date(array_res_nodes.x[thisres_nodes] * 1000));
-
+        for (var thisres_nodes in rawtimes)
+            time_xaxis.push(new Date(rawtimes[thisres_nodes] * 1000));
 
 
 
@@ -199,7 +199,7 @@ function AMS_Chart_NormalNodes() {
                     pointHoverBorderWidth: 2,
                     pointRadius: 1,
                     pointHitRadius: 10,
-                    data: array_res_modules.y,
+                    data: mods,
                     spanGaps: false
                 },
                 {
@@ -221,7 +221,7 @@ function AMS_Chart_NormalNodes() {
                     pointHoverBorderWidth: 2,
                     pointRadius: 1,
                     pointHitRadius: 10,
-                    data: array_res_nodes.y,
+                    data: ctls,
                     spanGaps: false
                 }
             ]
@@ -237,15 +237,15 @@ function AMS_Chart_NormalNodes() {
                         type: 'time',
                         time: {
                             displayFormats: {
-                                'millisecond': 'M-DD',
-                                'second': 'M-DD',
-                                'minute': 'M-DD',
-                                'hour': 'M-DD',
-                                'day': 'M-DD',
-                                'week': 'M-DD',
-                                'month': 'M-DD',
-                                'quarter': 'M-DD',
-                                'year': 'M-DD'
+                                'millisecond': 'M-DD HH:MM',
+                                'second': 'M-DD HH:MM',
+                                'minute': 'M-DD HH:MM',
+                                'hour': 'M-DD HH:MM',
+                                'day': 'M-DD HH:MM',
+                                'week': 'M-DD HH:MM',
+                                'month': 'M-DD HH:MM',
+                                'quarter': 'M-DD HH:MM',
+                                'year': 'M-DD HH:MM'
                             },
                             tooltipFormat: "YYYY-MM-DD HH:MM:SS"
                         },

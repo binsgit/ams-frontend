@@ -35,84 +35,32 @@ function AMS_Issues_Update(){
 
     $.ajax({
         async: true,
-        type: "GET",
-        url: __AMS_API_URL + "issue/" + 'latest'
+        type: "POST",
+        url: __AMS_API_URL,
+        data: '{"operation": "issues", "data": {}}',
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        error : function (data, textStatus, jqXHR) {
+            Reimu_ToogleCardTitleLoadingIcon('ams-mainpage-issues-title-loading',false);
+        }
     }).done(function(data, textStatus, jqXHR){
-        Log.d("API request /issues/" + __AMS_API_TimeStr + " success");
-        var parsed = JSON.parse(jqXHR.responseText);
-        var array_node = parsed.result.node;
-        var array_ec = parsed.result.ec;
+        var ret = JSON.parse(jqXHR.responseText);
+        var retdata = ret.data;
+        var issues = retdata.issues;
 
         AMS_Issues_Table_Flush();
 
         // Connection failed nodes
 
-        for (var thisnode in array_node) {
-            AMS_Issues_Table_Append_Node(array_node[thisnode].ip,array_node[thisnode].port,"连接失败");
+        for (var pissue in issues) {
+            if (issues[pissue].type === 0x20)
+                AMS_Issues_Table_Append(issues[pissue].ip,issues[pissue].port, issues[pissue].auc_id, issues[pissue].mod_id, issues[pissue].dna, issues[pissue].msg);
+            else
+                AMS_Issues_Table_Append_Node(issues[pissue].ip,issues[pissue].port, issues[pissue].msg);
         }
 
-        $.ajax({
-            async: true,
-            type: "GET",
-            url: __AMS_API_URL + "nodes"
-        }).done(function(data, textStatus, jqXHR){
+        Reimu_ToogleCardTitleLoadingIcon('ams-mainpage-issues-title-loading',false);
 
-            var parsed = JSON.parse(jqXHR.responseText);
-            var nodes = parsed.result;
-
-            var nr_nodes = nodes.length;
-            var processed_nodes = 0;
-
-            for (var thisnode in nodes) {
-                var tn_ip = nodes[thisnode].ip;
-                var tn_port = nodes[thisnode].port;
-                var tn_mods = nodes[thisnode].mods;
-
-                $.ajax({
-                    async: true,
-                    type: "GET",
-                    url: __AMS_API_URL + "status/module/latest/" + tn_ip + '/' + tn_port.toString(),
-                    complete: function () {
-                        processed_nodes++;
-
-                        console.log('Issues: Processed '+processed_nodes.toString()+'/'+nr_nodes.toString());
-
-                        if (processed_nodes === nr_nodes)
-                            Reimu_ToogleCardTitleLoadingIcon('ams-mainpage-issues-title-loading',false);
-                    }
-                }).done(function(data, textStatus, jqXHR){
-
-                    var parsed = JSON.parse(jqXHR.responseText);
-                    var mods = parsed.result;
-
-                    for (var thismod in mods) {
-                        mods[thismod].echu_combined = mods[thismod].echu_0 | mods[thismod].echu_1 | mods[thismod].echu_2 |
-                            mods[thismod].echu_3;
-
-                        var errstr = avalon_ec_strerror(__AMS_Issues_Table_FilterMode,mods[thismod]);
-
-                        if (errstr)
-                            AMS_Issues_Table_Append(mods[thismod].ip,mods[thismod].port,mods[thismod].device_id,
-                                mods[thismod].module_id,mods[thismod].dna,errstr);
-
-                        errstr = null;
-
-                    }
-
-                    // Force gc
-                    parsed = null;
-
-                });
-
-            }
-
-            // Force gc
-            parsed = null;
-
-        });
-
-        // Force gc
-        parsed = null;
 
     });
 

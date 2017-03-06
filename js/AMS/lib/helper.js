@@ -33,22 +33,7 @@ function AMS_ToggleLED(ip,port,devid,modid,btndom) {
     }
 
 
-    var serialized_ledtoggle_req = '{"modules": [{"ip":"' + ip + '","port":"' + port.toString() + '","device_id":' +
-        devid.toString() + ',"module_id":' + modid.toString() + ',"led":' + state.toString() + '}]}';
-
-    $.ajax({
-        async: true,
-        type: "POST",
-        url: __AMS_API_URL + "led",
-        data: serialized_ledtoggle_req,
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        error : function () {
-            Materialize.toast("LED切换错误：API请求失败",3000);
-        }
-    }).done(function(data, textStatus, jqXHR){
-
-    });
+    AMS_NodeDetails_ToggleLED(ip, port, devid, modid, state);
 }
 
 function Reimu_RandomInt(min, max) {

@@ -20,7 +20,7 @@ function AMS_FwUpd_WipeScriptList() {
 
 function AMS_SuperRTAC_UpdateScriptList() {
 
-    var serialized_status_req = '{"op":"get_scripts"}';
+    var serialized_status_req = '{"operation":"supertac","data":{"op":"get_scripts"}}';
 
 
     AMS_FwUpd_WipeScriptList();
@@ -28,7 +28,7 @@ function AMS_SuperRTAC_UpdateScriptList() {
     $.ajax({
         async: false,
         type: "POST",
-        url: __AMS_API_URL + "opt/supertac",
+        url: __AMS_API_URL,
         data: serialized_status_req,
         contentType: "application/json; charset=utf-8",
         dataType: "json",
@@ -75,12 +75,12 @@ function AMS_SuperRTAC_WipeStatus() {
 
 function AMS_SuperRTAC_UpdateStatus() {
 
-    var serialized_status_req = '{"op":"tasks"}';
+    var serialized_status_req = '{"operation":"supertac","data":{"op":"tasks"}}';
 
     $.ajax({
         async: false,
         type: "POST",
-        url: __AMS_API_URL + "opt/supertac",
+        url: __AMS_API_URL,
         data: serialized_status_req,
         contentType: "application/json; charset=utf-8",
         dataType: "json",
@@ -161,9 +161,12 @@ function AMS_SuperRTAC_CommitEdit(){
     }
 
     var jreq = {
-        op: "add_script",
-        name: filename,
-        content: supertac_script_editor.getValue()
+        operation: "supertac",
+        data: {
+            op: "add_script",
+            name: filename,
+            content: supertac_script_editor.getValue()
+        }
     };
 
     var serialized_ce_req = JSON.stringify(jreq);
@@ -171,7 +174,7 @@ function AMS_SuperRTAC_CommitEdit(){
     $.ajax({
         async: false,
         type: "POST",
-        url: __AMS_API_URL + "opt/supertac",
+        url: __AMS_API_URL,
         data: serialized_ce_req,
         contentType: "application/json; charset=utf-8",
         dataType: "json",
@@ -190,8 +193,11 @@ function AMS_SuperRTAC_DeleteScript(filename){
         return;
 
     var jreq = {
-        op: "del_script",
-        name: filename
+        operation: "supertac",
+        data: {
+            op: "del_script",
+            name: filename,
+        }
     };
 
     var serialized_ce_req = JSON.stringify(jreq);
@@ -199,7 +205,7 @@ function AMS_SuperRTAC_DeleteScript(filename){
     $.ajax({
         async: false,
         type: "POST",
-        url: __AMS_API_URL + "opt/supertac",
+        url: __AMS_API_URL,
         data: serialized_ce_req,
         contentType: "application/json; charset=utf-8",
         dataType: "json",
@@ -214,12 +220,12 @@ function AMS_SuperRTAC_DeleteScript(filename){
 
 function AMS_SuperRTAC_Req_Clear() {
 
-    var serialized_clear_req = '{"op":"clear_tasks"}';
+    var serialized_clear_req = '{"operation":"supertac","data":{"op":"clear_tasks"}}';
 
     $.ajax({
         async: false,
         type: "POST",
-        url: __AMS_API_URL + "opt/supertac",
+        url: __AMS_API_URL,
         data: serialized_clear_req,
         contentType: "application/json; charset=utf-8",
         dataType: "json",
@@ -354,10 +360,14 @@ function AMS_SuperRTAC_CheckExec(){
 }
 
 function AMS_SuperRTAC_RealExec(scriptname, ip_array, username, passwd){
+
     var jreq = {
-        op: "exec_script",
-        name: scriptname,
-        ips: ip_array
+        operation: "supertac",
+        data: {
+            op: "exec_script",
+            name: scriptname,
+            ips: ip_array
+        }
     };
 
     if (username)
@@ -371,7 +381,7 @@ function AMS_SuperRTAC_RealExec(scriptname, ip_array, username, passwd){
     $.ajax({
         async: false,
         type: "POST",
-        url: __AMS_API_URL + "opt/supertac",
+        url: __AMS_API_URL,
         data: serialized_ce_req,
         contentType: "application/json; charset=utf-8",
         dataType: "json",

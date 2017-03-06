@@ -11,7 +11,7 @@ function AMS_Map_Append_Line(n) {
         'id="ams-mainpage-card-maparea-line-row-'+n.toString()+'"></div></div>');
 }
 
-function AMS_Map_Append_Block(line,dead,ip,port,mhs,mod_num,temp,tmax,cs) {
+function AMS_Map_Append_Block(line,dead,ip,port,ghs,mod_num,temp,tmax,cs) {
 
     var s = '<div class="ams-mapblock tooltipped valign" data-position="top" data-delay="50" data-tooltip="'+
         ip+':'+port+'"';
@@ -34,8 +34,8 @@ function AMS_Map_Append_Block(line,dead,ip,port,mhs,mod_num,temp,tmax,cs) {
     else {
         s += mod_num + " Mods<br>";
 
-        if (mhs)
-            s += (mhs / 1000000).toPrecision(4).toString();
+        if (ghs)
+            s += (ghs / 1000).toPrecision(4).toString();
         else
             s += '0';
 
@@ -69,51 +69,47 @@ function AMS_Map_Update(){
 
     $.ajax({
         async: true,
-        type: "GET",
-        url: __AMS_API_URL + "farmmap/latest",
-        error: function () {
+        type: "POST",
+        url: __AMS_API_URL,
+        data: '{"operation": "farmap", "data": {}}',
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        error : function (data, textStatus, jqXHR) {
             Reimu_ToogleCardTitleLoadingIcon('ams-mainpage-map-title-loading',false);
         }
     }).done(function(data, textStatus, jqXHR){
-        Log.d("API request /farmmap/" + __AMS_API_TimeStr + " success");
-        var parsed = JSON.parse(jqXHR.responseText);
-        var array_res = parsed.result;
+        var ret = JSON.parse(jqXHR.responseText);
+        var retdata = ret.data;
+        var ctls = retdata.Controllers;
 
-        if (jqXHR.responseText !== '{"result": []}') {
+        if (ret.rc !== 0)
+            Materialize.toast("API请求失败：" + ret.msg + " (" + ret.rc.toString() + ")", 1000);
 
-            AMS_Map_Flush();
+        AMS_Map_Flush();
 
-            var lines = 0;
-            var thisline_blocks = 0;
+        var lines = 0;
+        var thisline_blocks = 0;
 
-            for (var thisres in array_res) {
+        for (var pctl in ctls) {
 
-                if (thisline_blocks === 10) {
-                    thisline_blocks = 0;
-                    lines++;
-                }
-
-                if (thisline_blocks === 0)
-                    AMS_Map_Append_Line(lines);
-
-                AMS_Map_Append_Block(lines, array_res[thisres].dead, array_res[thisres].ip, array_res[thisres].port,
-                    array_res[thisres].mhs, array_res[thisres].mod_num, array_res[thisres].temp, array_res[thisres].tmax, 0);
-
-                thisline_blocks++;
+            if (thisline_blocks === 10) {
+                thisline_blocks = 0;
+                lines++;
             }
 
-            // for (var j in lines)
-            $("#ams-mainpage-card-maparea").find('.tooltipped').tooltip();
+            if (thisline_blocks === 0)
+                AMS_Map_Append_Line(lines);
 
+            AMS_Map_Append_Block(lines, ctls[pctl].Dead, ctls[pctl].IP, ctls[pctl].Port,
+                ctls[pctl].GHS, ctls[pctl].Mods, ctls[pctl].Temp, ctls[pctl].TMax, 0);
+
+            thisline_blocks++;
         }
+        
 
         Reimu_ToogleCardTitleLoadingIcon('ams-mainpage-map-title-loading',false);
-
-        // Force gc
-        parsed = null;
-
-
     });
+
 
     var t = setTimeout(AMS_Map_Update, 15000);
 }

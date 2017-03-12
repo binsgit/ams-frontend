@@ -25,19 +25,7 @@ function AMS_SuperRTAC_UpdateScriptList() {
 
     AMS_FwUpd_WipeScriptList();
 
-    $.ajax({
-        async: false,
-        type: "POST",
-        url: __AMS_API_URL,
-        data: serialized_status_req,
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        error : function () {
-            Materialize.toast("API请求失败：无法连接AMSD",1000);
-        }
-    }).done(function(data, textStatus, jqXHR){
-        var parsed = JSON.parse(jqXHR.responseText);
-
+    apiReq(serialized_status_req, function (parsed) {
         if (parsed.rc !== 0) {
             Materialize.toast("AMSD内部错误", 3000);
             return;
@@ -64,7 +52,6 @@ function AMS_SuperRTAC_UpdateScriptList() {
         }
 
         supertac_scripts_table.find('.tooltipped').tooltip();
-
     });
 
 }
@@ -77,19 +64,7 @@ function AMS_SuperRTAC_UpdateStatus() {
 
     var serialized_status_req = '{"operation":"supertac","data":{"op":"tasks"}}';
 
-    $.ajax({
-        async: false,
-        type: "POST",
-        url: __AMS_API_URL,
-        data: serialized_status_req,
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        error : function () {
-            Materialize.toast("API请求失败：无法连接AMSD",100);
-        }
-    }).done(function(data, textStatus, jqXHR){
-        var parsed = JSON.parse(jqXHR.responseText);
-
+    apiReq(serialized_status_req, function (parsed) {
         if (parsed.rc !== 0) {
             Materialize.toast("AMSD内部错误", 3000);
             return;
@@ -100,8 +75,8 @@ function AMS_SuperRTAC_UpdateStatus() {
         for (var thisstatus in supertac_status) {
 
             var tt = '<td>' + supertac_status[thisstatus].ip + '</td><td>' + supertac_status[thisstatus].script + '</td><td>' +
-            Reimu_Time_unix2rfc3339(supertac_status[thisstatus].start_time) + '</td><td>' +
-            supertac_status[thisstatus].msg + '</td><td>' + supertac_status[thisstatus].lastoutputline + '</td><td>' +
+                Reimu_Time_unix2rfc3339(supertac_status[thisstatus].start_time) + '</td><td>' +
+                supertac_status[thisstatus].msg + '</td><td>' + supertac_status[thisstatus].lastoutputline + '</td><td>' +
                 '<a href="#" onclick="Materialize.toast(escapeHtml_Monospace(supertac_status[' + parseInt(thisstatus) + '].output))"' +
                 ' class="waves-effect waves-green btn-flat btn-floating">' +
                 '<i class="material-icons black-text">&#xE8F4;</i></a></td>';
@@ -117,7 +92,8 @@ function AMS_SuperRTAC_UpdateStatus() {
             }
 
         }
-
+    }, function () {
+        Materialize.toast("列表刷新失败：无法连接AMSD", 100);
     });
 
     t_supertac_UpdateStatus = setTimeout(AMS_SuperRTAC_UpdateStatus, 1000);
@@ -171,17 +147,7 @@ function AMS_SuperRTAC_CommitEdit(){
 
     var serialized_ce_req = JSON.stringify(jreq);
 
-    $.ajax({
-        async: false,
-        type: "POST",
-        url: __AMS_API_URL,
-        data: serialized_ce_req,
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        error : function () {
-            Materialize.toast("API请求失败：无法连接AMSD",2000);
-        }
-    }).done(function(data, textStatus, jqXHR){
+    apiReq(serialized_ce_req, function (parsed) {
         Materialize.toast("保存成功",2000);
         $('#ams-supertac-editor-window').modal('close');
     });
@@ -202,18 +168,8 @@ function AMS_SuperRTAC_DeleteScript(filename){
 
     var serialized_ce_req = JSON.stringify(jreq);
 
-    $.ajax({
-        async: false,
-        type: "POST",
-        url: __AMS_API_URL,
-        data: serialized_ce_req,
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        error : function () {
-            Materialize.toast("API请求失败：无法连接AMSD",2000);
-        }
-    }).done(function(data, textStatus, jqXHR){
-        Materialize.toast("删除成功",2000);
+    apiReq(serialized_ce_req, function (parsed) {
+        Materialize.toast("删除成功", 2000);
         AMS_SuperRTAC_UpdateScriptList();
     });
 }
@@ -222,17 +178,7 @@ function AMS_SuperRTAC_Req_Clear() {
 
     var serialized_clear_req = '{"operation":"supertac","data":{"op":"clear_tasks"}}';
 
-    $.ajax({
-        async: false,
-        type: "POST",
-        url: __AMS_API_URL,
-        data: serialized_clear_req,
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        error: function () {
-            Materialize.toast("API请求失败：无法连接AMSD", 100);
-        }
-    }).done(function (data, textStatus, jqXHR) {
+    apiReq(serialized_clear_req, function (parsed) {
         Materialize.toast("请稍候…", 3000);
         AMS_SuperRTAC_WipeStatus();
     });
@@ -378,17 +324,7 @@ function AMS_SuperRTAC_RealExec(scriptname, ip_array, username, passwd){
 
     var serialized_ce_req = JSON.stringify(jreq);
 
-    $.ajax({
-        async: false,
-        type: "POST",
-        url: __AMS_API_URL,
-        data: serialized_ce_req,
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        error : function () {
-            Materialize.toast("API请求失败：无法连接AMSD",2000);
-        }
-    }).done(function(data, textStatus, jqXHR){
+    apiReq(serialized_ce_req, function (parsed) {
         Materialize.toast("请求成功",2000);
         $('#ams-supertac-new-window').modal('close');
     });

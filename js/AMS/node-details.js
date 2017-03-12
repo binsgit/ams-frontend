@@ -10,18 +10,8 @@ function AMS_NodeDetails_ToggleLED(ip,port,devid,modid,state){
         '","port":' + port.toString() + ', "op":"led", "modid":' + modid.toString() +
         ', "devid":' + devid.toString() + ', "state":' + state.toString() + '}}';
 
-    $.ajax({
-        async: true,
-        type: "POST",
-        url: __AMS_API_URL,
-        data: slrreq,
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        error : function () {
-            Materialize.toast("无法开关LED：API请求失败",3000);
-        }
-    }).done(function(data, textStatus, jqXHR){
-        slrreq = null;
+    apiReq(slrreq, function (parsed) {
+
     });
 }
 
@@ -31,20 +21,10 @@ function AMS_NodeDetails_RebootMM_Req(ip,port,devid,modid){
         '","port":' + port.toString() + ', "op":"reboot", "modid":' + modid.toString() +
         ', "devid":' + devid.toString() + '}}';
 
-    $.ajax({
-        async: true,
-        type: "POST",
-        url: __AMS_API_URL,
-        data: slrreq,
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        error : function () {
-            Materialize.toast("无法开关LED：API请求失败",3000);
-        }
-    }).done(function(data, textStatus, jqXHR){
-        slrreq = null;
-        Materialize.toast("机器已重启")
+    apiReq(slrreq, function (parsed) {
+        Materialize.toast("机器已重启");
     });
+
 }
 
 function AMS_NodeDetails_RebootMM(ip,port,devid,modid){
@@ -370,6 +350,10 @@ function AMS_NodeDetails_ShowDebug(ip,port){
 
 }
 
+function AMS_NodeDetails_NewWindow(ip,port) {
+    window.open('?ip='+ip+'&port='+port.toString());
+}
+
 function AMS_NodeDetails_Inline(ip,port,focus) {
 
     var portstr = port.toString();
@@ -384,21 +368,27 @@ function AMS_NodeDetails_Inline(ip,port,focus) {
         ' class="modal-action waves-effect waves-light btn-flat tooltipped" data-position="bottom" data-delay="50"' +
         ' data-tooltip="此功能暂时只支持Google Chrome浏览器">另存为表格</a>';
 
+    var ddd = $('#ams-mainpage-nodedetail');
 
+    AMS_UI_Visibility("#ams-mainpage-dashboard", 0);
+    ddd.prepend('<h4>' + ip + ':' + port.toString() + '</h4>'+ buttons + AMS_NodeDetails_GenTable());
+    AMS_NodeDetails_GenTableData(ip,port,'ams-mainpage-nodedetail');
+    ddd.find('.collapsible').collapsible();
+    ddd.find('.tooltipped').tooltip();
 
-    if ($('#'+fulldomid).length === 0) {
-        AMS_Windows_Add(mydomid, {windowsize:'big',windowtype:'window'}, ip + ':' + port.toString(), buttons + AMS_NodeDetails_GenTable());
-        var ddd = $('#'+fulldomid);
-        ddd.find('.collapsible').collapsible();
-        ddd.find('.tooltipped').tooltip();
-        AMS_NodeDetails_GenTableData(ip,port,fulldomid);
-    }
+    // if ($('#'+fulldomid).length === 0) {
+    //     AMS_Windows_Add(mydomid, {windowsize:'big',windowtype:'window'}, ip + ':' + port.toString(), buttons + AMS_NodeDetails_GenTable());
+    //     var ddd = $('#'+fulldomid);
+    //     ddd.find('.collapsible').collapsible();
+    //     ddd.find('.tooltipped').tooltip();
+    //     AMS_NodeDetails_GenTableData(ip,port,fulldomid);
+    // }
 
     if (focus === 3) {
 
     }
 
-    AMS_Windows_Open(mydomid);
+    // AMS_Windows_Open(mydomid);
 
     mydomid = null;
     fulldomid = null;

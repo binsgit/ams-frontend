@@ -3,26 +3,60 @@
  */
 
 
-function apiReq(operation, data) {
-    var ret;
+function apiReq(serialized_req, donefunc, errfunc) {
+
+    var j_buf;
+    var j_s_t = serialized_req;
+
+    if (__AMS_CurrentUser_Token !== 0) {
+        j_buf = JSON.parse(serialized_req);
+        j_buf["auth"] = __AMS_CurrentUser_Token;
+        j_s_t = JSON.stringify(j_buf);
+    }
 
     $.ajax({
-        async: false,
+        async: true,
         type: "POST",
-        url: "/ams/api/ams_cgi.moe",
-        data: JSON.stringify(data),
+        url: __AMS_API_URL,
+        data: j_s_t,
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        error : function (data, textStatus, jqXHR) {
-
+        error: function(data, textStatus, jqXHR){
+            if (errfunc)
+                errfunc();
+            else
+                Materialize.toast("API请求失败：连接失败或服务器内部错误", 3000);
         }
     }).done(function(data, textStatus, jqXHR){
-        ret = JSON.parse(jqXHR.responseText);
-
-        if (ret.rc !== 0)
-            Materialize.toast("API请求失败：" + ret.msg + " (" + ret.rc.toString() + ")", 1000);
-    });
-
-    return ret;
-
+            var parsed = JSON.parse(jqXHR.responseText);
+            var rc = parsed.rc;
+            console.log(rc);
+            if (rc === 0) {
+                donefunc(parsed);
+            } else {
+                if (errfunc)
+                    errfunc(parsed);
+                else {
+                    switch (rc) {
+                        case -1:
+                            Materialize.toast("API请求失败：操作参数错误", 3000);
+                            break;
+                        case 65333:
+                            Materialize.toast("API请求失败：身份验证失败，请重新登录", 3000);
+                            AMS_LocalStorage_WipeLoggedInUserInfo();
+                            AMS_SideBar_UserInfo_Update(0);
+                            break;
+                        case 65334:
+                            Materialize.toast("API请求失败：主要参数错误", 3000);
+                            break;
+                        case 65335:
+                            Materialize.toast("API请求失败：不完整或出错的请求", 3000);
+                            break;
+                        default:
+                            Materialize.toast("API请求失败：核心内部错误", 3000);
+                            break;
+                    }
+                }
+            }
+        });
 }

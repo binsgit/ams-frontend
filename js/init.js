@@ -116,9 +116,6 @@
         // Set API URL of the API settings window
         $("#ams-apisettings-window-form-url").val(__AMS_API_URL);
 
-        // Load & auto refresh the charts
-        AMS_Chart_HashRate();
-        AMS_Chart_NormalNodes();
 
         // FIXME: Placeholder
         AMS_NavBar_IP_Selector_AppendEntry("192.168.1.0/24");
@@ -132,11 +129,26 @@
         // Realtime hashrate and alive nodes&modules count on navbar
         AMS_NavBar_MiscInfo_UpdateText();
 
-        // Auto refreshes issues card
-        AMS_Issues_Update();
+        var up = getUrlParams();
+        console.log(up);
 
-        // Auto refreshes map card
-        AMS_Map_Update();
+        var nd_ip = up["ip"];
+        var nd_port = up["port"];
+
+        if (nd_ip && nd_port) {
+            $('title').text(nd_ip+':'+nd_port);
+            AMS_NodeDetails_Inline(nd_ip, nd_port, 0);
+        } else {
+            // Load & auto refresh the charts
+            AMS_Chart_HashRate();
+            AMS_Chart_NormalNodes();
+
+            // Auto refreshes issues card
+            AMS_Issues_Update();
+
+            // Auto refreshes map card
+            AMS_Map_Update();
+        }
 
     }); // end of document ready
 })(jQuery); // end of jQuery name space 喵喵喵

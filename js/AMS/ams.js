@@ -115,6 +115,7 @@ function AMS_LocalStorage_SetLoggedInUserToken(token) {
 function AMS_LocalStorage_WipeLoggedInUserInfo(){
     $.jStorage.deleteKey("AMS_3_1_Config_CurrentUser_Token");
     $.jStorage.deleteKey("AMS_3_1_Config_CurrentUser_Name");
+    __AMS_CurrentUser_Token = 0;
 }
 
 
@@ -157,5 +158,19 @@ function AMS_Action_Map_TC_Switch(){
     } else {
         ams_map_tc = 0;
         btn.text("控制器平均");
+    }
+}
+
+function AMS_UI_Visibility(domid, b) {
+    var d = $(domid);
+
+    if (!b) {
+        d.css('visibility', 'hidden');
+        d.css('height', 0);
+        d.css('width', 0);
+    } else {
+        d.css('visibility', 'visible');
+        d.css('height', 'inherit');
+        d.css('width', 'inherit');
     }
 }

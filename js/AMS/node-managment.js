@@ -12,7 +12,7 @@ var inputline = '<tr class="nm-nn-ttb-tr"><td><input class="textbox-center" id="
     'onkeypress="Reimu_CallOnEnterKeyPress(event, function(){AMS_NodeManagment_API_AddNode()})"></td><td>' +
     '<input class="textbox-center" id="nm-nn-ttb-port" type="text" value="4028" ' +
     'onkeypress="Reimu_CallOnEnterKeyPress(event, function(){AMS_NodeManagment_API_AddNode()})"></td><td>' +
-    '<input class="textbox-center" id="nm-nn-ttb-mods" type="text" ' +
+    '<input disabled class="textbox-center" id="nm-nn-ttb-mods" type="text" value="自动检测" ' +
     'onkeypress="Reimu_CallOnEnterKeyPress(event, function(){AMS_NodeManagment_API_AddNode()})"></td><td>' +
     '<a href="#" onclick="AMS_NodeManagment_API_AddNode()" class="waves-effect waves-green btn-flat btn-floating">' +
     '<i class="material-icons black-text">&#xE876;</i></a>' +
@@ -71,26 +71,16 @@ function AMS_NodeManagment_API_AddNode(){
         return;
     }
 
-    var serialized_addnode_req = '{"token":"' + __AMS_CurrentUser_Token + '","operation":"add","ip":"' +
-        ip + '","port":"' + port.toString() + '","mods":"' + mods.toString()  + '"}';
+    var serialized_addnode_req = '{"data": {"op": "add", "controllers": [{"ip": "'+ip+'", "port": '+port.toString()+
+        '}]}, "operation": "controller"}';
 
     Materialize.toast('正在添加……', 2000);
 
-    $.ajax({
-        async: true,
-        type: "POST",
-        url: __AMS_API_URL + "nodes_mgmt",
-        data: serialized_addnode_req,
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        error : function () {
-            Materialize.toast("添加控制器失败：API请求失败",3000);
-        }
-    }).done(function(data, textStatus, jqXHR){
+    apiReq(serialized_addnode_req, function (parsed) {
         var nm_table = $('#ams-nodesmanage-nodes-table-tbody');
         nm_table.find('.nm-nn-ttb-tr').remove();
         nm_table.prepend('<tr><td>' + ip + '</td><td>' + port.toString() + '</td><td>' +
-            mods.toString() + '</td><td>' +
+            '自动检测' + '</td><td>' +
             '<a href="#" class="waves-effect waves-orange btn-flat btn-floating">' +
             '<i class="material-icons black-text">&#xE3C9;</i></a>' +
             '<a href="#" class="waves-effect waves-red btn-flat btn-floating">' +
@@ -103,13 +93,8 @@ function AMS_NodeManagment_API_AddNode(){
 
 function AMS_NodeManagment_FillCurrentNodes() {
 
-    $.ajax({
-        async: true,
-        type: "GET",
-        url: __AMS_API_URL + "nodes"
-    }).done(function(data, textStatus, jqXHR){
-        var parsed = JSON.parse(jqXHR.responseText);
-        var nodes_array = parsed.result;
+    apiReq('{"data": {"op": "list"}, "operation": "controller"}', function (parsed) {
+        var nodes_array = parsed.data.controllers;
 
         var nm_table = $('#ams-nodesmanage-nodes-table-tbody');
 
@@ -119,7 +104,7 @@ function AMS_NodeManagment_FillCurrentNodes() {
             var thisnode = nodes_array[pthisnode];
 
             nm_table.append('<tr><td>' + thisnode.ip + '</td><td>' + thisnode.port.toString() + '</td><td>' +
-                thisnode.mods.toString() + '</td><td>' +
+                '自动检测' + '</td><td>' +
                 '<a href="#" class="waves-effect waves-orange btn-flat btn-floating">' +
                 '<i class="material-icons black-text">&#xE3C9;</i></a>' +
                 '<a href="#" class="waves-effect waves-red btn-flat btn-floating">' +
@@ -129,8 +114,6 @@ function AMS_NodeManagment_FillCurrentNodes() {
 
         btn_bulkmodify.removeClass('disabled');
         btn_addnode.removeClass('disabled');
-
     });
-
 
 }

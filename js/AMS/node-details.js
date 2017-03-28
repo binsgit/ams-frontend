@@ -370,29 +370,13 @@ function AMS_NodeDetails_Inline(ip,port,focus) {
 
     var ddd = $('#ams-mainpage-nodedetail');
 
-    AMS_UI_Visibility("#ams-mainpage-dashboard", 0);
-    ddd.prepend('<h4>' + ip + ':' + port.toString() + '</h4>'+ buttons + AMS_NodeDetails_GenTable());
+    $("#ams-mainpage-dashboard").remove();
+
+    ddd.prepend('<div class="card hoverable"><div class="card-content"><span class="card-title">' + ip + ':' +
+        port.toString() + '</span>&nbsp;&nbsp;' + buttons + AMS_NodeDetails_GenTable() + '</div></div>');
     AMS_NodeDetails_GenTableData(ip,port,'ams-mainpage-nodedetail');
     ddd.find('.collapsible').collapsible();
     ddd.find('.tooltipped').tooltip();
-
-    // if ($('#'+fulldomid).length === 0) {
-    //     AMS_Windows_Add(mydomid, {windowsize:'big',windowtype:'window'}, ip + ':' + port.toString(), buttons + AMS_NodeDetails_GenTable());
-    //     var ddd = $('#'+fulldomid);
-    //     ddd.find('.collapsible').collapsible();
-    //     ddd.find('.tooltipped').tooltip();
-    //     AMS_NodeDetails_GenTableData(ip,port,fulldomid);
-    // }
-
-    if (focus === 3) {
-
-    }
-
-    // AMS_Windows_Open(mydomid);
-
-    mydomid = null;
-    fulldomid = null;
-    buttons = null;
 
 
 }

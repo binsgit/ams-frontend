@@ -39,6 +39,11 @@
     display: block;
 }
 
+.ams-general-text {
+    font-family: Microsoft Yahei, Ubuntu Regular !important;
+    font-size: 1.1rem !important;
+}
+
 .msyh {
     font-family: Microsoft Yahei !important;
     font-size: 1.1rem !important;

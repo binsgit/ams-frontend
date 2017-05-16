@@ -9,6 +9,10 @@
             }
         });
 
+        var jq_title = $('title');
+        $('#ams-mainmenu-header-version-string').text(AMS_Version_WebClient);
+        jq_title.text(jq_title.text() + ' v' + AMS_Version_WebClient);
+
         // Side Navbar Menu Width
         $('.button-collapse').sideNav({
             menuWidth: 245
@@ -51,6 +55,19 @@
         };
 
         $('.modal').modal();
+
+        AMS_Windows_Add_MsgBox('ams-window-system-about', '关于', '' +
+            '<span class="ams-general-text">Avalon Management System - 阿瓦隆矿机管理系统<br>' +
+            '<br>' +
+            '前端版本：' + AMS_Version_WebClient + '<br>' +
+            '后端版本：' + AMS_Version_Backend + '<br>' +
+            '<br>' +
+            '版权所有 &copy; 2016-2017 CloudyReimu<br>' +
+            '<br>' +
+            '本程序为自由软件；您可依据自由软件基金会所发表的GNU通用公共授权条款，对本程序再次发布和/或修改；无论您依据的是本授权的第三版，或（您可选的）任一日后发行的版本。<br>' +
+            '本程序是基于使用目的而加以发布，然而不负任何担保责任；亦无对适售性或特定目的适用性所为的默示性担保。详情请参照GNU通用公共授权。<br>' +
+            '您应已收到附随于本程序的GNU通用公共授权的副本；如果没有，请参照 <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a> 。' +
+            '</span>');
 
         $('#ams-userlogin-window').modal(modal_cfg_center_small);
         $('#ams-userlogout-window').modal(modal_cfg_center_small);
@@ -144,7 +161,7 @@
         var nd_port = up["port"];
 
         if (nd_ip && nd_port) {
-            $('title').text(nd_ip+':'+nd_port);
+            jq_title.text(jq_title.text() + ' - ' + nd_ip+':'+nd_port);
             AMS_NodeDetails_Inline(nd_ip, nd_port, 0);
         } else {
             // Load & auto refresh the charts

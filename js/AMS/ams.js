@@ -40,7 +40,7 @@ function AMS_NavBar_MiscInfo_UpdateText(){
         // console.log(jqXHR.responseText);
 
         var nodescount = retdata.ctls;
-        var machinescount = retdata.mods
+        var machinescount = retdata.mods;
         var thashrate_cgm = retdata.mhs / 1000 / 1000 / 1000;
         var thashrate_theo = retdata.mhs_t / 1000 / 1000 / 1000;
 
@@ -86,11 +86,11 @@ function AMS_SideBar_UserInfo_Update(islogined, username){
     if ( islogined == 1 ) {
         sut.text(username);
         sutt.attr("data-tooltip", "点此退出登录");
-        sutt.attr("href", "#ams-userlogout-window");
+        sutt.attr("href", "#ams-window-user-logout");
     } else {
         sut.text("未登录");
         sutt.attr("data-tooltip", "点我来登录吧 (´・ω・`)");
-        sutt.attr("href", "#ams-userlogin-window");
+        sutt.attr("href", "#ams-window-user-login");
     }
     sutt.tooltip();
 }

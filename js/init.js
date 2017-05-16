@@ -94,7 +94,15 @@
         });
 
         $('#ams-nodesmanage-window').modal();
-        $('#ams-poolmanage-window').modal(modal_cfg_big_window);
+
+        $('#ams-poolmanage-window').modal({
+            dismissible: true,
+            opacity: .5,
+            in_duration: 300,
+            out_duration: 200,
+            starting_top: '20%',
+            ending_top: '20%'
+        });
 
         $('#ams-nodedetails-window').modal(modal_cfg_big_window_dismissible);
 

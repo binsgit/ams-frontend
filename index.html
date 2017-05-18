@@ -466,110 +466,93 @@
         <a href="#" id="btn_add" onclick="AMS_NodeManagment_NewNode()" class="modal-action waves-effect waves-green btn-flat disabled">添加</a>
     </div>
 </div>
+<div id="ams-poolmodified-window" class="modal modal-fixed-footer">
+<div class="modal-content">
+<div class="row">
+    <div class="input-field col s6">
+        <input id="ams-poolmanage-window-form-pool1url" type="text" placeholder="stratum.xxxxx.com:3333" value="">
+            <label for="ams-poolmanage-window-form-pool1url">矿池1URL</label>
+    </div>
+    <div class="input-field col s3">
+        <input id="ams-poolmanage-window-form-pool1user" type="text" placeholder="x741 :)" value="">
+            <label for="ams-poolmanage-window-form-pool1user">矿池1用户名</label>
+    </div>
+    <div class="input-field col s3">
+        <input id="ams-poolmanage-window-form-pool1passwd" type="password" placeholder="123" value="">
+            <label for="ams-poolmanage-window-form-pool1passwd">矿池1密码</label>
+    </div>
+    </div>
 
-<div id="ams-poolmanage-window" class="modal modal-fixed-footer">
-    <div class="modal-content">
-        <a href="#" onclick="" class="modal-action modal-close"><i class="material-icons right black-text">&#xE14C;</i></a>
-        <a href="#" onclick="AMS_SuperRTAC_Help_Exec()" class="modal-action"><i class="material-icons right black-text">&#xE887;</i></a>
-        <h4>矿池管理</h4>
-
-
-        <div class="row">
-            <form class="col s12">
-
-                <div class="row">
-                    <input class="with-gap black-text" name="ams-poolmanage-new-ipsmode" type="radio"
-                           onchange="DisableThem(['#ams-poolmanage-window-form-iplist']);
-                           DontDisableThem(['#ams-poolmanage-window-form-ipst','#ams-poolmanage-window-form-iped']);"
-                           id="poolmanage-asni-range" checked="checked"/>
-                    <label for="poolmanage-asni-range">IP段</label>
-                </div>
-
-                <div class="row">
-                    <div class="input-field col s9">
-                        <input id="ams-poolmanage-window-form-ipst" type="text" placeholder="例如：192.168.1.50" value="">
-                        <label for="ams-poolmanage-window-form-ipst">IP地址（起始）</label>
-                    </div>
-                    <div class="input-field col s3">
-                        <input id="ams-poolmanage-window-form-iped" type="text" placeholder="例如：100" value="">
-                        <label for="ams-poolmanage-window-form-iped">IP地址结束</label>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <input class="with-gap black-text" name="ams-poolmanage-new-ipsmode" type="radio"
-                           onchange="DontDisableThem(['#ams-poolmanage-window-form-iplist']);
-                                  DisableThem(['#ams-poolmanage-window-form-ipst','#ams-poolmanage-window-form-iped']);"
-                           id="poolmanage-asni-list" />
-                    <label for="poolmanage-asni-list">IP列表</label>
-                </div>
-
-                <div class="row">
-                    <div class="input-field col s12">
-                    <textarea disabled id="ams-poolmanage-window-form-iplist" class="materialize-textarea"
-                              placeholder="每行一个；和上面的地址段只能任选其一"></textarea>
-                        <label for="ams-poolmanage-window-form-iplist">IP列表</label>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <input type="checkbox" class="filled-in black-text" id="poolmanage-asni-mlc"
-                           onchange="if (this.checked)
-                           DontDisableThem(['#ams-poolmanage-window-form-user','#ams-poolmanage-window-form-passwd']);
-                                     else
-                           DisableThem(['#ams-poolmanage-window-form-user','#ams-poolmanage-window-form-passwd'])"/>
-                    <label for="poolmanage-asni-mlc">指定登录信息</label>
-                </div>
-
-                <div class="row">
-                    <div class="input-field col s5">
-                        <input id="ams-poolmanage-window-form-user" type="text" placeholder="root" value="" disabled>
-                        <label for="ams-poolmanage-window-form-user">用户名</label>
-                    </div>
-                    <div class="input-field col s7">
-                        <input id="ams-poolmanage-window-form-passwd" type="password" placeholder="q123456 :)" value="" disabled>
-                        <label for="ams-poolmanage-window-form-passwd">密码</label>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="input-field col s6">
-                        <input id="ams-poolmanage-window-form-pool1url" type="text" placeholder="stratum.xxxxx.com:3333" value="">
-                        <label for="ams-poolmanage-window-form-pool1url">矿池1URL</label>
-                    </div>
-                    <div class="input-field col s3">
-                        <input id="ams-poolmanage-window-form-pool1user" type="text" placeholder="x741 :)" value="">
-                        <label for="ams-poolmanage-window-form-pool1user">矿池1用户名</label>
-                    </div>
-                    <div class="input-field col s3">
-                        <input id="ams-poolmanage-window-form-pool1passwd" type="password" placeholder="123" value="">
-                        <label for="ams-poolmanage-window-form-pool1passwd">矿池1密码</label>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="input-field col s6">
-                        <input id="ams-poolmanage-window-form-pool2url" type="text" placeholder="stratum.xxxxx.com:3333" value="">
-                        <label for="ams-poolmanage-window-form-pool2url">矿池2URL</label>
-                    </div>
-                    <div class="input-field col s3">
-                        <input id="ams-poolmanage-window-form-pool2user" type="text" placeholder="x741 :)" value="">
-                        <label for="ams-poolmanage-window-form-pool2user">矿池2用户名</label>
-                    </div>
-                    <div class="input-field col s3">
-                        <input id="ams-poolmanage-window-form-pool2passwd" type="password" placeholder="123" value="">
-                        <label for="ams-poolmanage-window-form-pool2passwd">矿池2密码</label>
-                    </div>
-                </div>
-
-            </form>
-        </div>
-
+    <div class="row">
+    <div class="input-field col s6">
+        <input id="ams-poolmanage-window-form-pool2url" type="text" placeholder="stratum.xxxxx.com:3333" value="">
+            <label for="ams-poolmanage-window-form-pool2url">矿池2URL</label>
+    </div>
+    <div class="input-field col s3">
+        <input id="ams-poolmanage-window-form-pool2user" type="text" placeholder="x741 :)" value="">
+        <label for="ams-poolmanage-window-form-pool2user">矿池2用户名</label>
+    </div>
+    <div class="input-field col s3">
+        <input id="ams-poolmanage-window-form-pool2passwd" type="password" placeholder="123" value="">
+        <label for="ams-poolmanage-window-form-pool2passwd">矿池2密码</label>
+    </div>
+    </div>
     </div>
 
     <div class="modal-footer">
         <a href="#" class="modal-close waves-effect waves-red btn-flat">取消</a>
-        <a href="#" onclick="AMS_SuperRTAC_CheckExec()" class="waves-effect waves-green btn-flat">确定</a>
+        <a href="#ams-poolmodified-now" class="waves-effect waves-green btn-flat">确定</a>
+    </div>
+</div>
+<div id="ams-poolmanage-window" class="modal modal-fixed-footer">
+    <div class="modal-content">
+        <a href="#" onclick="" class="modal-action modal-close"><i class="material-icons right black-text">&#xE14C;</i></a>
+        <a href="#" onclick="AMS_SuperRTAC_Help_Exec()" class="modal-action"><i class="material-icons right black-text">刷新</i></a>
+        <h4>矿池管理</h4>
+        <div class="row">
+            <form class="col s12">
+
+                <div class="row">
+                    <table class="highlight">
+                    <thead>
+                    <tr>
+                        <th><input type="button" name="order_ip_list" value="排序" class="waves-effect waves-green"></th>
+                        <th><input type="button" name="order_run_time" value="排序" class="waves-effect waves-green"></th>
+                        <th><input type="button" name="order_pool" value="排序" class="waves-effect waves-green"></th>
+                        <th><input type="button" name="order_worker" value="排序" class="waves-effect waves-green"></th>
+                        <th><input type="button" name="order_miner_number" value="排序" class="waves-effect waves-green"></th>
+                        <th><input type="button" name="order_miner_type" value="排序" class="waves-effect waves-green"></th>
+                        <th><input type="button" name="order_GHS" value="排序" class="waves-effect waves-green"></th>
+                        <th><input type="button" name="order_GHSavg" value="排序" class="waves-effect waves-green"></th>
+                    </tr>
+                    <tr>
+                        <th data-field="ams-mainpage-badmachines-table-th-ip_list">Target</th>
+                        <th data-field="ams-mainpage-badmachines-table-th-run_time">运行时间</th>
+                        <th data-field="ams-mainpage-badmachines-table-th-pool">矿池</th>
+                        <th data-field="ams-mainpage-badmachines-table-th-worker">矿工</th>
+                        <th data-field="ams-mainpage-badmachines-table-th-miner_number">机器数量</th>
+                        <th data-field="ams-mainpage-badmachines-table-th-miner_type">机器种类</th>
+                        <th data-field="ams-mainpage-badmachines-table-th-GHS">实际算力</th>
+                        <th data-field="ams-mainpage-badmachines-table-th-GHSavg">平均算力</th>
+                    </tr>
+                    </thead>
+                    <tbody id="ams-mainpage-badmachines-table-tbody">
+                    <!--<tr>-->
+                    <!--<td>192.168.1.233:4028</td>-->
+                    <!--<td>0</td>-->
+                    <!--<td>1</td>-->
+                    <!--<td>喵喵喵</td>-->
+                    <!--</tr>-->
+                    </tbody>
+                </table>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <h6 class="waves-effect waves-red">所选IP的机器总数量为：</h6>
+        <a href="#" class="modal-close waves-effect waves-red btn-flat">取消</a>
+        <a href="#ams-poolmodified-window" class="waves-effect waves-green btn-flat">更改</a>
     </div>
 </div>
 

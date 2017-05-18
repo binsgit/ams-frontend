@@ -115,5 +115,43 @@ function AMS_NodeManagment_FillCurrentNodes() {
         btn_bulkmodify.removeClass('disabled');
         btn_addnode.removeClass('disabled');
     });
+}
+function AMS_poolmanagment_iplist() {
+
+    var parsed=test_ip_list();
+    var nodes_array = parsed.data.controllers;
+    var nm_table = $('#ams-mainpage-badmachines-table-tbody');
+
+    nm_table.find('tr').remove();
+
+    for (var pthisnode in nodes_array) {
+        var thisnode = nodes_array[pthisnode];
+        var parsed_2=test_pool_list();
+        var nodes_array_2= parsed_2.data.Status.Pools;
+        for (var pthisnode in nodes_array) {
+            var thisnode = nodes_array[pthisnode];
+
+            nm_table.append('<tr><td>' + thisnode.URL +
+                '</td></tr>' + '<td>' + +'</td>');
+
+    }
+
+
+}
+function AMS_poolmanagment_poolist() {
+
+    var parsed=test_pool_list();
+    var nodes_array = parsed.data.Status.Pools;
+    var nm_table = $('#ams-mainpage-badmachines-table-tbody');
+
+    nm_table.find('tr').remove();
+
+    for (var pthisnode in nodes_array) {
+        var thisnode = nodes_array[pthisnode];
+
+        nm_table.append('<tr><td>' + thisnode.URL +
+            '</td></tr>');
+    }
+
 
 }

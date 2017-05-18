@@ -56,34 +56,45 @@ function AMS_Grid_Chart_New(ctx, data) {
 }
 
 function AMS_Grid_Append(id, iteminfo) {
-
-    var id_str = id.toString();
-    var canvas_id = 'ams-gridchart-' + id_str;
-
-    apiReq_low(null, 0, iteminfo+"_glimpse.json", function (ret) {
-        $('#ams-grid').append('<div class="col s12 m6 l4">' +
-            '<div class="card hoverable">' +
-            '<div class="card-content">' +
-            '<span class="card-title" id="ams-gridtitle-' + id.toString() + '">' + iteminfo + '</span>' +
+    let id_str = id.toString();
+    let canvas_id = 'ams-gridchart-' + id_str;
 
 
-            '<br>' + '<span style="font-family: Ubuntu Mono, DejaVu Sans Mono, Consolas, Monaco, Lucida Console, ' +
-            'Liberation Mono, Bitstream Vera Sans Mono, Courier New, monospace">控制器数量: ' + ret.data.ctls.toString() +
-            '&nbsp;&nbsp;机器数量: ' + ret.data.mods.toString() + '&nbsp;&nbsp;算力: ' +
-            (ret.data.mhs/1000000000).toPrecision(5).toString() + '/' + (ret.data.mhs_t/1000000000).toPrecision(5).toString()+
-            ' PH/s</span>' +
+    let req_glimpse = new APIReq({
+        APIURL: iteminfo+"_glimpse.json",
+        DoneCallback: function (ret) {
+            $('#ams-grid').append('<div class="col s12 m6 l4">' +
+                '<div class="card hoverable">' +
+                '<div class="card-content">' +
+                '<span class="card-title" id="ams-gridtitle-' + id.toString() + '">' + iteminfo + '</span>' +
+                '<br>' + '<span style="font-family: Ubuntu Mono, DejaVu Sans Mono, Consolas, Monaco, Lucida Console, ' +
+                'Liberation Mono, Bitstream Vera Sans Mono, Courier New, monospace">控制器数量: ' + ret.data.ctls.toString() +
+                '&nbsp;&nbsp;机器数量: ' + ret.data.mods.toString() + '&nbsp;&nbsp;算力: ' +
+                (ret.data.mhs/1000000000).toPrecision(5).toString() + '/' + (ret.data.mhs_t/1000000000).toPrecision(5).toString()+
+                ' PH/s</span>' +
+                '<canvas id="' + canvas_id + '" width="572" height="266" style="display: block;"></canvas>' +
+                '</div></div></div>');
+        },
+        ErrorCallback: function (ret) {
+            $('#ams-grid').append('<div class="col s12 m6 l4">' +
+                '<div class="card hoverable">' +
+                '<div class="card-content">' +
+                '<span class="card-title red-text" id="ams-gridtitle-' + id.toString() + '">' + iteminfo + '</span>' +
+                '<br><span class="red-text" style="font-family: Ubuntu Mono, DejaVu Sans Mono, Consolas, Monaco, ' +
+                'Lucida Console, Liberation Mono, Bitstream Vera Sans Mono, Courier New, monospace">数据获取失败！</span>' +
+                '<canvas id="' + canvas_id + '" width="572" height="266" style="display: block;"></canvas>' +
+                '</div></div></div>');
+        }
+    });
 
+    req_glimpse.Logging |= APIReq.LoggingLevels.Debug;
 
-            '<canvas id="' + canvas_id + '" width="572" height="266" style="display: block;"></canvas>' +
-            '</div></div></div>');
-
-        console.log(iteminfo);
-
-        apiReq_low(null, 0, iteminfo + "_hashrate.json", function (ret) {
+    let req_hashrate = new APIReq({
+        APIURL: iteminfo+"_hashrate.json",
+        DoneCallback: function (ret) {
             var retdata = ret.data;
             var rawtime = retdata.times;
             var rawpools = retdata.mdzz;
-
             var time_xaxis = [];
             var datasets = [];
 
@@ -132,19 +143,15 @@ function AMS_Grid_Append(id, iteminfo) {
 
 
             AMS_Grid_Chart_New(ctx, chartdata);
-
-
-        });
-    }, function (ret) {
-        $('#ams-grid').append('<div class="col s12 m6 l4">' +
-            '<div class="card hoverable">' +
-            '<div class="card-content">' +
-            '<span class="card-title red-text" id="ams-gridtitle-' + id.toString() + '">' + iteminfo + '</span>' +
-            '<br><span class="red-text" style="font-family: Ubuntu Mono, DejaVu Sans Mono, Consolas, Monaco, ' +
-            'Lucida Console, Liberation Mono, Bitstream Vera Sans Mono, Courier New, monospace">数据获取失败！</span>' +
-            '<canvas id="' + canvas_id + '" width="572" height="266" style="display: block;"></canvas>' +
-            '</div></div></div>');
+        }
     });
+
+    req_hashrate.Logging |= APIReq.LoggingLevels.Debug;
+
+    req_glimpse.NextReq = req_hashrate;
+    req_glimpse.Dispatch();
+
+
 }
 
 function AMS_Grid_Reload() {

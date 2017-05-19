@@ -115,10 +115,40 @@ function AMS_NodeManagment_FillCurrentNodes() {
         btn_bulkmodify.removeClass('disabled');
         btn_addnode.removeClass('disabled');
     });
-}
-function AMS_poolmanagment_iplist() {
 
-    var parsed=test_ip_list();
+
+    let req_nodes = new APIReq({
+            JSON: '{"data": {"op": "list"}, "operation": "controller"}',
+            DoneCallback: function (parsed) {
+                var nodes_array = parsed.data.controllers;
+
+                var nm_table = $('#ams-nodesmanage-nodes-table-tbody');
+
+                nm_table.find('tr').remove();
+
+                for (var pthisnode in nodes_array) {
+                    var thisnode = nodes_array[pthisnode];
+
+                    nm_table.append('<tr><td>' + thisnode.ip + '</td><td>' + thisnode.port.toString() + '</td><td>' +
+                        '自动检测' + '</td><td>' +
+                        '<a href="#" class="waves-effect waves-orange btn-flat btn-floating">' +
+                        '<i class="material-icons black-text">&#xE3C9;</i></a>' +
+                        '<a href="#" class="waves-effect waves-red btn-flat btn-floating">' +
+                        '<i class="material-icons black-text">&#xE14C;</i></a>' +
+                        '</td></tr>');
+                }
+
+                btn_bulkmodify.removeClass('disabled');
+                btn_addnode.removeClass('disabled');
+            }
+    });
+
+    req_nodes.Dispatch();
+}
+
+function AMS_poolmanagement_iplist() {
+
+    var parsed = test_ip_list();
     var nodes_array = parsed.data.controllers;
     var nm_table = $('#ams-mainpage-badmachines-table-tbody');
 
@@ -126,19 +156,27 @@ function AMS_poolmanagment_iplist() {
 
     for (var pthisnode in nodes_array) {
         var thisnode = nodes_array[pthisnode];
-        var parsed_2=test_pool_list();
-        var nodes_array_2= parsed_2.data.Status.Pools;
-        for (var pthisnode in nodes_array) {
-            var thisnode = nodes_array[pthisnode];
-
-            nm_table.append('<tr><td>' + thisnode.URL +
-                '</td></tr>' + '<td>' + +'</td>');
-
+        var parsed_ip = test_pool_list();
+        var ip_info_runtime = parsed_ip.data.Status.Summary;
+        var ip_info_pool = parsed_ip.data.Status.Pools;
+        var ip_info_devices = parsed_ip.data.Status.Devices;
+        var ip_info_miner_type = parsed_ip.data.Status.Modules;
+        var sum_mm = 0;
+        var sum_ghs = ip_info_runtime.MHSav / 1000
+        for (var status in ip_info_devices){
+            var status_mm = ip_info_devices[status];
+            sum_mm+=status_mm.MMCount;
+    }
+   
+        nm_table.append('<tr><td><input type="checkbox" class="filled-in" id="filled-in-box" checked="checked" /> <label for="filled-in-box" >' + thisnode.ip + '</label></td><td>' + ip_info_runtime.Elapsed + '</td><td>'+ ip_info_pool[0].URL + 
+            '</td><td>' + ip_info_pool[0].User + '</td><td>' + sum_mm + '</td><td>' + ip_info_miner_type[0].Ver.slice(0,3) +   
+            '</td><td>' + sum_ghs + '</td><td>' + (sum_ghs / 10) + 
+            '</td></tr>');
     }
 
-
 }
-function AMS_poolmanagment_poolist() {
+
+function AMS_poolmanagement_poolist() {
 
     var parsed=test_pool_list();
     var nodes_array = parsed.data.Status.Pools;

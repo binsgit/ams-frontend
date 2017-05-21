@@ -168,9 +168,6 @@ class APIReq {
         this.RequestData = JSON.stringify(buf);
     }
 
-
-
-
 }
 
 function apiReq(serialized_req, donefunc, errfunc) {

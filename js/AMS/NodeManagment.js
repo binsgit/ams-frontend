@@ -2,6 +2,20 @@
  * Created by root on 17-1-9.
  */
 
+AMS.NodeManagement = {
+    Window: {
+        OpenUI: function () {
+            if (!AMS.User.IsLoggedIn()) {
+                Materialize.toast("此功能只能在登录后使用", 3000);
+                AMS.Windows.Login.OpenUI();
+            } else {
+                $('#ams-window-nodemanagement').modal('open');
+                AMS_NodeManagment_FillCurrentNodes();
+            }
+        }
+    }
+};
+
 var newnode_status = 0;
 
 var nm_window = $('#ams-nodesmanage-window');

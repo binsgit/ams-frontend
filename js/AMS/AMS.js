@@ -2,6 +2,10 @@
  * Created by root on 16-12-28.
  */
 
+let AMS = {
+
+};
+
 
 var __AMS_API_URL;
 var __AMS_API_Time = Math.floor(Date.now() / 1000);

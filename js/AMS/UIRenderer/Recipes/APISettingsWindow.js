@@ -2,7 +2,7 @@
  * Created by root on 17-5-21.
  */
 
-AMS.UIRenderer.APISettingsWindow = function () {
+AMS.UIRenderer.Recipes.APISettingsWindow = function () {
     let ret = '<div id="ams-window-apisettings" class="modal">' +
         '<div class="modal-content">' +
         '<h4>API设置</h4>' +
@@ -28,5 +28,11 @@ AMS.UIRenderer.APISettingsWindow = function () {
         '确定' +
         '</a>' +
         '</div>' +
-        '</div>'
+        '</div>';
+
+    let postrender_func = function () {
+        $('#ams-window-apisettings').modal(AMS.UIRenderer.Templates.ModalAttributes.Dialog.Small);
+    };
+
+    return [ret, postrender_func];
 };

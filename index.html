@@ -305,6 +305,7 @@
         <a href="#AMS_poolmanagement_poolist()" class="waves-effect waves-green btn-flat">确定</a>
     </div>
 </div>
+
 <div id="ams-poolmanage-window" class="modal modal-fixed-footer">
     <div class="modal-content">
         <a href="#" onclick="" class="modal-action modal-close"><i class="material-icons right black-text">&#xE14C;</i></a>
@@ -393,46 +394,7 @@
                     <br>
                     <div class="ams-maparea" id="ams-mainpage-card-maparea">
 
-                        <div id="map-loading">
-                            <div class="preloader-wrapper big active">
-                                <div class="spinner-layer spinner-blue">
-                                    <div class="circle-clipper left">
-                                        <div class="circle"></div>
-                                    </div><div class="gap-patch">
-                                    <div class="circle"></div>
-                                </div><div class="circle-clipper right">
-                                    <div class="circle"></div>
-                                </div>
-                                </div>
-                                <div class="spinner-layer spinner-red">
-                                    <div class="circle-clipper left">
-                                        <div class="circle"></div>
-                                    </div><div class="gap-patch">
-                                    <div class="circle"></div>
-                                </div><div class="circle-clipper right">
-                                    <div class="circle"></div>
-                                </div>
-                                </div>
-                                <div class="spinner-layer spinner-yellow">
-                                    <div class="circle-clipper left">
-                                        <div class="circle"></div>
-                                    </div><div class="gap-patch">
-                                    <div class="circle"></div>
-                                </div><div class="circle-clipper right">
-                                    <div class="circle"></div>
-                                </div>
-                                </div>
-                                <div class="spinner-layer spinner-green">
-                                    <div class="circle-clipper left">
-                                        <div class="circle"></div>
-                                    </div><div class="gap-patch">
-                                    <div class="circle"></div>
-                                </div><div class="circle-clipper right">
-                                    <div class="circle"></div>
-                                </div>
-                                </div>
-                            </div>
-                        </div>
+
 
 
                     </div>
@@ -447,7 +409,7 @@
                     <span class="card-title">算力</span>
                     &nbsp;
                     <span id="ams-dashboard-hashrate-title-loading"></span>
-                    <div id="ams-dashboard-hashrate-card-loading" class="ams-maparea">
+                    <div id="ams-dashboard-hashrate-loading" class="ams-maparea">
                         <div class="preloader-wrapper big active">
                             <div class="spinner-layer spinner-blue">
                                 <div class="circle-clipper left">
@@ -497,8 +459,8 @@
                 <div class="card-content">
                     <span class="card-title">工作正常的设备数量</span>
                     &nbsp;
-                    <span id="ams-mainpage-aliverate-title-loading"></span>
-                    <div id="ams-mainpage-aliverate-card-loading" class="ams-maparea">
+                    <span id="ams-dashboard-aliverate-title-loading"></span>
+                    <div id="ams-dashboard-aliverate-loading" class="ams-maparea">
                         <div class="preloader-wrapper big active">
                             <div class="spinner-layer spinner-blue">
                                 <div class="circle-clipper left">
@@ -622,10 +584,28 @@
 <script src="js/Chart.js/2.4.0/Chart.min.js"></script>
 <script src="js/Chart.js/2.4.0/Chart.bundle.min.js"></script>
 
+<script src="js/sprintf.js"></script>
+
+<script src="js/Reimu.js/Reimu.js"></script>
+<script src="js/Reimu.js/Algorithm.js"></script>
+<script src="js/Reimu.js/Dom.js"></script>
+<script src="js/Reimu.js/Event.js"></script>
+<script src="js/Reimu.js/Html.js"></script>
+<script src="js/Reimu.js/Inet.js"></script>
+<script src="js/Reimu.js/StringOps.js"></script>
+<script src="js/Reimu.js/Time.js"></script>
+
 <!--init script-->
 <script src="js/init.js"></script>
 
+<script src="js/AMS/AMS.js"></script>
+
 <!--AMS libraries-->
+<script src="js/AMS/RuntimeData/RuntimeData.js"></script>
+<script src="js/AMS/Themes/Themes.js"></script>
+<script src="js/AMS/API/API.js"></script>
+<script src="js/AMS/API/Request.js"></script>
+
 <script src="js/AMS/lib/temp2color.js"></script>
 <script src="js/AMS/lib/urlparams.js"></script>
 <script src="js/AMS/lib/time.js"></script>
@@ -638,20 +618,30 @@
 
 
 <!--AMS components-->
-<script src="js/AMS/AMS.js"></script>
+<script src="js/AMS/UIRenderer/UIRenderer.js"></script>
+<script src="js/AMS/UIRenderer/Templates/ModalAttributes.js"></script>
+<script src="js/AMS/UIRenderer/Recipes/APISettingsWindow.js"></script>
+<script src="js/AMS/UIRenderer/Recipes/ErrorSelectorList.js"></script>
+<script src="js/AMS/UIRenderer/Recipes/LogoutWindow.js"></script>
+<script src="js/AMS/UIRenderer/Recipes/LoginWindow.js"></script>
+<script src="js/AMS/UIRenderer/Recipes/NavBar.js"></script>
+<script src="js/AMS/UIRenderer/Recipes/SideBar.js"></script>
+<script src="js/AMS/UIRenderer/Recipes/SuperRTACWindow.js"></script>
+<script src="js/AMS/UIRenderer/Recipes/ThemeSettingsWindow.js"></script>
+
+
+<script src="js/AMS/NavBar.js"></script>
 <script src="js/AMS/User.js"></script>
 <script src="js/AMS/issues.js"></script>
 <script src="js/AMS/map.js"></script>
-<script src="js/AMS/charts.js"></script>
+<script src="js/AMS/Charts.js"></script>
 <script src="js/AMS/node-details.js"></script>
 <script src="js/AMS/NodeManagment.js"></script>
 <script src="js/AMS/pool-managment.js"></script>
-<script src="js/AMS/firmware-update.js"></script>
 <script src="js/AMS/SuperRTAC.js"></script>
-<script src="js/AMS/datasource.js"></script>
 <script src="js/AMS/debug.js"></script>
 <script src="js/AMS/lib/req.js"></script>
-<script src="js/AMS/version.js"></script>
+<script src="js/AMS/Version.js"></script>
 
 </body>
 </html>

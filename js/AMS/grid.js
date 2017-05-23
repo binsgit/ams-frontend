@@ -68,8 +68,8 @@ function AMS_Grid_Append(id, iteminfo) {
                 '<div class="card-content">' +
                 '<span class="card-title" id="ams-gridtitle-' + id.toString() + '">' + iteminfo + '</span>' +
                 '<br>' + '<span style="font-family: Ubuntu Mono, DejaVu Sans Mono, Consolas, Monaco, Lucida Console, ' +
-                'Liberation Mono, Bitstream Vera Sans Mono, Courier New, monospace">控制器数量: ' + ret.data.ctls.toString() +
-                '&nbsp;&nbsp;机器数量: ' + ret.data.mods.toString() + '&nbsp;&nbsp;算力: ' +
+                'Liberation Mono, Bitstream Vera Sans Mono, Courier New, monospace">在线控制器数量: ' + ret.data.ctls.toString() +
+                '&nbsp;&nbsp;在线机器数量: ' + ret.data.mods.toString() + '&nbsp;&nbsp;算力: ' +
                 (ret.data.mhs/1000000000).toPrecision(5).toString() + '/' + (ret.data.mhs_t/1000000000).toPrecision(5).toString()+
                 ' PH/s</span>' +
                 '<canvas id="' + canvas_id + '" width="572" height="266" style="display: block;"></canvas>' +

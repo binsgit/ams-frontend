@@ -5,12 +5,12 @@
 AMS.RuntimeData = {
 
     StorageManipulate: function(key, val) {
-        if (val)
-            $.jStorage.set(key, val);
-        else if (val === null)
+        if (val === null)
             $.jStorage.deleteKey(key);
-        else
+        else if (val === undefined)
             return $.jStorage.get(key, undefined);
+        else
+            $.jStorage.set(key, val);
     },
 
     API: {

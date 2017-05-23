@@ -15,7 +15,7 @@ AMS.User = {
         ProcessLogin: function () {
             let username = $("#ams-window-login-form-username").val();
             let password = $("#ams-window-login-form-passwd").val();
-            Materialize.toast("正在登录，请稍侯 (｡•ˇ‸ˇ•｡)")
+            Materialize.toast("正在登录，请稍侯 (｡•ˇ‸ˇ•｡)", 3000);
             AMS.User.Login(username, password);
         }
     },
@@ -41,7 +41,7 @@ AMS.User = {
                 AMS.RuntimeData.User.Token(null);
                 AMS.RuntimeData.User.LoginName(null);
 
-                Materialize.toast("登录失败！请检查用户名或密码是否正确̣ ◝(๑⁺᷄ ·̭ ⁺᷅๑)◞՞", 3000, 'rounded');
+                Materialize.toast("登录失败！请检查用户名或密码是否正确̣ ◝(๑⁺᷄ ·̭ ⁺᷅๑)◞՞", 5000, 'rounded');
             },
             AlwaysCallback: function () {
                 AMS.User.UpdateSideBar();
@@ -74,52 +74,13 @@ AMS.User = {
         if ( lgname ) {
             sut.text(lgname);
             sutt.attr("data-tooltip", "点此退出登录");
-            sutt.attr("href", "#ams-window-user-logout");
+            sutt.attr("href", "#ams-window-logout");
         } else {
             sut.text("未登录");
             sutt.attr("data-tooltip", "点我来登录吧 (´・ω・`)");
-            sutt.attr("href", "#ams-window-user-login");
+            sutt.attr("href", "#ams-window-login");
         }
 
         sutt.tooltip();
     }
 };
-
-function AMS_User_LogoutUser() {
-    AMS_LocalStorage_WipeLoggedInUserInfo();
-    AMS_SideBar_UserInfo_Update(0);
-    Materialize.toast("成功退出登录", 3000, 'rounded');
-}
-
-function AMS_User_LoginUser(username, password) {
-
-    var serialized_login_req = '{"operation": "login", "data": {"username":"' + username + '","passwd":"' + password + '"}}';
-
-    apiReq(serialized_login_req, function(parsed){
-            AMS_LocalStorage_SetLoggedInUserName(username);
-            AMS_LocalStorage_SetLoggedInUserToken(parsed.data.token);
-            AMS_SideBar_UserInfo_Update(1, username);
-            Materialize.toast("登录成功 (´・ω・`)", 3000, 'rounded');
-    }, function(parsed) {
-        AMS_LocalStorage_SetLoggedInUserToken(0);
-        Materialize.toast("登录失败！请检查用户名或密码是否正确̣ ◝(๑⁺᷄ ·̭ ⁺᷅๑)◞՞", 3000, 'rounded');
-    })
-
-}
-
-function AMS_User_LoginUserFromForm(){
-    var username = $("#ams-userlogin-window-form-username").val();
-    var password = $("#ams-userlogin-window-form-passwd").val();
-    Materialize.toast("正在登录……", 2000, 'rounded');
-    AMS_User_LoginUser(username, password);
-}
-
-/**
- * @return {number}
- */
-function AMS_User_IsLoggedIn(){
-    if (AMS_LocalStorage_GetLoggedInUserToken() === 0)
-        return 0;
-    else
-        return 1;
-}

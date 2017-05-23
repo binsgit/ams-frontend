@@ -2,7 +2,7 @@
  * Created by root on 17-5-21.
  */
 
-AMS.UIRenderer.LogoutWindow = function () {
+AMS.UIRenderer.Recipes.LogoutWindow = function () {
     let ret = '<div id="ams-window-logout" class="modal">' +
         '<div class="modal-content">' +
         '<h4>退出登录</h4>' +
@@ -15,5 +15,9 @@ AMS.UIRenderer.LogoutWindow = function () {
         '</div>' +
         '</div>';
 
-    return ret;
+    let postrender_func = function () {
+
+    };
+
+    return [ret, postrender_func];
 };

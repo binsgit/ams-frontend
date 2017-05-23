@@ -9,6 +9,10 @@
             }
         });
 
+
+        AMS.Init();
+
+
         var jq_title = $('title');
         $('#ams-mainmenu-header-version-string').text(AMS_Version_WebClient);
         jq_title.text(jq_title.text() + ' v' + AMS_Version_WebClient);

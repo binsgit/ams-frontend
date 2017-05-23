@@ -2,7 +2,7 @@
  * Created by root on 17-5-21.
  */
 
-AMS.UIRenderer.LoginWindow = function () {
+AMS.UIRenderer.Recipes.LoginWindow = function () {
     let ret = '<div id="ams-window-login" class="modal">' +
         '<div class="modal-content">' +
         '<h4>登录</h4>' +
@@ -30,8 +30,14 @@ AMS.UIRenderer.LoginWindow = function () {
         '</div>' +
         '<div class="modal-footer">' +
         '<a href="#" class="modal-action modal-close waves-effect waves-red btn-flat">取消</a>' +
-        '<a href="#" class="modal-action modal-close waves-effect waves-green btn-flat" ' +
+        '<a href="#" class="modal-action waves-effect waves-green btn-flat" ' +
         'onclick="AMS.User.LoginWindow.ProcessLogin()">登录</a>' +
         '</div>' +
         '</div>';
+
+    let postrender_func = function () {
+        $('#ams-window-login').modal(AMS.UIRenderer.Templates.ModalAttributes.Dialog.Small);
+    };
+
+    return [ret, postrender_func];
 };

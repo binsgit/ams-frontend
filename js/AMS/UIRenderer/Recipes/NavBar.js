@@ -1,9 +1,8 @@
 /**
  * Created by root on 17-5-21.
  */
-import {sprintf} from "../../sprintf";
 
-AMS.UIRenderer.NavBar = function () {
+AMS.UIRenderer.Recipes.NavBar = function () {
     let theme = AMS.Themes.CurrentTheme();
     let ret = '<div class="navbar-fixed">' +
         '<nav class="' + theme.NavBar.Background + '" role="navigation">' +
@@ -63,5 +62,9 @@ AMS.UIRenderer.NavBar = function () {
 
 
 
-    return ret;
+    let postrender_func = function () {
+
+    };
+
+    return [ret, postrender_func];
 };

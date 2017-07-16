@@ -15,7 +15,9 @@ AMS.RuntimeData = {
 
     API: {
         URL: function(s) {
-            return AMS.RuntimeData.StorageManipulate("AMS_3_2_RuntimeData_API_URL", s);
+            let ret = AMS.RuntimeData.StorageManipulate("AMS_3_2_RuntimeData_API_URL", s);
+            ret = ret ? ret : "../api/ams-cgi.moe";
+            return ret;
         }
     },
 

@@ -75,11 +75,15 @@ AMS.AsciiArt = function () {
     ].join("");
 
     console.log(art);
+    console.log("\nREADY");
+
 };
 
 AMS.Init = function () {
     AMS.Version.Init();
     AMS.UIRenderer.Init();
+    AMS.NodeManagement.Init();
+
     AMS.User.UpdateSideBar();
 
     AMS.NavBar.Context.InfoUpdaterTimer = setTimeout(AMS.NavBar.UpdateInfo, 10000);

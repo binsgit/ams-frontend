@@ -41,19 +41,20 @@ AMS.UIRenderer.Recipes.SideBar = function () {
     AddSubHeader("信息");
     AddEntry("概览", '&#xE88A;', '?');
     AddSubHeader("管理");
-    AddEntry("控制器管理", '&#xE875;', '?');
-    AddEntry("矿池管理", '&#xE80B;', '#');
+    AddEntry("控制器管理", '&#xE875;', '#', 'AMS.NodeManagement.Window.OpenUI()');
+    AddEntry("矿池管理", '&#xE80B;', '#ams-window-poolmanagement');
     AddEntry("Super RTAC", '&#xE869;', '#', 'TODOOOOOOOOOO',
         {position:"right",delay:"50",tooltip:"我可以做很多事情哦 (´・ω・`) 比如说用来给机器批量升级"});
     AddSubHeader("系统");
     AddEntry("主题", '&#xE3B7;', '#ams-window-themesettings');
     AddEntry("API设置", '&#xE86F;', '#ams-window-apisettings');
-    AddEntry("关于", '&#xE88E;', '#');
+    AddEntry("关于", '&#xE88E;', '#ams-window-about');
 
 
     ret += '</ul>';
 
     let postrender_func = function () {
+        $('.tooltipped').tooltip();
 
     };
 

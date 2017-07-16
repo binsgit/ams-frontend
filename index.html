@@ -239,32 +239,7 @@
 </div>
 
 
-<div id="ams-window-nodesmanage" class="modal modal-fixed-footer" onload="AMS_NodeManagment_FillCurrentNodes()">
-    <div class="modal-content">
-        <a href="#" onclick="" class="modal-action modal-close"><i class="material-icons right black-text">&#xE14C;</i></a>
-        <h4>控制器管理</h4>
 
-        <table class="highlight centered responsive-table">
-            <thead><tr>
-                <th data-field="nodes-table-th-ip">IP地址</th>
-                <th data-field="nodes-table-th-port">端口</th>
-                <th data-field="nodes-table-th-mods">机器数量</th>
-                <th data-field="nodes-table-th-action">操作</th>
-            </tr></thead>
-
-            <tbody id="ams-window-nodesmanage-nodes-table-tbody">
-
-            <tr><td>正在载入，请稍候…</td><td></td><td></td><td></td></tr>
-
-            </tbody>
-        </table>
-    </div>
-    <div class="modal-footer">
-        <!--<a href="#" class="modal-action modal-close waves-effect waves-green btn-flat">取消</a>-->
-        <a href="#" id="btn_bulkmodify" onclick="" class="modal-action waves-effect waves-green btn-flat disabled">批量修改</a>
-        <a href="#" id="btn_add" onclick="AMS_NodeManagment_NewNode()" class="modal-action waves-effect waves-green btn-flat disabled">添加</a>
-    </div>
-</div>
 
 
 <div id="ams-poolmodified-window" class="modal modal-fixed-footer">
@@ -306,10 +281,9 @@
     </div>
 </div>
 
-<div id="ams-poolmanage-window" class="modal modal-fixed-footer">
+<div id="ams-window-poolmanagement" class="modal modal-fixed-footer">
     <div class="modal-content">
         <a href="#" onclick="" class="modal-action modal-close"><i class="material-icons right black-text">&#xE14C;</i></a>
-        <a href="#" onclick="AMS_poolmanagement_iplist()" class="modal-action"><i class="material-icons right black-text">刷新</i></a>
         <h4>矿池管理</h4>
         <div class="row">
             <form class="col s12">
@@ -318,27 +292,18 @@
                     <table class="highlight">
                     <thead>
                     <tr>
-                        <th><input type="button" name="order_ip_list" value="排序" class="waves-effect waves-green"></th>
-                        <th><input type="button" name="order_run_time" value="排序" class="waves-effect waves-green"></th>
-                        <th><input type="button" name="order_pool" value="排序" class="waves-effect waves-green"></th>
-                        <th><input type="button" name="order_worker" value="排序" class="waves-effect waves-green"></th>
-                        <th><input type="button" name="order_miner_number" value="排序" class="waves-effect waves-green"></th>
-                        <th><input type="button" name="order_miner_type" value="排序" class="waves-effect waves-green"></th>
-                        <th><input type="button" name="order_GHS" value="排序" class="waves-effect waves-green"></th>
-                        <th><input type="button" name="order_GHSavg" value="排序" class="waves-effect waves-green"></th>
-                    </tr>
-                    <tr>
-                        <th data-field="ams-mainpage-badmachines-table-th-ip_list">Target</th>
-                        <th data-field="ams-mainpage-badmachines-table-th-run_time">运行时间</th>
-                        <th data-field="ams-mainpage-badmachines-table-th-pool">矿池</th>
-                        <th data-field="ams-mainpage-badmachines-table-th-worker">矿工</th>
-                        <th data-field="ams-mainpage-badmachines-table-th-miner_number">机器数量</th>
-                        <th data-field="ams-mainpage-badmachines-table-th-miner_type">机器种类</th>
-                        <th data-field="ams-mainpage-badmachines-table-th-GHS">实际算力</th>
-                        <th data-field="ams-mainpage-badmachines-table-th-GHSavg">平均算力</th>
+                        <th data-field="pm-sel"><a href="#">选择</a></th>
+                        <th data-field="pm-ip"><a href="#">Target</a></th>
+                        <th data-field="pm-runtime">运行时间</th>
+                        <th data-field="pm-pool">矿池</th>
+                        <th data-field="pm-worker">矿工</th>
+                        <th data-field="pm-mods">机器数量</th>
+                        <th data-field="pm-modtype">机器种类</th>
+                        <th data-field="pm-GHS">实际算力</th>
+                        <th data-field="pm-GHSavg">平均算力</th>
                     </tr>
                     </thead>
-                    <tbody id="ams-mainpage-badmachines-table-tbody">
+                    <tbody id="pm-table-tbody">
                     <!--<tr>-->
                     <!--<td>192.168.1.233:4028</td>-->
                     <!--<td>0</td>-->
@@ -351,6 +316,7 @@
             </form>
         </div>
     </div>
+
     <div class="modal-footer">
         <h6 class="waves-effect waves-red">所选IP的机器总数量为：</h6>
         <a href="#" class="modal-close waves-effect waves-red btn-flat">取消</a>
@@ -414,6 +380,9 @@
 <!--AMS components-->
 <script src="js/AMS/UIRenderer/UIRenderer.js"></script>
 <script src="js/AMS/UIRenderer/Templates/ModalAttributes.js"></script>
+<script src="js/AMS/UIRenderer/Recipes/AboutWindow.js"></script>
+<script src="js/AMS/UIRenderer/Recipes/PoolManagementWindow.js"></script>
+<script src="js/AMS/UIRenderer/Recipes/NodesManagementWindow.js"></script>
 <script src="js/AMS/UIRenderer/Recipes/APISettingsWindow.js"></script>
 <script src="js/AMS/UIRenderer/Recipes/ErrorSelectorList.js"></script>
 <script src="js/AMS/UIRenderer/Recipes/LogoutWindow.js"></script>
@@ -431,8 +400,8 @@
 <script src="js/AMS/map.js"></script>
 <script src="js/AMS/Charts.js"></script>
 <script src="js/AMS/node-details.js"></script>
-<script src="js/AMS/NodeManagment.js"></script>
-<script src="js/AMS/pool-managment.js"></script>
+<script src="js/AMS/NodeManagement.js"></script>
+<script src="js/AMS/PoolManagement.js"></script>
 <script src="js/AMS/SuperRTAC.js"></script>
 <script src="js/AMS/debug.js"></script>
 <script src="js/AMS/lib/req.js"></script>

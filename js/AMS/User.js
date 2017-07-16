@@ -27,7 +27,7 @@ AMS.User = {
                 operation: 'login',
                 data: {
                     username: username,
-                    password: password
+                    passwd: password
                 }
             },
             DoneCallback: function (parsed) {
@@ -36,6 +36,8 @@ AMS.User = {
 
                 Materialize.toast("登录成功 (´・ω・`)", 3000, 'rounded');
                 AMS.User.LoginWindow.CloseUI();
+
+                AMS.User.UpdateSideBar();
             },
             ErrorCallback: function (status) {
                 AMS.RuntimeData.User.Token(null);

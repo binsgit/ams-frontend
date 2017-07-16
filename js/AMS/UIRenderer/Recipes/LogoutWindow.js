@@ -16,7 +16,7 @@ AMS.UIRenderer.Recipes.LogoutWindow = function () {
         '</div>';
 
     let postrender_func = function () {
-
+        $('#ams-window-logout').modal(AMS.UIRenderer.Templates.ModalAttributes.Dialog.Small);
     };
 
     return [ret, postrender_func];

@@ -76,6 +76,7 @@ AMS.AsciiArt = function () {
 
     console.log(art);
     console.log("\nREADY");
+
 };
 
 AMS.Init = function () {

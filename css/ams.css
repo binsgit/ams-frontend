@@ -119,6 +119,20 @@
     height: 10px;
 }
 
+.Tbl4Cb {
+    text-align: center;
+}
+
+.CbInTbl {
+    vertical-align: middle;
+    position: relative;
+}
+
+.CbLblInTbl {
+    display: inline-block;
+    vertical-align: middle;
+}
+
 td, tr {
     border-radius: 0 !important;
 }

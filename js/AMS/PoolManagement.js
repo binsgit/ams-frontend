@@ -55,8 +55,10 @@ AMS.PoolManagement = {
                                 ghsavg_total /= 1000;
                                 ghs_total /= 1000;
 
+
+
                                 let ppstr = '<tr>' +
-                                    '<td class="pmtd-sel"><input type="checkbox" class="filled-in"/><label></label></td>' +
+                                    '<td class="pmtd-sel"><input type="checkbox" id="pmtd-sel-cb" class="filled-in"/><label for="pmtd-sel-cb"></label></td>' +
                                     '<td class="pmtd-ip">' + thisctl.ip + '</td>' +
                                     '<td class="pmtd-runtime">' + Reimu.Time.Sec2HMS(thiscst.Summary.Elapsed) + '</td>' +
                                     '<td class="pmtd-pool">' + thiscst.Pools[0].URL + '</td>' +

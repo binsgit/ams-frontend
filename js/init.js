@@ -73,12 +73,6 @@
             '您应已收到附随于本程序的GNU通用公共授权的副本；如果没有，请参照 <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a> 。' +
             '</span>');
 
-        $('#ams-userlogin-window').modal(modal_cfg_center_small);
-        $('#ams-userlogout-window').modal(modal_cfg_center_small);
-        $('#ams-apisettings-window').modal(modal_cfg_center_small);
-        $('#ams-themesettings-window').modal(modal_cfg_center_small);
-        $('#ams-fwupgrade-new-window').modal(modal_cfg_center_small);
-
         $('#ams-supertac-window').modal({
             ready: function(modal, trigger) {
                 AMS_SuperRTAC_UpdateStatus();
@@ -144,13 +138,6 @@
 
         // Set API URL of the API settings window
         $("#ams-apisettings-window-form-url").val(__AMS_API_URL);
-
-
-        // FIXME: Placeholder
-        AMS_NavBar_IP_Selector_AppendEntry("192.168.1.0/24");
-
-        // Detect logged in user on page load
-        AMS_StartupTask_ProcessLoggedInUser();
 
         // Realtime clock on navbar
         AMSNavBarClock();

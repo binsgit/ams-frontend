@@ -10,6 +10,7 @@ AMS.UIRenderer.Recipes.PoolManagementWindow = function () {
 
     let postrender_func = function () {
         $('#ams-window-poolmanagement').modal();
+        $('#ams-window-poolmanagement-confirm').modal(AMS.UIRenderer.Templates.ModalAttributes.Dialog);
     };
 
     return [ret, postrender_func];

@@ -7,14 +7,24 @@ AMS.UIRenderer.Recipes.ErrorSelectorList = function () {
 
     let recipe = {
         ul: {
-            id: "ams-ulist-badmachines-warnings",
+            id: "ams-ulist-issues-warning",
             class: "dropdown-content",
             __Next: []
         }
     };
 
+    let e = AMS.Issues.AvalonErrNum;
     let list_contents = [
-        ["TODO", "&#xE8B2;", "WU异常"],
+        [e.Error_WU, "&#xE8B2;", "WU异常"],
+        [e.Error_MW, "&#xE8B2;", "MW异常"],
+        [e.Error_WU, "&#xE8B2;", "WU异常"],
+        [e.Error_WU, "&#xE8B2;", "WU异常"],
+        [e.Error_WU, "&#xE8B2;", "WU异常"],
+        [e.Error_WU, "&#xE8B2;", "WU异常"],
+        [e.Error_WU, "&#xE8B2;", "WU异常"],
+        [e.Error_WU, "&#xE8B2;", "WU异常"],
+        [e.Error_WU, "&#xE8B2;", "WU异常"],
+        [e.Error_WU, "&#xE8B2;", "WU异常"],
 
     ];
 

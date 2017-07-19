@@ -46,7 +46,6 @@ AMS.UIRenderer.Recipes.Dashboard = function () {
                                                             br: {}
                                                         },
                                                         {
-                                                            br: {},
                                                             div: {
                                                                 class: "ams-maparea",
                                                                 id: "ams-dashboard-maparea"
@@ -194,7 +193,7 @@ AMS.UIRenderer.Recipes.Dashboard = function () {
                                                             }
                                                         },
                                                         tbody: {
-                                                            id: "ams-dashboard-badmachines-table-tbody"
+                                                            id: "ams-dashboard-issues-table-tbody"
                                                         }
                                                     }
                                                 }
@@ -210,7 +209,14 @@ AMS.UIRenderer.Recipes.Dashboard = function () {
         }
     };
 
-    let ret = Reimu.Html.Renderer(recipe);
+    let page_mode = getUrlParams().mode;
+
+    let ret;
+
+    if (!page_mode || page_mode === 'dashboard')
+        ret = Reimu.Html.Renderer(recipe);
+    else
+        ret = '';
 
     let postrender_func = function () {
 

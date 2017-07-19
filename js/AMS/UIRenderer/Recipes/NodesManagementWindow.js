@@ -44,6 +44,7 @@ AMS.UIRenderer.Recipes.NodesManagement = function () {
                 } // Callback for Modal close
             }
         );
+
     };
 
     return [ret, postrender_func];

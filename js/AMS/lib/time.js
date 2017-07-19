@@ -34,10 +34,7 @@ function Reimu_Time_unix2rfc3339(sec) {
     return date.getFullYear() + "-" + M + "-" + d + " " + h + ":" + m + ":" + s;
 }
 
-function AMSNavBarClock() {
-    $("#ams-navbar-clock").text(Reimu_Time_unix2rfc3339());
-    var t = setTimeout(AMSNavBarClock, 500);
-}
+
 function padzero(i) {
     if (i < 10) {i = "0" + i}  // add zero in front of numbers < 10
     return i;

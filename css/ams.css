@@ -129,6 +129,7 @@
 }
 
 .CbLblInTbl {
+    float: left;
     display: inline-block;
     vertical-align: middle;
 }

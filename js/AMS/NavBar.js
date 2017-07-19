@@ -7,6 +7,17 @@ AMS.NavBar = {
         InfoUpdaterTimer: null
     },
 
+    Init: function () {
+        AMS.NavBar.UpdateInfo();
+
+        AMS.NavBar.tm_RealtimeClock = setInterval(AMS.NavBar.RealtimeClock, 500);
+        AMS.NavBar.tm_UpdateInfo = setInterval(AMS.NavBar.UpdateInfo, 1000*60);
+    },
+
+    RealtimeClock: function () {
+            $("#ams-navbar-clock").text(Reimu_Time_unix2rfc3339());
+    },
+
     UpdateInfo: function () {
 
         let thisreq = new AMS.API.Request({
@@ -16,7 +27,7 @@ AMS.NavBar = {
             },
 
             DoneCallback: function (parsed) {
-                let retdata = ret.data;
+                let retdata = parsed.data;
 
                 // if (ams_api_connectok_noticed === 0) {
                 //     ams_api_connectok_noticed = 1;
@@ -36,5 +47,7 @@ AMS.NavBar = {
                 $("#ams-navbar-hashrate").text(thashrate_cgm.toFixed(2).toString()+" / "+thashrate_theo.toFixed(2).toString());
             }
         });
+
+        thisreq.Dispatch();
     }
 };

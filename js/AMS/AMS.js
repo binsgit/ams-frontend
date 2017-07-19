@@ -82,7 +82,10 @@ AMS.AsciiArt = function () {
 AMS.Init = function () {
     AMS.Version.Init();
     AMS.UIRenderer.Init();
+    AMS.NavBar.Init();
+    AMS.Map.Init();
     AMS.NodeManagement.Init();
+    AMS.Issues.Init();
 
     AMS.User.UpdateSideBar();
 

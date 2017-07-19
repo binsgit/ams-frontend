@@ -2,30 +2,54 @@
  * Created by root on 17-1-5.
  */
 
-var ams_nodedatails_openedwindowlist = {};
+AMS.NodeDetails = {
 
-function AMS_NodeDetails_ToggleLED(ip,port,devid,modid,state){
+    Operations: {
+        ToggleLed: function (ip,port,devid,modid,state) {
+            let tlreq = new AMS.API.Request({
+                RawData: {
+                    operation: 'ascset',
+                    data: {
+                        ip: ip,
+                        port: port.toString(),
+                        op: 'led',
+                        modid: modid.toString(),
+                        devid: devid.toString(),
+                        state: state.toString()
+                    }
+                },
+                ErrorCallback: function () {
+                    Materialize.toast('错误：LED状态变更失败');
+                }
+            });
 
-    var slrreq = '{"operation": "ascset", "data": {"ip":"' + ip +
-        '","port":' + port.toString() + ', "op":"led", "modid":' + modid.toString() +
-        ', "devid":' + devid.toString() + ', "state":' + state.toString() + '}}';
+            tlreq.Dispatch();
+        },
 
-    apiReq(slrreq, function (parsed) {
+        RebootMM: function (ip,port,devid,modid) {
+            let rbreq = new AMS.API.Request({
+                RawData: {
+                    operation: 'ascset',
+                    data: {
+                        ip: ip,
+                        port: port.toString(),
+                        op: 'reboot',
+                        modid: modid.toString(),
+                        devid: devid.toString(),
+                    }
+                },
+                DoneCallback: function () {
+                    Materialize.toast('机器已重启');
+                },
+                ErrorCallback: function () {
+                    Materialize.toast('错误：重启失败');
+                }
+            });
 
-    });
-}
-
-function AMS_NodeDetails_RebootMM_Req(ip,port,devid,modid){
-
-    var slrreq = '{"operation": "ascset", "data": {"ip":"' + ip +
-        '","port":' + port.toString() + ', "op":"reboot", "modid":' + modid.toString() +
-        ', "devid":' + devid.toString() + '}}';
-
-    apiReq(slrreq, function (parsed) {
-        Materialize.toast("机器已重启");
-    });
-
-}
+            rbreq.Dispatch();
+        }
+    }
+};
 
 function AMS_NodeDetails_RebootMM(ip,port,devid,modid){
     var mydomid = 'ndrc-' + inet_pton("AF_INET", ip) + '-' + port.toString() + '-' + devid.toString() + '-' +

@@ -36,28 +36,41 @@ AMS.PoolManagement = {
 
             let pool1url = AMS.PoolManagement.jq_PmCfmWindow.find('#pmcfm-form-pool1url').val();
             let pool2url = AMS.PoolManagement.jq_PmCfmWindow.find('#pmcfm-form-pool2url').val();
+            let pool3url = AMS.PoolManagement.jq_PmCfmWindow.find('#pmcfm-form-pool3url').val();
             let pool1user = AMS.PoolManagement.jq_PmCfmWindow.find('#pmcfm-form-pool1user').val();
             let pool2user = AMS.PoolManagement.jq_PmCfmWindow.find('#pmcfm-form-pool2user').val();
+            let pool3user = AMS.PoolManagement.jq_PmCfmWindow.find('#pmcfm-form-pool3user').val();
             let pool1passwd = AMS.PoolManagement.jq_PmCfmWindow.find('#pmcfm-form-pool1passwd').val();
             let pool2passwd = AMS.PoolManagement.jq_PmCfmWindow.find('#pmcfm-form-pool2passwd').val();
+            let pool3passwd = AMS.PoolManagement.jq_PmCfmWindow.find('#pmcfm-form-pool3passwd').val();
 
             if (pool1url.length)
                 poolcfg.pool1url = pool1url;
 
             if (pool2url.length)
-                poolcfg.pool1url = pool2url;
+                poolcfg.pool2url = pool2url;
+
+            if (pool3url.length)
+                poolcfg.pool3url = pool3url;
 
             if (pool1user.length)
                 poolcfg.pool1user = pool1user;
 
             if (pool2user.length)
-                poolcfg.pool1user = pool2user;
+                poolcfg.pool2user = pool2user;
+
+            if (pool3user.length)
+                poolcfg.pool3user = pool3user;
 
             if (pool1passwd.length)
                 poolcfg.pool1pw = pool1passwd;
 
             if (pool2passwd.length)
-                poolcfg.pool1pw = pool2passwd;
+                poolcfg.pool2pw = pool2passwd;
+
+            if (pool3passwd.length)
+                poolcfg.pool3pw = pool3passwd;
+
 
             if (Object.keys(poolcfg).length) {
 

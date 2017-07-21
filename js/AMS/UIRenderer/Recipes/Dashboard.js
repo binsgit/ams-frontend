@@ -78,7 +78,7 @@ AMS.UIRenderer.Recipes.Dashboard = function () {
                                                                 class: "ams-maparea"
                                                             },
                                                             canvas: {
-                                                                id: "ams-dashboard-hashrate-chart",
+                                                                id: "ams-dashboard-chart-hashrate",
                                                                 width: "auto",
                                                                 height: "140%"
                                                             }
@@ -110,7 +110,7 @@ AMS.UIRenderer.Recipes.Dashboard = function () {
                                                                 class: "ams-maparea"
                                                             },
                                                             canvas: {
-                                                                id: "ams-dashboard-aliverate-chart",
+                                                                id: "ams-dashboard-chart-aliverate",
                                                                 width: "auto",
                                                                 height: "140%"
                                                             }
@@ -144,15 +144,15 @@ AMS.UIRenderer.Recipes.Dashboard = function () {
                                                 a: {
                                                     href: "#",
                                                     class: "waves-effect waves-orange btn-flat",
-                                                    onclick: "", // TODO
+                                                    onclick: "AMS.Issues.UI.SetFilterMode(0)",
                                                     __Next: "全部"
                                                 }
                                             },
                                             {
                                                 a: {
                                                     href: "#",
-                                                    class: "waves-effect waves-red btn-flat",
-                                                    "data-activates": "ams-ulist-badmachines-critical",
+                                                    class: "waves-effect waves-red btn-flat amscustdpd",
+                                                    "data-activates": "ams-ulist-issues-critical",
                                                     __Next: [
                                                         "严重警告",
                                                         {
@@ -167,8 +167,8 @@ AMS.UIRenderer.Recipes.Dashboard = function () {
                                             {
                                                 a: {
                                                     href: "#",
-                                                    class: "waves-effect waves-yellow btn-flat",
-                                                    "data-activates": "ams-ulist-badmachines-warning",
+                                                    class: "waves-effect waves-yellow btn-flat amscustdpd",
+                                                    "data-activates": "ams-ulist-issues-warning",
                                                     __Next: [
                                                         "一般警告",
                                                         {

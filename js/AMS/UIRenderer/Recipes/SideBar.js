@@ -31,7 +31,7 @@ AMS.UIRenderer.Recipes.SideBar = function () {
     ret += '<li><div class="userView logo-bg">' +
         '<div class="background center ' + theme.SideBar.UserInfo.Background + '"><img src="assets/ams-logo.svg" align="middle">' +
         '<br></div><br><span class="ams mainmenu-header-first codename">AMS</span>' +
-        '<span class="ams mainmenu-header version">v3.0.2-dev</span>' +
+        '<span class="ams mainmenu-header version">' + AMS.Version.WebClient + '</span>' +
         '</div></li>' +
 
         '<li><a href="#" class="white-text msyh waves-effect waves-light tooltipped" data-position="right" data-delay="50" data-tooltip="喵喵喵">' +
@@ -43,7 +43,7 @@ AMS.UIRenderer.Recipes.SideBar = function () {
     AddSubHeader("管理");
     AddEntry("控制器管理", '&#xE875;', '#', 'AMS.NodeManagement.Window.OpenUI()');
     AddEntry("矿池管理", '&#xE80B;', '#', 'AMS.PoolManagement.Window.OpenUI()');
-    AddEntry("Super RTAC", '&#xE869;', '#', 'TODOOOOOOOOOO',
+    AddEntry("Super RTAC", '&#xE869;', '#ams-window-srtac_tasks', '',
         {position:"right",delay:"50",tooltip:"我可以做很多事情哦 (´・ω・`) 比如说用来给机器批量升级"});
     AddSubHeader("系统");
     AddEntry("主题", '&#xE3B7;', '#ams-window-themesettings');

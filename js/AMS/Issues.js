@@ -20,6 +20,10 @@ AMS.Issues = {
         AMS.Issues.jq_TableBody = $("#ams-dashboard-issues-table-tbody");
         // AMS.Issues.UI.Update();
         AMS.Issues.tm_UpdateIssues = setInterval(AMS.Issues.UI.Update(), 60*1000);
+
+        $('.amscustdpd').dropdown({
+            belowOrigin: true
+        });
     },
 
     UI: {
@@ -28,7 +32,7 @@ AMS.Issues = {
             AMS.Issues.UI.Update();
         },
         Append: function (ip,port,auc,module,dna,err) {
-            AMS.Issues.jq_TableBody.append('<tr onclick="AMS_NodeDetails_Inline(\''+ip+'\','+port+');">'+
+            AMS.Issues.jq_TableBody.append('<tr onclick="AMS.NodeDetails.OpenPage(\''+ip+'\','+port+');">'+
                 '<td>'+ip+':'+port+'</td><td>'+auc+'</td><td>'+module+'</td>'+'<td>'+dna+'</td>'+'<td>'+err+'</td></tr>');
         },
         AppendNode: function (ip,port,err) {
@@ -60,7 +64,7 @@ AMS.Issues = {
 
                     for (let pissue in issues) {
                         if (AMS.Issues.TableFilterMode && !(issues[pissue].echu_ored & AMS.Issues.TableFilterMode)) {
-                            return;
+                            continue;
                         }
 
                         if (issues[pissue].type === 0x20)
@@ -77,55 +81,3 @@ AMS.Issues = {
         }
     }
 };
-
-var __AMS_Issues_Table_FilterMode = -1;
-var __AMS_Issues_RefreshTimer = null;
-
-function AMS_Issues_ApplyFilterMode(m) {
-    __AMS_Issues_Table_FilterMode=m;
-    AMS_Issues_Update();
-}
-
-
-function AMS_Issues_Update(){
-
-    if (__AMS_Issues_RefreshTimer) {
-        clearTimeout(__AMS_Issues_RefreshTimer);
-        __AMS_Issues_RefreshTimer = null;
-    }
-
-    Reimu_ToogleCardTitleLoadingIcon('ams-mainpage-issues-title-loading',true);
-
-    $.ajax({
-        async: true,
-        type: "POST",
-        url: __AMS_API_URL,
-        data: '{"operation": "issues", "data": {}}',
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        error : function (data, textStatus, jqXHR) {
-            Reimu_ToogleCardTitleLoadingIcon('ams-mainpage-issues-title-loading',false);
-        }
-    }).done(function(data, textStatus, jqXHR){
-        var ret = JSON.parse(jqXHR.responseText);
-        var retdata = ret.data;
-        var issues = retdata.issues;
-
-        AMS_Issues_Table_Flush();
-
-        // Connection failed nodes
-
-        for (var pissue in issues) {
-            if (issues[pissue].type === 0x20)
-                AMS_Issues_Table_Append(issues[pissue].ip,issues[pissue].port, issues[pissue].auc_id, issues[pissue].mod_id, issues[pissue].dna, issues[pissue].msg);
-            else
-                AMS_Issues_Table_Append_Node(issues[pissue].ip,issues[pissue].port, issues[pissue].msg);
-        }
-
-        Reimu_ToogleCardTitleLoadingIcon('ams-mainpage-issues-title-loading',false);
-
-
-    });
-
-    __AMS_Issues_RefreshTimer = setTimeout(AMS_Issues_Update, 60000);
-}

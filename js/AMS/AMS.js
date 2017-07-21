@@ -3,7 +3,7 @@
  */
 
 let AMS = {
-
+    Environment: {}
 };
 
 AMS.AsciiArt = function () {
@@ -80,6 +80,7 @@ AMS.AsciiArt = function () {
 };
 
 AMS.Init = function () {
+    AMS.Environment.URLParams = getUrlParams();
     AMS.Version.Init();
     AMS.UIRenderer.Init();
     AMS.NavBar.Init();

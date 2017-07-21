@@ -63,7 +63,7 @@ AMS.Charts = {
 
                     }
 
-                    let ctx = document.getElementById("ams-mainpage-card-hashrate-chart");
+                    let ctx = document.getElementById("ams-dashboard-chart-hashrate");
                     let chartdata = {
                         labels: time_xaxis,
                         datasets: datasets
@@ -80,15 +80,15 @@ AMS.Charts = {
                                     type: 'time',
                                     time: {
                                         displayFormats: {
-                                            'millisecond': 'M-DD HH:MM',
-                                            'second': 'M-DD HH:MM',
-                                            'minute': 'M-DD HH:MM',
-                                            'hour': 'M-DD HH:MM',
-                                            'day': 'M-DD HH:MM',
-                                            'week': 'M-DD HH:MM',
-                                            'month': 'M-DD HH:MM',
-                                            'quarter': 'M-DD HH:MM',
-                                            'year': 'M-DD HH:MM'
+                                            'millisecond': 'M.DD HH:MM',
+                                            'second': 'M.DD HH:MM',
+                                            'minute': 'M.DD HH:MM',
+                                            'hour': 'M.DD HH:MM',
+                                            'day': 'M.DD HH:MM',
+                                            'week': 'M.DD HH:MM',
+                                            'month': 'M.DD HH:MM',
+                                            'quarter': 'M.DD HH:MM',
+                                            'year': 'M.DD HH:MM'
                                         },
                                         tooltipFormat: "YYYY-MM-DD HH:MM:SS"
                                     },
@@ -139,7 +139,7 @@ AMS.Charts = {
                         time_xaxis.push(new Date(rawtimes[thisres_nodes] * 1000));
 
 
-                    let ctx = document.getElementById("ams-mainpage-card-normalnodes-chart");
+                    let ctx = document.getElementById("ams-dashboard-chart-aliverate");
 
                     let chartdata = {
                         labels: time_xaxis,
@@ -203,15 +203,15 @@ AMS.Charts = {
                                     type: 'time',
                                     time: {
                                         displayFormats: {
-                                            'millisecond': 'M-DD HH:MM',
-                                            'second': 'M-DD HH:MM',
-                                            'minute': 'M-DD HH:MM',
-                                            'hour': 'M-DD HH:MM',
-                                            'day': 'M-DD HH:MM',
-                                            'week': 'M-DD HH:MM',
-                                            'month': 'M-DD HH:MM',
-                                            'quarter': 'M-DD HH:MM',
-                                            'year': 'M-DD HH:MM'
+                                            'millisecond': 'M.DD HH:MM',
+                                            'second': 'M.DD HH:MM',
+                                            'minute': 'M.DD HH:MM',
+                                            'hour': 'M.DD HH:MM',
+                                            'day': 'M.DD HH:MM',
+                                            'week': 'M.DD HH:MM',
+                                            'month': 'M.DD HH:MM',
+                                            'quarter': 'M.DD HH:MM',
+                                            'year': 'M.DD HH:MM'
                                         },
                                         tooltipFormat: "YYYY-MM-DD HH:MM:SS"
                                     },

@@ -33,7 +33,7 @@ AMS.Map = {
                     s += ' style="background-color: '+ams_t2c(temp)+' !important;"';
             }
 
-            s += ' onclick="AMS_NodeDetails_NewWindow(\''+ip+'\','+port+');"';
+            s += ' onclick="AMS.NodeDetails.OpenPage(\''+ip+'\','+port+');"';
 
             s += '><span class="valign">';
 

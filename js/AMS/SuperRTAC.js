@@ -35,14 +35,14 @@ AMS.SuperRTAC = {
                 for (let thiscript in supertac_scripts) {
                     AMS.SuperRTAC.Context.ScriptsTable.append('<tr><td>' + supertac_scripts[thiscript].name + '</td><td>' +
                         Reimu.Time.strftime_rfc3339(supertac_scripts[thiscript].mtime) + '</td><td>' +
-                        '<a href="#" onclick="AMS_SuperRTAC_PrepareExec(\'' + supertac_scripts[thiscript].name +
+                        '<a href="#" onclick="AMS.SuperRTAC.PrepareExec(\'' + supertac_scripts[thiscript].name +
                         '\')" class="waves-effect waves-green btn-flat btn-floating">' +
                         '<i class="material-icons black-text">&#xE037;</i></a>' +
-                        '<a href="#" onclick="AMS_SuperRTAC_OpenEditor(\'' + supertac_scripts[thiscript].name +
+                        '<a href="#" onclick="AMS.SuperRTAC.OpenEditor(\'' + supertac_scripts[thiscript].name +
                         '\',supertac_scripts[' + thiscript.toString() + '].content' +
                         ')" class="waves-effect waves-orange btn-flat btn-floating">' +
                         '<i class="material-icons black-text">&#xE3C9;</i></a>' +
-                        '<a href="#" onclick="AMS_SuperRTAC_DeleteScript(\'' + supertac_scripts[thiscript].name +
+                        '<a href="#" onclick="AMS.SuperRTAC.DeleteScript(\'' + supertac_scripts[thiscript].name +
                         '\')' + '" class="waves-effect waves-red btn-flat btn-floating">' +
                         '<i class="material-icons black-text">&#xE92B;</i></a>' +
                         '</td></tr>');

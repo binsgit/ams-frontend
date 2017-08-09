@@ -94,6 +94,13 @@
     vertical-align: middle;
 }
 
+.autocol {
+    width: auto !important;
+    margin-left: auto;
+    left: auto;
+    right: auto;
+}
+
 .modal-size-big {
     width: 96% !important;
     height: 96% !important;

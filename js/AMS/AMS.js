@@ -87,6 +87,7 @@ AMS.Init = function () {
     AMS.Map.Init();
     AMS.NodeManagement.Init();
     AMS.Issues.Init();
+    $('select').material_select();
 
     AMS.User.UpdateSideBar();
 

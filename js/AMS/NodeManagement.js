@@ -16,10 +16,23 @@ AMS.NodeManagement = {
             jq_NmTable: _buf0.find('#nodes-table-tbody'),
             jq_btn_bulkmodify: _buf0.find('#btn_bulkmodify'),
             jq_btn_add: _buf0.find('#btn_add'),
-            State_NodeAdder: 0
+            State_NodeAdder: 0,
+            jq_as: $('#ams-window-nodescanner')
         };
 
         AMS.NodeManagement.StaticRes = buf;
+    },
+
+    Window_AutoScan: {
+        OpenUI: function () {
+            if (!AMS.User.IsLoggedIn()) {
+                Materialize.toast("此功能只能在登录后使用", 3000);
+                AMS.Windows.Login.OpenUI();
+            } else {
+                AMS.NodeManagement.StaticRes.jq_as.modal('open');
+            }
+        }
+
     },
 
     Window: {

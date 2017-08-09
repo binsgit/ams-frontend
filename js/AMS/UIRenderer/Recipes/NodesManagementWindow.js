@@ -24,6 +24,7 @@ AMS.UIRenderer.Recipes.NodesManagement = function () {
         '</div>'+
         '<div class="modal-footer">'+
         '<a href="#" id="btn_bulkmodify" onclick="" class="modal-action waves-effect waves-green btn-flat">批量修改</a>'+
+        '<a href="#" id="btn_autoscan" onclick="AMS.NodeManagement.Window_AutoScan.OpenUI()" class="modal-action waves-effect waves-green btn-flat">自动搜索</a>'+
         '<a href="#" id="btn_add" onclick="AMS.NodeManagement.Window.AddNode(1)" class="modal-action waves-effect waves-green btn-flat">添加</a>'+
         '</div>'+
         '</div>';

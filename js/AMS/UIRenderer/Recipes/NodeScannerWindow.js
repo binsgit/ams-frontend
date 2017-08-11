@@ -20,7 +20,7 @@ AMS.UIRenderer.Recipes.NodeScannerWindow = function () {
         '</div>' +
         '<div class="input-field col s4">' +
 
-        '<select id="sel_awn_bywhat">' +
+        '<select id="sel_awn_bywhat" disabled>' +
         '<option value="1">Port 4028</option>' +
         '<option value="2">Port 22</option>' +
         '</select>' +
@@ -30,7 +30,7 @@ AMS.UIRenderer.Recipes.NodeScannerWindow = function () {
         '</div>'+
         '</div>'+
         '<div class="modal-footer">'+
-        '<a href="#" id="btn_startscan" onclick="" class="modal-action waves-effect waves-green btn-flat">开始</a>' +
+        '<a href="#" id="btn_startscan" onclick="AMS.NodeScanner.Window.StartScan()" class="modal-action waves-effect waves-green btn-flat">开始</a>' +
         '</div>'+
         '</div>';
 
@@ -56,11 +56,11 @@ AMS.UIRenderer.Recipes.NodeScannerWindow = function () {
         '</div>' +
         '<div class="input-field col s4">' +
         '<div class="progress">' +
-        '<div class="determinate" style="width: 70%"></div>' +
+        '<div class="determinate" style="width: 0%"></div>' +
         '</div>' +
         '</div>' +
         '<div class="input-field col s4">' +
-        '<span id="progress-percent">70% (2333/6666)</span>' +
+        '<span id="progress-percent">0% (0/0)</span>' +
         '</div>' +
         '</div>' +
 
@@ -70,7 +70,7 @@ AMS.UIRenderer.Recipes.NodeScannerWindow = function () {
         '有效的控制器数量：' +
         '</div>' +
         '<div class="input-field col s4">' +
-        '<span id="found-ctls-cnt">450</span>' +
+        '<span id="found-ctls-cnt">0</span>' +
         '</div>' +
         '</div>' +
 
@@ -81,6 +81,53 @@ AMS.UIRenderer.Recipes.NodeScannerWindow = function () {
         '</div>' +
         '</div>';
 
+
+    ret += '<div id="ams-window-nodescanresult" class="modal">' +
+        '<div class="modal-content">' +
+        '<h4>扫描结果</h4>' +
+
+        '<table class="highlight responsive-table">' +
+        '<thead>' +
+        '<tr>' +
+        '<th data-field="nsr-sel" class="Tbl4Cb" width="6%">' +
+        '<input type="checkbox" class="filled-in CbInTbl" id="nsr-selall-cb"' +
+        ' onclick="AMS.NodeScanner.Queue.ToggleAll(this.checked)" checked/>' +
+        '<label for="nsr-selall-cb" class="CbLblInTbl"></label>' +
+        '</th>' +
+        '<th data-field="nsr-type" width="20%">类型</th>' +
+        '<th data-field="nsr-ip">IP</th>' +
+
+        '</tr>' +
+        '</thead>' +
+        '<tbody id="nsr-table-tbody">' +
+
+
+        '</tbody>' +
+        '</table>' +
+
+        '</div>' +
+
+        '<div class="modal-footer">' +
+        // '<div class="row">' +
+        // '<div class="input-field col s2">' +
+        // '<select multiple id="typesel">' +
+        // '<option value="1">新增</option>' +
+        // '<option value="2">缺失</option>' +
+        // '</select>' +
+        // '</div>' +
+        // '</div>' +
+        // '<label>判断依据</label>' +
+        '&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" id="sel-sanae" class="left filled-in" checked ' +
+        'onclick="AMS.NodeScanner.Queue.ToggleSanae(this.checked)"/>' +
+        '<label for="sel-sanae" class="tooltipped" data-position="top" data-delay="50" data-tooltip="点击确定后，选中的新增控制器会被添加进控制器列表">所有新增的控制器</label>' +
+        '&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" id="sel-reimu" class="left filled-in" checked ' +
+        'onclick="AMS.NodeScanner.Queue.ToggleReimu(this.checked)"/>' +
+        '<label for="sel-reimu" class="tooltipped" data-position="top" data-delay="50" data-tooltip="点击确定后，选中的缺失控制器会被从控制器列表中移除">所有缺失的控制器</label>' +
+        '<a href="#" class="modal-close waves-effect waves-red btn-flat">取消</a>' +
+        '<a href="#" onclick="AMS.NodeScanner.Queue.ApplyChanges()" class="waves-effect waves-green btn-flat">确定</a>' +
+        '</div>' +
+        '</div>';
+
     let postrender_func = function () {
         let attr = AMS.UIRenderer.Templates.ModalAttributes.Dialog.Small;
         // attr.dismissible = false;
@@ -88,6 +135,10 @@ AMS.UIRenderer.Recipes.NodeScannerWindow = function () {
 
         attr.dismissible = false;
         $('#ams-window-nodescanstatus').modal(attr);
+
+        $('#ams-window-nodescanresult').modal({
+            dismissible: false
+        });
 
     };
 

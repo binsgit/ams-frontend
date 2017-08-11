@@ -88,6 +88,9 @@ AMS.Init = function () {
     AMS.NodeManagement.Init();
     AMS.Issues.Init();
     $('select').material_select();
+    AMS.NodeScanner.Init();
+
+    $('.tooltipped').tooltip();
 
     AMS.User.UpdateSideBar();
 

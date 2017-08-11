@@ -17,7 +17,9 @@ AMS.NodeManagement = {
             jq_btn_bulkmodify: _buf0.find('#btn_bulkmodify'),
             jq_btn_add: _buf0.find('#btn_add'),
             State_NodeAdder: 0,
-            jq_as: $('#ams-window-nodescanner')
+            jq_as: $('#ams-window-nodescanner'),
+            NodeArray: [],
+            PortArray: []
         };
 
         AMS.NodeManagement.StaticRes = buf;
@@ -58,14 +60,20 @@ AMS.NodeManagement = {
                     }
                 },
                 DoneCallback: function (parsed) {
+                    AMS.NodeManagement.StaticRes.NodeArray = [];
+
                     let nodes_array = parsed.data.controllers;
                     let nm_table = AMS.NodeManagement.StaticRes.jq_NmTable;
-
 
                     nm_table.find('tr').remove();
 
                     for (let pthisnode in nodes_array) {
                         let thisnode = nodes_array[pthisnode];
+                        if (thisnode.port === 4028)
+                            AMS.NodeManagement.StaticRes.NodeArray.push(thisnode.ip);
+
+                        AMS.NodeManagement.StaticRes.PortArray.push(thisnode.port);
+
                         let portstr = thisnode.port.toString();
                         let id_ipsfx = Reimu.Inet.inet_pton(AF_INET, thisnode.ip).toString().split(',').join('_') +
                             "x" + portstr;

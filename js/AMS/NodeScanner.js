@@ -256,7 +256,7 @@ AMS.NodeScanner = {
                 return;
             }
 
-            if (!Reimu.Inet.isValidV4Addr(ipst)) {
+            if (!Reimu.Inet.isValidV4Addr(iped)) {
                 Materialize.toast("结束地址格式错误！", 3000);
                 return;
             }

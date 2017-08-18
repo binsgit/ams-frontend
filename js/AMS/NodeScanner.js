@@ -251,6 +251,16 @@ AMS.NodeScanner = {
                 return;
             }
 
+            if (!Reimu.Inet.isValidV4Addr(ipst)) {
+                Materialize.toast("起始地址格式错误！", 3000);
+                return;
+            }
+
+            if (!Reimu.Inet.isValidV4Addr(ipst)) {
+                Materialize.toast("结束地址格式错误！", 3000);
+                return;
+            }
+
             AMS.NodeScanner.jq_rwtbl.find('tr').remove();
 
             let thisreq = new AMS.API.Request({
@@ -271,6 +281,8 @@ AMS.NodeScanner = {
                 ErrorCallback: function (parsed) {
                     if (parsed.rc === 666) {
                         Materialize.toast("当前有正在执行的搜索任务！", 3000);
+                    } else if (parsed.rc === 233) {
+                        Materialize.toast("IP地址段填写错误！", 3000);
                     } else {
                         Materialize.toast("未知错误："+parsed.rc.toString(), 3000);
                     }

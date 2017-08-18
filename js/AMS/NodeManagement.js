@@ -128,6 +128,11 @@ AMS.NodeManagement = {
                 return false;
             }
 
+            if (!Reimu.Inet.isValidV4Addr(ip)) {
+                Materialize.toast('IP地址格式错误', 2000);
+                return false;
+            }
+
             if (!port) {
                 Materialize.toast('错误：端口不能为空',2000);
                 return false;

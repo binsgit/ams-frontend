@@ -39,11 +39,11 @@ AMS.UIRenderer.Recipes.NodesManagement = function () {
                 endingTop: '10%', // Ending top style attribute
                 ready: function(modal, trigger) { // Callback for Modal open. Modal and trigger parameters available.
                     console.log(modal, trigger);
-                    Materialize.toast('对控制器列表的修改<br>将在下一次数据扫描时生效', undefined, 'amsctlmnotice');
+                    Materialize.toast('对控制器列表的修改<br>将在下一次数据扫描时生效', 3000);
                 },
                 complete: function() {
                     AMS.NodeManagement.Window.AddNode(1);
-                    $('.amsctlmnotice').first()[0].remove();
+                    // $('.amsctlmnotice').first()[0].remove();
                 } // Callback for Modal close
             }
         );
